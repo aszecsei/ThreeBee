@@ -8,13 +8,17 @@
   },
   "dependencies": {
     "body-parser": "~1.16.0",
+    "chai": "^3.5.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.0",
     "ejs": "~2.5.5",
     "express": "~4.14.1",
     "less-middleware": "~2.2.0",
     "morgan": "~1.7.0",
-    "serve-favicon": "~2.3.2"
+    "passport": "^0.3.2",
+    "request": "^2.79.0",
+    "serve-favicon": "~2.3.2",
+    "sqlite3": "^3.1.8"
   },
   "devDependencies": {
     "mocha": "^3.2.0"

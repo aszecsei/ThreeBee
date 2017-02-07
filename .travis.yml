@@ -1,3 +1,5 @@
 language: node_js
 node_js:
   - "0.10"
+notifications:
+  slack: cs58003:a8van2tuhEdtxPWdJC8shSY6

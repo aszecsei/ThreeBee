@@ -7,4 +7,6 @@ This will be used to handle the database connection
 module.exports = function () {
     var sqlite3 = require('sqlite3').verbose();
     return new sqlite3.Database(':memory:');
+    //Switch :memory: to filename .sqllite
+
 };

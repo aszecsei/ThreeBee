@@ -3,14 +3,18 @@
 var express = require('express');
 var router = express.Router();
 
+var passport = require('passport');
+
 /* GET signup page. */
 router.get('/', function(req, res, next) {
     res.render('signup');
 });
 
-/* POST signup page. */
-router.post('/', function(req, res, next) {
-    
-});
+// process the signup form
+router.post('/', passport.authenticate('local-signup-user', function(req, res) {
+    // If this function gets called, authentication was successful.
+    // `req.user` contains the authenticated user.
+    res.send({ user: req.user });
+}));
 
 module.exports = router;

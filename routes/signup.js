@@ -8,4 +8,9 @@ router.get('/', function(req, res, next) {
     res.render('signup');
 });
 
+/* POST signup page. */
+router.post('/', function(req, res, next) {
+    
+});
+
 module.exports = router;

@@ -31,7 +31,17 @@ function User(id, email, password, userType) {
 }
 
 User.findOne = function (params, callback) {
-    return db.get("SELECT * FROM USER WHERE (?)", params, function(err, row) {
+    // create the array
+    var stringArray = [];
+    var paramArray = [];
+    for(var prop in params) {
+        if(params.hasOwnProperty(prop)) {
+            stringArray.push("?=?");
+            paramArray.push(prop);
+            paramArray.push(params[prop]);
+        }
+    }
+    return db.get("SELECT * FROM USER WHERE (" + stringArray.join(" AND ") + ")", paramArray, function(err, row) {
         if(err) {
             callback(err, undefined);
             return;

@@ -2,12 +2,12 @@
 This will be used to handle the database connection
  */
 
-var shouldUseMemory = true;
+var shouldUseMemory = false;
 
 'use strict';
 
 var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database(shouldUseMemory ? ':memory:' : "../example.sqlite3");
+var db = new sqlite3.Database(shouldUseMemory ? ':memory:' : "../db.sqlite3");
 if(shouldUseMemory) {
     // Set up the database
     db.run("CREATE TABLE `USER_TYPES` ( `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, `name` TEXT NOT NULL )");

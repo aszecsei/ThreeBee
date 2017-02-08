@@ -35,18 +35,7 @@ User.findOne = function (params, callback) {
 };
 
 User.findById = function (id, callback) {
-    return db.get("SELECT * FROM USER WHERE ID=?", id, function(err, row) {
-        if(err) {
-            callback(err, undefined);
-            return;
-        }
-        if(row) {
-            var result = new User(row.id, row.email, row.password, row.user_type);
-            callback(err, result);
-            return;
-        }
-        callback(err, undefined);
-    });
+    return User.findOne({id: id}, callback);
 };
 
 module.exports = User;

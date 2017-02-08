@@ -6,6 +6,11 @@ var db = require('../database');
 var bcrypt   = require('bcrypt-nodejs');
 
 function User(id, email, password, userType) {
+    this.id = id;
+    this.email = email;
+    this.password = password;
+    this.user_type = userType;
+
     this.generateHash = function(password) {
         return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
     };
@@ -15,7 +20,13 @@ function User(id, email, password, userType) {
     };
     
     this.save = function (callback) {
-        return db.run("INSERT INTO USER VALUES (?)", {email: this.email, password: this.password, user_type: this.user_type},  callback);
+        return db.run("INSERT OR IGNORE INTO USER (email, password, user_type) VALUES (?,?,?)", [this.email, this.password, this.user_type],  function(err) {
+            if(err) {
+                callback(err);
+            } else {
+                callback(err, this.lastID);
+            }
+        });
     }
 }
 

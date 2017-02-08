@@ -71,12 +71,13 @@ module.exports = function() {
                     console.log("4");
 
                     // save the user
-                    newUser.save(function(err) {
+                    newUser.save(function(err, id) {
                         console.log("5");
                         if (err) {
                             console.log(err);
                             throw err;
                         }
+                        newUser.id = id;
                         console.log("6");
                         return done(null, newUser);
                     });

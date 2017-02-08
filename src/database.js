@@ -2,7 +2,7 @@
 This will be used to handle the database connection
  */
 
-var shouldUseMemory = false;
+var shouldUseMemory = true;
 
 'use strict';
 

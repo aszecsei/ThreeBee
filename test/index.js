@@ -24,4 +24,22 @@ describe("User", function() {
             expect(user.validPassword("password"));
         });
     });
+
+    describe("Database", function () {
+        it("Users can be added and retrieved from the database", function () {
+            var newUser = new User();
+            newUser.email = "beep@boop.com";
+            newUser.password = newUser.generateHash("password");
+            newUser.user_type = 1;
+            newUser.save(function(err, id) {
+                expect(err).to.not.exist();
+                expect(id).to.exist();
+                User.findOne({email: "beep@boop.com"}, function(err, mUser) {
+                    expect(err).to.not.exist();
+                    expect(mUser).to.exist();
+                    done();
+                })
+            });
+        });
+    });
 });

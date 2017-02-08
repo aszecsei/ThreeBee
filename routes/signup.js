@@ -11,10 +11,14 @@ router.get('/', function(req, res, next) {
 });
 
 // process the signup form
-router.post('/', passport.authenticate('local-signup-user', function(req, res) {
+router.post('/', passport.authenticate('local-signup-user'), function(req, res) {
     // If this function gets called, authentication was successful.
     // `req.user` contains the authenticated user.
-    res.send({ user: req.user });
-}));
+    if(req) {
+        res.send({user: req.user});
+    } else {
+        res.status(401);
+    }
+});
 
 module.exports = router;

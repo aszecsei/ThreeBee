@@ -8,39 +8,48 @@
 
 </head>
 <body>
+    <form>
+        <fieldset>
+            <legend><span class="number">1.</span>Your basic info</legend>
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName"><br>
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName">
+        </fieldset>
 
-<fieldset>
-    <legend><span class="number">1.</span>Your basic info</legend>
-    <label for="firstName">First Name:</label>
-    <input type="text" id="firstName"><br>
-    <label for="lastName">Last Name:</label>
-    <input type="text" id="lastName"><br>
-    <label for="email">Email:</label>
-    <input type="text" id="email"><br>
-</fieldset>
+        <fieldset>
+            <legend><span class="number">2.</span>Address Information</legend>
+            <label for="street">Street Address:</label>
+            <input type="text" id="street"><br>
+            <label for="city">City:</label>
+            <input type="text" id="city"><br>
+            <label for="state">State:</label>
+            <input type="text" id="state"><br>
+            <label for="country">Country:</label>
+            <select id="country">
+                    <option value="usa">USA</option>
+                    <option value="canada">Canada</option>
+            </select>
+            <br><br><br>
+                <label for="zipcode">Zipcode:</label>
+                <input type="text" id="zipcode">
+        </fieldset>
 
-<fieldset>
-    <legend><span class="number">2.</span>Address Information</legend>
-    Street Address: <input type="text" id="street"><br>
-    City: <input type="text" id="city"><br>
-    State: <input type="text" id="state"><br>
-    Country: <select>
-        <option value="usa">USA</option>
-        <option value="canada">Canada</option>
-    </select><br>
-    Zip Code: <input type="text" id="zipcode"><br>
-</fieldset>
+        <fieldset>
+            <legend><span class="number">3.</span>Account Information</legend>
+            <label for="email">Email:</label>
+            <input type="text" id="email"><br>
+            <label for="password">Password:</label>
+            <input type="text" id="password"><br>
+            <label for="confpassword"> Confirm Password:</label>
+            <input type="text" id="confpassword"><br>
+        </fieldset>
 
-<button onclick="submit()">Submit</button>
 
-<script type="text/javascript" src="/javascripts/signup.js"></script>
+        <button onclick="submit()">Submit</button>
 
-<script>
-  //  function submit() {
-
-       // document.getElementById("lastName").value = document.getElementById("firstName").value;
-
-   // }</script>
+        <script type="text/javascript" src="/javascripts/signup.js"></script>
+    </form>
 
 </body>
 </html>

@@ -1,0 +1,15 @@
+form {
+    max-width: 300px;
+    margin: 10px auto;
+    padding: 10px 20px;
+    background: #f4f7f8;
+    border-radius: 8px;
+}
+h1 {
+    margin: 0 0 30px 0;
+    text-align: center;
+}
+select {
+    padding: 4px;
+    height: 28px;
+}

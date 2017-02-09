@@ -4,6 +4,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var passport = require('passport');
+var session = require('express-session');
+
+require('./src/passport')(); // Configure passport
 
 var index = require('./routes/index');
 var signup = require('./routes/signup');
@@ -23,7 +27,10 @@ app.use(cookieParser());
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
-var db = require('./src/database')();
+// required for passport
+app.use(session({secret: 'badabingbadaboom'})); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
 
 app.use('/', index);
 app.use('/signup', signup);

@@ -1,18 +1,24 @@
 /**
  * Created by Tanner on 2/7/2017.
  */
-var invalid = "~`!#$%^&*+=-[]\\\';,/{}|\":<>?";
-function submit() {
-        checkFirst()
+var invalid = "~`!#$%^&*+=-[];,/{}|:<>?";
+function submit(e) {
+    if (checkFirst()){
+
+    }
+    return false;
+
 }
 
 function checkFirst() {
     var first = document.getElementById("firstName").value;
     if (first.test(invalid)){
-            return false;
+        return false;
+
     }
     else if(!first.test(invalid)){
-            return true;
+        document.getElementById("firstName").style.borderColor='#FF0000';
+        return true;
     }
 
 
@@ -29,8 +35,8 @@ function checkLast() {
 
 }
 function checkEmail() {
-    var first = document.getElementById("firstName").value;
-    if (first.test(invalid)){
+    var first = document.getElementById("email").value;
+    if (first.test("@")){
         return false;
     }
     else if(!first.test(invalid)){

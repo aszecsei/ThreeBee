@@ -3,6 +3,7 @@
  */
 var invalid = "~`!#$%^&*+=-[];,/{}|:<>?";
 function submit(e) {
+    document.getElementById('firstName').value = "Test";
     if (checkFirst()){
 
     }

@@ -14,6 +14,14 @@ describe("Web", function() {
             done();
         });
     });
+
+    it("Signup returns status 200", function () {
+        var url = "http://localhost:3000/signup";
+        request(url, function(error, response, body) {
+            expect(response.statusCode).to.equal(200);
+            done();
+        });
+    });
 });
 
 describe("User", function() {

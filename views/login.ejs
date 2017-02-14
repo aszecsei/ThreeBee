@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% title = "Signup"; %>
+    <% include ./partials/head.ejs %>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+    <script type="text/javascript" src="/javascripts/login.js"></script>
+</head>
+<body class="container">
+
+<header>
+    <% include ./partials/header.ejs %>
+</header>
+
+<main>
+    <div class="jumbotron">
+        <h1>Log In</h1>
+        <form id="signupform" method="post" class="form-horizontal" onsubmit="return validateForm();">
+            <div class="form-group">
+                <label class="col-xs-3 control-label">Email</label>
+                <div class="col-xs-5">
+                    <input type="email" class="form-control" name="email" required/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-3 control-label">Password</label>
+                <div class="col-xs-5">
+                    <input type="password" class="form-control" name="password" required/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-9 col-xs-offset-3">
+                    <button type="submit" class="btn btn-primary">Log In</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+<footer>
+    <% include ./partials/footer.ejs %>
+</footer>
+
+</body>
+</html>

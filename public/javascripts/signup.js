@@ -13,7 +13,6 @@ function testInvalid(input) {
     return false;
 }
 
-// When the document is ready
-$(function() {
-
-});
+function validateForm() {
+    return false;
+}

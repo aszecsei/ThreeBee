@@ -1,35 +1,92 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Signup</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-
+    <% title = "Signup"; %>
+    <% include ./partials/head.ejs %>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+    <script type="text/javascript" src="/javascripts/signup.js"></script>
 </head>
-<body>
-<h1>Signup</h1>
-<p>
-    First name: <input type="text" id="firstName"><br>
-    Last name: <input type="text" id="lastName"><br>
-    Email: <input type="text" id="email"><br>
-    Street Address: <input type="text" id="street"><br>
-    City: <input type="text" id="city"><br>
-    State: <input type="text" id="state"><br>
-    Country: <select>
-        <option value="usa">USA</option>
-        <option value="canada">Canada</option>
-    </select><br>
-    Zip Code: <input type="text" id="zipcode"><br>
-</p>
-<button onclick="submit()">Submit</button>
+<body class="container">
 
-<script type="text/javascript" src="/javascripts/signup.js"></script>
+<header>
+    <% include ./partials/header.ejs %>
+</header>
 
-<script>
-  //  function submit() {
+<main>
+    <div class="jumbotron">
+        <h1>Register</h1>
+        <form id="signupform" method="post" class="form-horizontal" onsubmit="return validateForm();">
+            <div class="form-group">
+                <label class="col-xs-3 control-label">First Name</label>
+                <div class="col-xs-5">
+                    <input type="text" class="form-control" name="firstName" required/>
+                </div>
+            </div>
 
-       // document.getElementById("lastName").value = document.getElementById("firstName").value;
+            <div class="form-group">
+                <label class="col-xs-3 control-label">Last Name</label>
+                <div class="col-xs-5">
+                    <input type="text" class="form-control" name="lastName" required/>
+                </div>
+            </div>
 
-   // }</script>
+            <div class="form-group">
+                <label class="col-xs-3 control-label">Email</label>
+                <div class="col-xs-5">
+                    <input type="email" class="form-control" name="email" required/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-3 control-label">Street Address</label>
+                <div class="col-xs-5">
+                    <input type="text" class="form-control" name="address" required/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-3 control-label">City</label>
+                <div class="col-xs-5">
+                    <input type="text" class="form-control" name="city" required/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-3 control-label">State</label>
+                <div class="col-xs-5">
+                    <input type="text" class="form-control" name="state" required/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-3 control-label">Zip Code</label>
+                <div class="col-xs-5">
+                    <input type="text" class="form-control" name="zipCode" required/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-3 control-label">Country</label>
+                <div class="col-xs-5">
+                    <select class="form-control" name="country">
+                        <option value="usa">USA</option>
+                        <option value="canada">Canada</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-9 col-xs-offset-3">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+<footer>
+    <% include ./partials/footer.ejs %>
+</footer>
 
 </body>
 </html>

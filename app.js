@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var session = require('express-session');
 
+
 require('./src/passport')(); // Configure passport
 
 var index = require('./routes/index');

@@ -14,6 +14,5 @@ function testInvalid(input) {
 }
 
 function validateForm() {
-        $("[name="firstName"]")
     return false;
 }

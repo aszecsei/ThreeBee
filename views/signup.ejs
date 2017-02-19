@@ -16,25 +16,26 @@
 <main>
     <div class="jumbotron ">
         <h1>Register</h1>
-        <form id="signupform" method="post" class="form-horizontal" onsubmit="return validateForm();">
-            <div class="form-group has-success">
+        <form data-toggle="validator" role="form" id="signupform" method="post" class="form-horizontal">
+            <div class="form-group has-feedback">
                 <label class="col-xs-3 control-label">First Name</label>
-                <div class="col-xs-5">
-                    <input type="text" class="form-control  form-control-danger" id="firstName" required/>
+                <div class="col-xs-5 input-group">
+                    <input type="text" class="form-control" id="firstName" placeholder="John" minlength="3" oninvalid="this.setCustomValidity('Please only include a valid first name')" pattern= "^[^#%&*:<>?/{|}]+$" required/>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
 
-            <div class="form-group has-warning">
+            <div class="form-group has-feedback">
                 <label class="col-xs-3 control-label">Last Name</label>
                 <div class="col-xs-5">
-                    <input type="text" class="form-control" id="lastName" required/>
+                    <input type="text" class="form-control" id="lastName" placeholder="Doe" minlength="3" oninvalid="this.setCustomValidity('Please only include a valid last name')" pattern= "^[^#%&*:<>?/{|}]+$" required/>
                 </div>
             </div>
 
             <div class="form-group has-error">
                 <label class="col-xs-3 control-label">Email</label>
                 <div class="col-xs-5">
-                    <input type="email" class="form-control" id="email" required/>
+                    <input type="email" class="form-control" id="email" placeholder="johndoe@Example.com" minlength="3" oninvalid="this.setCustomValidity('Please only include a valid email')" pattern= "(?:\.com)" required/>
                 </div>
             </div>
 

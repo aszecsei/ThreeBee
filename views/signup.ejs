@@ -4,8 +4,9 @@
     <% title = "Signup"; %>
     <% include ./partials/head.ejs %>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.js"></script>
     <script type="text/javascript" src="/javascripts/signup.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 </head>
 <body class="container">
 
@@ -14,60 +15,66 @@
 </header>
 
 <main>
-    <div class="jumbotron ">
+    <div class="jumbotron">
         <h1>Register</h1>
         <form data-toggle="validator" role="form" id="signupform" method="post" class="form-horizontal">
             <div class="form-group has-feedback">
                 <label class="col-xs-3 control-label">First Name</label>
-                <div class="col-xs-5 input-group">
-                    <input type="text" class="form-control" id="firstName" placeholder="John" minlength="3" oninvalid="this.setCustomValidity('Please only include a valid first name')" pattern= "^[^#%&*:<>?/{|}]+$" required/>
-                    <div class="help-block with-errors"></div>
+                <div class="col-xs-5">
+                    <input type="text" class="form-control" id="dirstName" placeholder="John" minlength="3" pattern="^([A-Za-z])+$"  data-error="Please enter your first name"  required/>
                 </div>
+                <div class="help-block with-errors"></div>
             </div>
 
             <div class="form-group has-feedback">
                 <label class="col-xs-3 control-label">Last Name</label>
                 <div class="col-xs-5">
-                    <input type="text" class="form-control" id="lastName" placeholder="Doe" minlength="3" oninvalid="this.setCustomValidity('Please only include a valid last name')" pattern= "^[^#%&*:<>?/{|}]+$" required/>
+                    <input type="text" class="form-control" id="lastName" placeholder="Doe" minlength="3" pattern="/^[A-Za-z]+(((\'|\-|\.)?([A-Za-z])+))?$/" data-error="Please enter your last name"  required/>
                 </div>
+                <div class="help-block with-errors"></div>
             </div>
 
-            <div class="form-group has-error">
+            <div class="form-group has-feedback">
                 <label class="col-xs-3 control-label">Email</label>
                 <div class="col-xs-5">
-                    <input type="email" class="form-control" id="email" placeholder="johndoe@Example.com" minlength="3" oninvalid="this.setCustomValidity('Please only include a valid email')" pattern= "(?:\.com)" required/>
+                    <input type="email" class="form-control" id="email" placeholder="johndoe@Example.com" minlength="3" pattern= "^([a-z0-9_\.\+-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$" data-error="Please enter a valid email address"  required/>
                 </div>
+                <div class="help-block with-errors"></div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group has-feedback">
                 <label class="col-xs-3 control-label">Street Address</label>
                 <div class="col-xs-5">
                     <input type="text" class="form-control" id="address" required/>
                 </div>
+                <div class="help-block with-errors"></div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group has-feedback">
                 <label class="col-xs-3 control-label">City</label>
                 <div class="col-xs-5">
                     <input type="text" class="form-control" id="city" required/>
                 </div>
+                <div class="help-block with-errors"></div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group has-feedback">
                 <label class="col-xs-3 control-label">State</label>
                 <div class="col-xs-5">
                     <input type="text" class="form-control" id="state" required/>
                 </div>
+                <div class="help-block with-errors"></div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group has-feedback">
                 <label class="col-xs-3 control-label">Zip Code</label>
                 <div class="col-xs-5">
-                    <input type="text" class="form-control" id="zipCode" required/>
+                    <input type="text" class="form-control" id="zipCode" pattern="(^\d{5}$)|(^\d{5}-\d{4}$)" data-error="Please enter a valid zipcode" required/>
                 </div>
+                <div class="help-block with-errors"></div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group has-feedback">
                 <label class="col-xs-3 control-label">Country</label>
                 <div class="col-xs-5">
                     <select class="form-control" id="country">
@@ -77,7 +84,7 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group has-feedback">
                 <div class="col-xs-9 col-xs-offset-3">
                     <button type="submit" class="btn btn-primary">Register</button>
                 </div>

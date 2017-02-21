@@ -19,23 +19,44 @@ function User(id, email, password, userType) {
         return bcrypt.compareSync(password, this.password);
     };
     this.generateTempPass = function() {
-        var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        for (var i=1;i<20;i++) {
-            var c = Math.floor(Math.random()*chars.length + 1);
-            password += chars.charAt(c)
+        var password = [];
+        var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_-+=';
+        for(var j=1;j<5;j++) {
+            password[j] = ""
+            for (var i = 1; i < 5; i++) {
+                var c = Math.floor(Math.random() * chars.length + 1);
+                password[j] += chars.charAt(c)
+            }
         }
-        if (password.search('/[A-Z]/') == -1){
-            var c = Math.floor(Math.random()*26 + 1);
-            password.replace(password.search('/[a-z]/'),chars.charAt(c));
+        while((password[1].search('/[A-Z]/') !==-1)){
+            for (var i = 1; i < 5; i++) {
+                var c = Math.floor(Math.random() * chars.length + 1);
+                password[1] += chars.charAt(c)
+            }
         }
-        if (password.search('/[0-9]/') == -1)
-        {
-            var c = Math.floor(Math.random()*10 + 54);
-            password.replace(password.search('/[a-z]/'),chars.charAt(c));
+        while((password[2].search('/[a-z]/') !==-1)){
+            for (var i = 1; i < 5; i++) {
+                var c = Math.floor(Math.random() * chars.length + 1);
+                password[2] += chars.charAt(c)
+            }
+        }
+        while((password[1].search('/[0-9]/') !==-1)){
+            for (var i = 1; i < 5; i++) {
+                var c = Math.floor(Math.random() * chars.length + 1);
+                password[1] += chars.charAt(c)
+            }
+        }
+        while((password[1].search('/[-!$%^&*()_+|~=`{}[]:/;<>?,.@#]/') !==-1)){
+            for (var i = 1; i < 5; i++) {
+                var c = Math.floor(Math.random() * chars.length + 1);
+                password[1] += chars.charAt(c)
+            }
+        }
+        var passwordEnd = password[1]+password[2]+password[3]+password[4];
 
-        }
 
-        return password;
+
+        return passwordEnd;
     };
     this.save = function (callback) {
         return db.run("INSERT OR IGNORE INTO USER (email, password, user_type) VALUES (?,?,?)", [this.email, this.password, this.user_type],  function(err) {

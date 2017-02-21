@@ -7,7 +7,7 @@ var passport = require('passport');
 
 /* GET signup page. */
 router.get('/', function(req, res, next) {
-    res.render('signup');
+    res.render('signup', {shouldDisplayLogin: false});
 });
 
 // process the signup form

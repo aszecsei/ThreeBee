@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <% include ./partials/head.ejs %>
   </head>
-  <body>
+  <body class="container">
+
+  <header>
+      <% include ./partials/header.ejs %>
+  </header>
+
     <h1><%= title %></h1>
     <p><%= body %></p>
   </body>

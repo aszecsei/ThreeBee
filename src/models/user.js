@@ -18,17 +18,24 @@ function User(id, email, password, userType) {
     this.validPassword = function(password) {
         return bcrypt.compareSync(password, this.password);
     };
-    this.checkPass =function(password) {
-        if (password.length < 8){
-            return false
+    this.generateTempPass = function() {
+        var password = '';
+        var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        for (var i=1;i<20;i++) {
+            var c = Math.floor(Math.random()*chars.length + 1);
+            password += chars.charAt(c)
+        }
+        if (password.search('/[A-Z]/') == -1){
+            var c = Math.floor(Math.random()*26 + 1);
+            password.charAt(password.search('/[a-z]/')) == chars.charAt(c);
+        }
+        if (password.search('/[0-9]/') == -1)
+        {
+            var c = Math.floor(Math.random()*10 + 54);
+            password.charAt(password.search('/[a-z]/')) == chars.charAt(c);
         }
 
-        else if((password.search('/[A-Z]/') == -1) && (password.search('/[0-9]/') == -1)){
-            return true
-        }
-        else {
-            return false;
-        }
+        return password;
     };
     this.save = function (callback) {
         return db.run("INSERT OR IGNORE INTO USER (email, password, user_type) VALUES (?,?,?)", [this.email, this.password, this.user_type],  function(err) {

@@ -23,12 +23,24 @@ describe("Web", function() {
         });
     });
 });
+function checkPass(password) {
+    if (password.length < 8){
+        return false
+    }
 
+    else if((password.search('/[A-Z]/') == -1) && (password.search('/[0-9]/') == -1)){
+        return true
+    }
+    else {
+        return false;
+    }
+}
 describe("User", function() {
     describe("Password Hashing", function() {
         var user = new User();
-        it("Password is correct", function() {
-            expect(user.checkPass("Password1")).to.equal(true);
+        it("Gen Pass is correct", function() {
+            var pass =user.generateTempPass();
+            expect(checkPass(pass)).to.equal(true);
         });
         it("Hashes passwords match", function() {
             expect(user.generateHash("password"));

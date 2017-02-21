@@ -19,11 +19,11 @@ function User(id, email, password, userType) {
         return bcrypt.compareSync(password, this.password);
     };
     this.generateTempPass = function() {
-        const lowChars = "abcdefghijklmnopqrstuvwxyz".split("");
-        const capChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-        const numChars = "0123456789".split("");
-        const spcChars = "~!@#$%^&*_-+=?".split("");
-        const allChars = lowChars.concat(capChars).concat(numChars).concat(spcChars); // Create arrays of each type of character
+        var lowChars = "abcdefghijklmnopqrstuvwxyz".split("");
+        var capChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+        var numChars = "0123456789".split("");
+        var spcChars = "~!@#$%^&*_-+=?".split("");
+        var allChars = lowChars.concat(capChars).concat(numChars).concat(spcChars); // Create arrays of each type of character
 
         var strings =  [lowChars[Math.floor(Math.random() * lowChars.length)],
                         capChars[Math.floor(Math.random() * capChars.length)],

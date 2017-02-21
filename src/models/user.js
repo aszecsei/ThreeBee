@@ -18,7 +18,18 @@ function User(id, email, password, userType) {
     this.validPassword = function(password) {
         return bcrypt.compareSync(password, this.password);
     };
-    
+    this.checkPass =function(password) {
+        if (password.length < 8){
+            return false
+        }
+
+        else if((password.search('/[A-Z]/') == -1) && (password.search('/[0-9]/') == -1)){
+            return true
+        }
+        else {
+            return false;
+        }
+    };
     this.save = function (callback) {
         return db.run("INSERT OR IGNORE INTO USER (email, password, user_type) VALUES (?,?,?)", [this.email, this.password, this.user_type],  function(err) {
             if(err) {
@@ -29,6 +40,7 @@ function User(id, email, password, userType) {
         });
     }
 }
+
 
 User.findOne = function (params, callback) {
     // create the array

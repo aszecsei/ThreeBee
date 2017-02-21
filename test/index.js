@@ -26,8 +26,12 @@ describe("Web", function() {
 
 describe("User", function() {
     describe("Password Hashing", function() {
+        var user = new User();
+        it("Password is correct", function() {
+            expect(user.checkPass("Password1")).to.equal(true);
+        });
         it("Hashes passwords match", function() {
-            var user = new User();
+            expect(user.generateHash("password"));
             user.password = user.generateHash("password");
             expect(user.validPassword("password"));
         });

@@ -19,7 +19,6 @@ function User(id, email, password, userType) {
         return bcrypt.compareSync(password, this.password);
     };
     this.generateTempPass = function() {
-        var password = '';
         var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         for (var i=1;i<20;i++) {
             var c = Math.floor(Math.random()*chars.length + 1);
@@ -27,12 +26,12 @@ function User(id, email, password, userType) {
         }
         if (password.search('/[A-Z]/') == -1){
             var c = Math.floor(Math.random()*26 + 1);
-            password.charAt(password.search('/[a-z]/')) == chars.charAt(c);
+            password.replace(password.search('/[a-z]/'),chars.charAt(c));
         }
         if (password.search('/[0-9]/') == -1)
         {
             var c = Math.floor(Math.random()*10 + 54);
-            password.charAt(password.search('/[a-z]/')) == chars.charAt(c);
+            password.replace(password.search('/[a-z]/'),chars.charAt(c));
         }
 
         return password;

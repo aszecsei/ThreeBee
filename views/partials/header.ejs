@@ -14,7 +14,7 @@
             <li><a href="/">Home</a></li>
             <li><a href="/about">About</a></li>
         </ul>
-        <% if(shouldDisplayLogin) { %>
+        <% if(shouldDisplayLogin == 0) { %>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="/signup">Register</a></li>
             <li class="dropdown">
@@ -42,6 +42,10 @@
                     </li>
                 </ul>
             </li>
+        </ul>
+        <% } else if(shouldDisplayLogin == 1) { %>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/signout">Sign Out</a></li>
         </ul>
         <% } %>
 

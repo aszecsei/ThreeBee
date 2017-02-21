@@ -7,7 +7,7 @@ var passport = require('passport');
 
 /* GET login page. */
 router.get('/', function(req, res, next) {
-    res.render('login', {shouldDisplayLogin: false});
+    res.render('login', {shouldDisplayLogin: 2});
 });
 
 // process the login form

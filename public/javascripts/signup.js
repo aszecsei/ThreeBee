@@ -15,5 +15,6 @@ function testInvalid(input) {
 
 
 function validateForm() {
+
     return false;
 }

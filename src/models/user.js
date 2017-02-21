@@ -18,7 +18,41 @@ function User(id, email, password, userType) {
     this.validPassword = function(password) {
         return bcrypt.compareSync(password, this.password);
     };
-    
+    this.generateTempPass = function() {
+        var lowChars = "abcdefghijklmnopqrstuvwxyz".split("");
+        var capChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+        var numChars = "0123456789".split("");
+        var spcChars = "~!@#$%^&*_-+=?".split("");
+        var allChars = lowChars.concat(capChars).concat(numChars).concat(spcChars); // Create arrays of each type of character
+
+        var strings =  [lowChars[Math.floor(Math.random() * lowChars.length)],
+                        capChars[Math.floor(Math.random() * capChars.length)],
+                        numChars[Math.floor(Math.random() * numChars.length)],
+                        spcChars[Math.floor(Math.random() * spcChars.length)]]; // Create 4 strings, each of which has a required character type
+
+        var selection;
+
+        for(var i=0; i<16; i++) {
+            selection = Math.floor(Math.random() * strings.length); // Select a string to alter
+            strings[selection] = (Math.random() > 0.5) ?
+                (strings[selection] + allChars[Math.floor(Math.random() * allChars)]) :
+                allChars[Math.floor(Math.random() * allChars)] + strings[selection]; // Randomly append or prepend a random character to our selected string
+        }
+        var result = "";
+        while(strings.length > 0) {
+            selection = Math.floor(Math.random() * strings.length); // Select a string to add
+            result += strings[selection]; // Add it to our result
+            strings.splice(selection, 1); // Remove the selected string from the array of strings
+        }
+        return result;
+    };
+    this.checkPass = function(password) {
+        if (password.length < 8) {
+            return false
+        } else {
+            return (password.search('/[A-Z]/') == -1) && (password.search('/[0-9]/') == -1) && (password.search('/[a-z]/') == -1);
+        }
+    };
     this.save = function (callback) {
         return db.run("INSERT OR IGNORE INTO USER (email, password, user_type) VALUES (?,?,?)", [this.email, this.password, this.user_type],  function(err) {
             if(err) {
@@ -29,6 +63,7 @@ function User(id, email, password, userType) {
         });
     }
 }
+
 
 User.findOne = function (params, callback) {
     // create the array

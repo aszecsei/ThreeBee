@@ -32,6 +32,7 @@ function User(id, email, password, userType) {
         {
             var c = Math.floor(Math.random()*10 + 54);
             password.replace(password.search('/[a-z]/'),chars.charAt(c));
+
         }
 
         return password;

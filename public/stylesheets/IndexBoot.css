@@ -3,6 +3,7 @@
     overflow: hidden;
     vertical-align: top;
     background: url("../images/stock-photo.jpg") no-repeat;
+    background-size: 1290px;
 }
 #searchbox{
     width: 400px;
@@ -12,7 +13,7 @@
     padding-right: 20px;
     padding-left: 20px;
     vertical-align:top;
-    min-height: 600px;
+    min-height: 450px;
 }
 
 #city_menu{
@@ -33,4 +34,12 @@
     font-size: 1.5em;
     padding-right: 20px;
     padding-left: 10px;
+}
+
+#outward-text{
+    font-size: 1.5em;
+}
+
+#return-text{
+    font-size: 1.5em;
 }

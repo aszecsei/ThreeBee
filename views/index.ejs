@@ -4,25 +4,58 @@
 
       <% include ./partials/head.ejs %>
       <% title = "Homepage"; %>
+      <meta charset="utf=8">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
       <link rel="stylesheet" href="/stylesheets/IndexBoot.css">
-
+      <link rel="stylesheet" href="/stylesheets/datepicker.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <main>
       <header>
           <% include ./partials/header.ejs %>
       </header>
-      <div class="jumbotron ">
-          <img src="images/public-domain-images-free-stock-photos-high-quality-resolution-downloads-unsplash0071-1000x666.jpg" class="img-rounded img-responsive "   alt="Responsive image">
+      <div class="jumbotron">
+          <label id="form">
+          <form action="">
+              <input type="radio" name="flightdir" value="oneway"> <label id="radio_button">One way</label>
+              <input type="radio" name="flightdir" value="roundtrip"> <label id="radio_button"> Round trip</label><br>
+          </form>
+          <!-- <p> Date: <input type="text" id="date_input"></p>
+          <SingleDatePicker id="date_input" date={this.state.date} focused={this.state.focused}></SingleDatePicker> -->
 
+          <div class="form-group">
+              <label for="dep_city" id="city_menu">From</label>
+              <select class="form-control" id="dep_city">
+                  <option>Burlington, IA (BRL)</option>
+                  <option>Cedar Rapids, IA (CID)</option>
+                  <option>Mason City, IA (MCW)</option>
+                  <option>Chicago, IL (ORD)</option>
+              </select>
+          </div>
+          <div class="form-group">
+              <label for="arr_city" id="city_menu">To</label>
+              <select class="form-control" id="dep_city">
+                  <option>Burlington, IA (BRL)</option>
+                  <option>Cedar Rapids, IA (CID)</option>
+                  <option>Mason City, IA (MCW)</option>
+                  <option>Chicago, IL (ORD)</option>
+              </select>
+          </div>
+          </label>
+          <img id="stockimg" src="images/public-domain-images-free-stock-photos-high-quality-resolution-downloads-unsplash0071-1000x666.jpg" class="img-rounded img-responsive "   alt="Responsive image">
       </div>
 
 
 
+      <div>
+          <SingleDatePicker id="date_input" date={this.state.date} focused={this.state.focused}></SingleDatePicker>
+
+      </div>
+
+
   </main>
-
-
-
-  <main>
 
 
 </html>

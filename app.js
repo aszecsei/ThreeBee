@@ -6,6 +6,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var session = require('express-session');
+var react = require('react');
+var dates = require('react-dates');
 
 
 require('./src/passport')(); // Configure passport
@@ -30,7 +32,11 @@ app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // required for passport
-app.use(session({secret: 'badabingbadaboom'})); // session secret
+app.use(session({
+  secret: 'badabingbadaboom',
+  resave: false,
+    saveUninitialized: false
+})); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 

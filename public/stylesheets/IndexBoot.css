@@ -1,6 +1,33 @@
-.jumbotron
-{
-    display: inline-block;
+.jumbotron {
 
 
+}
+#form{
+    max-width: 400px;
+
+    padding-left: 20px;
+}
+#stockimg{
+    width:1200px;
+    padding-left: 50px;
+}
+
+#city_menu{
+    font-size: 1.5em;
+}
+#top_logo{
+    padding-bottom: 20px;
+    padding-top: 20px;
+    padding-left: 20px;
+}
+
+#logo_container{
+    background-color: rgba(84, 123, 133, 0);
+    width: 100%;
+}
+
+#radio_button{
+    font-size: 1.5em;
+    padding-right: 40px;
+    padding-left: 10px;
 }

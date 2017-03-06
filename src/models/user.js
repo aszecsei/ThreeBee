@@ -5,11 +5,12 @@
 var db = require('../database');
 var bcrypt   = require('bcrypt-nodejs');
 
-function User(id, email, password, userType) {
+function User(id, email, password, userType, authStatus) {
     this.id = id;
     this.email = email;
     this.password = password;
     this.user_type = userType;
+    this.auth_status = authStatus
 
     this.generateHash = function(password) {
         return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
@@ -35,8 +36,8 @@ function User(id, email, password, userType) {
         for(var i=0; i<16; i++) {
             selection = Math.floor(Math.random() * strings.length); // Select a string to alter
             strings[selection] = (Math.random() > 0.5) ?
-                (strings[selection] + allChars[Math.floor(Math.random() * allChars)]) :
-                allChars[Math.floor(Math.random() * allChars)] + strings[selection]; // Randomly append or prepend a random character to our selected string
+                (strings[selection] + allChars[Math.floor(Math.random() * allChars.length)]) :
+                allChars[Math.floor(Math.random() * allChars.length)] + strings[selection]; // Randomly append or prepend a random character to our selected string
         }
         var result = "";
         while(strings.length > 0) {
@@ -46,6 +47,30 @@ function User(id, email, password, userType) {
         }
         return result;
     };
+
+    this.generateToken = function() {
+        var lowChars = "abcdefghijklmnopqrstuvwxyz".split("");
+        var capChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+        var numChars = "0123456789".split("");
+        var allChars = lowChars.concat(capChars).concat(numChars);
+        var result = "";
+
+        // The format is XXXXXXXX-XXXXXXXXXXXXXXXX-XXXXXXXXXXXXXXXX
+        for(var i=0; i<8; i++) {
+            result += allChars[Math.floor(Math.random() * allChars.length)];
+        }
+        result += "-";
+        for(i=0; i<16; i++) {
+            result += allChars[Math.floor(Math.random() * allChars.length)];
+        }
+        result += "-";
+        for(i=0; i<16; i++) {
+            result += allChars[Math.floor(Math.random() * allChars.length)];
+        }
+        return result;
+    };
+
+
     this.checkPass = function(password) {
         if (password.length < 8) {
             return false
@@ -54,7 +79,7 @@ function User(id, email, password, userType) {
         }
     };
     this.save = function (callback) {
-        return db.run("INSERT OR IGNORE INTO USER (email, password, user_type) VALUES (?,?,?)", [this.email, this.password, this.user_type],  function(err) {
+        db.query("INSERT INTO `users` (email, password, user_type, auth_status) VALUES (?,?,?, ?)", [this.email, this.password, this.user_type, this.auth_status],  function(err) {
             if(err) {
                 callback(err);
             } else {
@@ -76,13 +101,13 @@ User.findOne = function (params, callback) {
             paramArray.push(params[prop]);
         }
     }
-    return db.get("SELECT * FROM USER WHERE (" + stringArray.join(" AND ") + ")", paramArray, function(err, row) {
+    db.query("SELECT * FROM USER WHERE (" + stringArray.join(" AND ") + ")", paramArray, function(err, row) {
         if(err) {
             callback(err, undefined);
             return;
         }
-        if(row) {
-            var result = new User(row.id, row.email, row.password, row.user_type);
+        if(row.length > 0) {
+            var result = new User(row[0].id, row[0].email, row[0].password, row[0].user_type, row[0].auth_status);
             callback(err, result);
             return;
         }

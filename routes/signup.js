@@ -10,7 +10,7 @@ var User = require('../src/models/user');
 
 /* GET signup page. */
 router.get('/', function(req, res, next) {
-    res.render('signup', {shouldDisplayLogin: 2});
+    res.render('signup', {shouldDisplayLogin: (req.isAuthenticated() ? 1 : 0)});
 });
 
 // process the signup form

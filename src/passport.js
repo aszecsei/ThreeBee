@@ -65,15 +65,17 @@ module.exports = function() {
 
                 // if no user is found
                 if(!user)
-                    return done(null, false);
+                    return done(null, false, req.flash('message', 'No such user.'));
 
                 // if the user is found but the password is wrong
                 if(!user.validPassword(password))
-                    return done(null, false);
+                    return done(null, false, req.flash('message', 'Incorrect password.'));
+
+                if(user.user_type == 0 && !user.auth_status)
+                    return done(null, false, req.flash('message', 'You must validate your email before signing in.'));
 
                 // all is well, return successful user
                 return done(null, user);
-
             });
         }));
 };

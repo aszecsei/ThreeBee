@@ -8,8 +8,11 @@ var passport = require('passport');
 var db = require('../src/database');
 var User = require('../src/models/user');
 
+
+var email = require('../src/email');
+
 /* GET signup page. */
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
     res.render('signup', {shouldDisplayLogin: 2});
 });
 
@@ -45,11 +48,13 @@ router.post('/', function(req, res) {
                 newUser.id = id;
 
                 // Now, save the auth token
-                db.query("INSERT INTO `auth_keys` (`user_id`, `auth_key`) VALUES (?, ?)", [newUser.id, newUser.generateToken()], function(err) {
+                var authToken = newUser.generateToken();
+                db.query("INSERT INTO `auth_keys` (`user_id`, `auth_key`) VALUES (?, ?)", [newUser.id, authToken], function(err) {
                     if(err) {
                         throw err;
                     }
 
+                    email.sendMail(newUser.email, "Authenticate Your ThreeBee Account", "We recently received a registration for ThreeBee Airlines associated with this account.\n\nIf this is you, please either click the link or paste it into your browser: <a href='http://localhost:3000/signup/" + authToken + "'>http://localhost:3000/signup/" + authToken + "</a>");
                     res.redirect("/signup/success");
                 });
             });
@@ -57,8 +62,45 @@ router.post('/', function(req, res) {
     });
 });
 
-router.get('/:id', function(req, res, next) {
-    //
+router.get('/:auth', function(req, res) {
+    // Check if it's a valid auth key
+    var auth = req.params.auth;
+    db.query("SELECT * FROM `auth_keys` WHERE `auth_key` = ?", auth, function(err, results) {
+        if(err)
+            throw err;
+
+        if(results.length > 0) {
+            // We're gonna authorize the user
+            res.render('authorize', {authKey: auth, shouldDisplayLogin:2});
+        }
+    });
+});
+
+router.post('/:auth', function(req, res) {
+    var auth = req.params.auth;
+    db.query("SELECT * FROM `auth_keys` WHERE `auth_key` = ?", auth, function(err, results) {
+        if(err)
+            throw err;
+
+        if(results.length > 0) {
+            // We're gonna authorize the user!
+            var userid = results[0].user_id;
+
+
+            db.query("DELETE FROM `auth_keys` WHERE `auth_key`=?", auth, function(err) {
+                if(err)
+                    throw err;
+
+                var usr = new User();
+                db.query("UPDATE `USERS` SET auth_status = 1, password = ?", usr.generateHash(req.body.password), function(err) {
+                    if(err)
+                        throw err;
+
+                    res.redirect("/login");
+                });
+            });
+        }
+    });
 });
 
 module.exports = router;

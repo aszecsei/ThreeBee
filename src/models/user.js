@@ -10,7 +10,7 @@ function User(id, email, password, userType, authStatus) {
     this.email = email;
     this.password = password;
     this.user_type = userType;
-    this.auth_status = authStatus
+    this.auth_status = authStatus;
 
     this.generateHash = function(password) {
         return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
@@ -96,18 +96,17 @@ User.findOne = function (params, callback) {
     var paramArray = [];
     for(var prop in params) {
         if(params.hasOwnProperty(prop)) {
-            stringArray.push("?=?");
-            paramArray.push(prop);
+            stringArray.push("`" + prop + "`=?");
             paramArray.push(params[prop]);
         }
     }
-    db.query("SELECT * FROM USER WHERE (" + stringArray.join(" AND ") + ")", paramArray, function(err, row) {
+    db.query("SELECT * FROM `USERS` WHERE " + stringArray.join(" AND "), paramArray, function(err, row) {
         if(err) {
             callback(err, undefined);
             return;
         }
         if(row.length > 0) {
-            var result = new User(row[0].id, row[0].email, row[0].password, row[0].user_type, row[0].auth_status);
+            var result = new User(row[0].user_id, row[0].email, row[0].password, row[0].user_type, row[0].auth_status);
             callback(err, result);
             return;
         }
@@ -116,7 +115,8 @@ User.findOne = function (params, callback) {
 };
 
 User.findById = function (id, callback) {
-    return User.findOne({id: id}, callback);
+    return User.findOne({user_id: id}, callback);
 };
 
+module.exports = User;
 module.exports = User;

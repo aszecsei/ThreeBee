@@ -78,8 +78,19 @@ function User(id, email, password, userType, authStatus) {
             return (password.search('/[A-Z]/') == -1) && (password.search('/[0-9]/') == -1) && (password.search('/[a-z]/') == -1);
         }
     };
+
     this.save = function (callback) {
         db.query("INSERT INTO `users` (email, password, user_type, auth_status) VALUES (?,?,?, ?)", [this.email, this.password, this.user_type, this.auth_status],  function(err) {
+            if(err) {
+                callback(err);
+            } else {
+                callback(err, this.lastID);
+            }
+        });
+    };
+
+    this.update = function(callback) {
+        db.query("UPDATE `users` SET email=?, password=?, user_type=?, auth_status=? WHERE user_id=?", [this.email, this.password, this.user_type, this.auth_status, this.id], function(err) {
             if(err) {
                 callback(err);
             } else {

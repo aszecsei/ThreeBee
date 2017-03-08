@@ -12,7 +12,7 @@ module.exports = {
 
     isManager: function(req, res, next) {
         // if user is authenticated in the session, carry on
-        if (req.isAuthenticated() && (req.user.user_type == 1 || req.user.user_type == 2))
+        if (req.isAuthenticated() && (req.user.user_type == 1 || req.user.user_type == 2) && req.user.auth_status == 1)
             return next();
 
         // if they aren't redirect them to the home page
@@ -21,7 +21,7 @@ module.exports = {
 
     isAdmin: function(req, res, next) {
         // if user is authenticated in the session, carry on
-        if (req.isAuthenticated() && req.user.user_type == 2)
+        if (req.isAuthenticated() && req.user.user_type == 2 && req.user.auth_status == 1)
             return next();
 
         // if they aren't redirect them to the home page

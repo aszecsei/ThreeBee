@@ -91,8 +91,10 @@ router.post('/:auth', function(req, res) {
                 if(err)
                     throw err;
 
-                var usr = new User();
-                db.query("UPDATE `USERS` SET auth_status = 1, password = ?", usr.generateHash(req.body.password), function(err) {
+                var usr = User.findById(userid);
+                usr.auth_status = 1;
+                usr.password = usr.generateHash(req.body.password);
+                usr.update(function(err, newID) {
                     if(err)
                         throw err;
 

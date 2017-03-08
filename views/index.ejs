@@ -12,6 +12,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <!--  jQuery -->
       <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+      <script type="text/javascript" src="/javascripts/homepage_search.js"></script>
       <!-- Bootstrap Date-Picker Plugin -->
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
@@ -24,8 +25,9 @@
           <div id="searchbox" class="jumbotron">
               <label id="form">
                   <form action="">
-                      <input type="radio" name="flightdir" value="oneway"> <label id="radio_button">One way</label>
-                      <input type="radio" name="flightdir" value="roundtrip"> <label id="radio_button"> Round trip</label><br>
+
+                      <input id="roundtripyes" type="radio" checked name="flightdir" value="roundtrip"> <label id="radio_button"> Round trip</label>
+                      <input id="roundtripno" type="radio" name="flightdir" value="oneway"> <label id="radio_button">One way</label><br>
                   </form>
                   <!-- <p> Date: <input type="text" id="date_input"></p>
                   <SingleDatePicker id="date_input" date={this.state.date} focused={this.state.focused}></SingleDatePicker> -->
@@ -56,36 +58,11 @@
                       </div>
 
                   </form>
-                  <script>
-                      $(document).ready(function(){
-                      var date_input=$('input[name="outward-date"]'); //our date input has the name "date"
-                      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-                      var options={
-                      format: 'mm/dd/yyyy',
-                      container: container,
-                      todayHighlight: true,
-                      autoclose: true,
-                      };
-                      date_input.datepicker(options);
-                      })
-                  </script>
+
                   <div class="form-group">
                       <label for="return-date" class="control-label" id="return-text"> Return </label>
                       <input class="form-control" id="return-date" name="return-date" placeholder="MM/DD/YYYY" type="text"/>
                   </div>
-                  <script>
-                      $(document).ready(function(){
-                          var date_input=$('input[name="return-date"]'); //our date input has the name "date"
-                          var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-                          var options={
-                              format: 'mm/dd/yyyy',
-                              container: container,
-                              todayHighlight: true,
-                              autoclose: true,
-                          };
-                          date_input.datepicker(options);
-                      })
-                  </script>
                   <div class="form-group">
                       <button class="btn btn-primary" name="submit" type="submit">Submit</button>
                   </div>

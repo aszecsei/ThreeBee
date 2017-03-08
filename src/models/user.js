@@ -10,7 +10,7 @@ function User(id, email, password, userType, authStatus) {
     this.email = email;
     this.password = password;
     this.user_type = userType;
-    this.auth_status = authStatus
+    this.auth_status = authStatus;
 
     this.generateHash = function(password) {
         return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);

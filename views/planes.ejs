@@ -12,8 +12,40 @@
 
 <main>
     <div class="jumbotron">
-        <form id="planeform" method="post" class="form-horizontal" onsubmit="return false;">
+        <form id="addplaneform" method="post" class="form-horizontal">
+            <div class="form-group">
+                <label class="col-xs-3 control-label">Plane Name: </label>
+                <div class="col-xs-5">
+                    <input type="text" class="form-control" name="name" required/>
+                </div>
+            </div>
 
+            <div class="form-group">
+                <label class="col-xs-3 control-label">Number of First Class Seats:  </label>
+                <div class="col-xs-5">
+                    <input type="number" class="form-control" name="numFirstSeat" required/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-3 control-label">Number of Business Seats:  </label>
+                <div class="col-xs-5">
+                    <input type="number" class="form-control" name="numBizSeat" required/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-3 control-label">Number of Coach Seats:  </label>
+                <div class="col-xs-5">
+                    <input type="number" class="form-control" name="numCoachSeat" required/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-9 col-xs-offset-3">
+                    <button type="submit" class="btn btn-primary">Add Plane</button>
+                </div>
+            </div>
 
 
         </form>

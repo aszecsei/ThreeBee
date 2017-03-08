@@ -36,7 +36,7 @@ router.post('/', function(req, res) {
             // set the user's local credentials
             newUser.email    = req.body.email;
             newUser.password = "";
-            newUser.user_type = 1;
+            newUser.user_type = 0; // Normal user
             newUser.auth_status = 0;
 
             // save the user

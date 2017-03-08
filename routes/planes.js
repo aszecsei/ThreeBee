@@ -2,15 +2,13 @@
 
 var express = require('express');
 var router = express.Router();
-
-var passport = require('passport');
-var Plane = require('../src/models/plane.js');
+var Plane = require('../src/models/plane');
 
 router.get('/', function(req, res, next) {
     res.render('planes', {shouldDisplayLogin: 2});
 });
 
-router.post('/', function(req, res) {
+router.post('/addplane', function(req, res) {
     Plane.findOne({'name': req.body.name}, function (err, user) {
         // if there are any errors, return the error
         if (err)
@@ -41,6 +39,10 @@ router.post('/', function(req, res) {
         }
     });
 });
+router.post('/removeplane'), function(req, res){
+
+
+}
 
 
 module.exports = router;

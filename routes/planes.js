@@ -9,13 +9,13 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/addplane', function(req, res) {
-    Plane.findOne({'name': req.body.name}, function (err, user) {
+    Plane.findOne({'name': req.body.addname}, function (err, plane) {
         // if there are any errors, return the error
         if (err)
             res.status(400);
 
         // check to see if theres already a user with that email
-        if (user) {
+        if (plane) {
             res.status(400);
         } else {
             // if there is no user with that email
@@ -23,9 +23,9 @@ router.post('/addplane', function(req, res) {
             var newPlane = new Plane();
 
             // set the user's local credentials
-            newPlane.name = req.body.name;
-            newPlane.numCoachSeat = req.body.numCoachSeat;
+            newPlane.name = req.body.addname;
             newPlane.numBizSeat = req.body.numBizSeat;
+            newPlane.numCoachSeat = req.body.numCoachSeat;
             newPlane.numFirstSeat = req.body.numFirstSeat;
 
             // save the user
@@ -39,10 +39,23 @@ router.post('/addplane', function(req, res) {
         }
     });
 });
-router.post('/removeplane'), function(req, res){
 
+router.post('/removeplane', function(req, res){
 
-}
+    Plane.findOne({'name': req.body.rename}, function (err, plane) {
+        if (err)
+            res.status(400);
+        // if there are any errors, return the error
+        if (err)
+            res.status(400);
+
+        // check to see if theres already a user with that email
+
+            Plane.delete(req.body.rename)
+
+    });
+
+});
 
 
 module.exports = router;

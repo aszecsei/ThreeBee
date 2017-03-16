@@ -1,11 +1,14 @@
 /**
+ * Created by Tanner on 3/16/2017.
+ */
+/**
  * Created by Tanner on 3/6/2017.
  */
 'use strict';
 
 var db = require('../database');
 
-function Plane(id,name, numFirstSeat, numBizSeat, numCoachSeat) {
+function Flight(id,name, numFirstSeat, numBizSeat, numCoachSeat) {
     this.id = id;
     this.name = name;
     this.numFirstSeat = numFirstSeat;
@@ -25,10 +28,10 @@ function Plane(id,name, numFirstSeat, numBizSeat, numCoachSeat) {
 
     }
 }
-Plane.delete = function (name,callback) {
+Flight.delete = function (name,callback) {
     db.query("DELETE FROM threebee.airplane_type WHERE airplane_name = '" +name+"';");
 };
-Plane.findOne = function (params, callback) {
+Flight.findOne = function (params, callback) {
     // create the array
     var stringArray = [];
     var paramArray = [];
@@ -45,7 +48,7 @@ Plane.findOne = function (params, callback) {
             return;
         }
         if (row.length > 0) {
-            var result = new Plane(row[0].idairplane_type, row[0].name, row[0].numFirstSeat, row[0].numBizSeat, row[0].numCoachSeat);
+            var result = new Flight(row[0].idairplane_type, row[0].name, row[0].numFirstSeat, row[0].numBizSeat, row[0].numCoachSeat);
             callback(err, result);
             return;
         }
@@ -53,8 +56,8 @@ Plane.findOne = function (params, callback) {
     });
 };
 
-Plane.findById = function (id, callback) {
-    return Plane.findOne({id: id}, callback);
+Flight.findById = function (id, callback) {
+    return Flight.findOne({id: id}, callback);
 };
 
-module.exports = Plane;
+module.exports = Flight;

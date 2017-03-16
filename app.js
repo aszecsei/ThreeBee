@@ -13,7 +13,8 @@ require('./src/passport')(); // Configure passport
 var index = require('./routes/index');
 var signup = require('./routes/signup');
 var login = require('./routes/login');
-var planes = require('./routes/planes')
+var planes = require('./routes/planes');
+var flights = require('./routes/flights');
 
 var app = express();
 
@@ -39,6 +40,7 @@ app.use('/', index);
 app.use('/signup', signup);
 app.use('/login', login);
 app.use('/planes', planes);
+app.use('/flights',flights);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

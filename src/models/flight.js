@@ -8,15 +8,27 @@
 
 var db = require('../database');
 
-function Flight(id,name, numFirstSeat, numBizSeat, numCoachSeat) {
+function Flight(id,duration, firstFlight, turnover, planeID, takeoff, landing) {
     this.id = id;
-    this.name = name;
-    this.numFirstSeat = numFirstSeat;
-    this.numBizSeat = numBizSeat;
-    this.numCoachSeat = numCoachSeat;
+    this.duration = duration;
+    this.firstFlight = firstFlight;
+    this.turnover = turnover;
+    this.planeID = planeID;
+    this.takeoff = takeoff;
+    this.landing = landing;
 
     this.save = function (callback) {
-        db.query("INSERT INTO airplane_type (airplane_name, airplane_firstSeats, airplane_buisnessSeats, airplane_coachSeats) VALUES (?,?,?,?)", [this.name, this.numFirstSeat, this.numBizSeat, this.numCoachSeat], function (err) {
+        db.query("INSERT INTO flight_data (flight_duration, flight_firstFlight, flight_turnover, planeID, flight_takeoff, flight_landing) VALUES (?,?,?,?,?,?)", [this.duration, this.firstFlight, this.turnover, this.planeID, this.takeoff,this.landing], function (err) {
+            if (err) {
+                callback(err);
+            } else {
+                callback(err, this.lastID);
+            }
+        });
+        var secondFlightDate = new Date("'" + this.firstFlight.value + "'");
+        var tryIT = secondFlightDate.toISOString();
+        secondFlightDate =  secondFlightDate.setTime(secondFlightDate.getTime()*60000+this.duration*60000+this.turnover*60000);
+        db.query("INSERT INTO flight_data (flight_duration, flight_firstFlight, flight_turnover, planeID, flight_takeoff, flight_landing) VALUES (?,?,?,?,?,?)", [this.duration,tryIT, this.turnover, this.planeID, this.landing,this.takeoff], function (err) {
             if (err) {
                 callback(err);
             } else {
@@ -29,7 +41,7 @@ function Flight(id,name, numFirstSeat, numBizSeat, numCoachSeat) {
     }
 }
 Flight.delete = function (name,callback) {
-    db.query("DELETE FROM threebee.airplane_type WHERE airplane_name = '" +name+"';");
+    db.query("DELETE FROM threebee.flight_data WHERE airplane_name = '" +name+"';");
 };
 Flight.findOne = function (params, callback) {
     // create the array
@@ -42,13 +54,13 @@ Flight.findOne = function (params, callback) {
             paramArray.push(params[prop]);
         }
     }
-    db.query("SELECT * FROM AIRPLANE_TYPE WHERE (" + stringArray.join(" AND ") + ")", paramArray, function (err, row) {
+    db.query("SELECT * FROM threebee.flight_data WHERE (" + stringArray.join(" AND ") + ")", paramArray, function (err, row) {
         if (err) {
             callback(err, undefined);
             return;
         }
         if (row.length > 0) {
-            var result = new Flight(row[0].idairplane_type, row[0].name, row[0].numFirstSeat, row[0].numBizSeat, row[0].numCoachSeat);
+            var result = new Flight(row[0].idflight_data, row[0].name, row[0].numFirstSeat, row[0].numBizSeat, row[0].numCoachSeat);
             callback(err, result);
             return;
         }

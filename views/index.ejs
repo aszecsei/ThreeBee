@@ -26,8 +26,8 @@
               <label id="form">
                   <form action="">
 
-                      <input id="roundtripyes" type="radio" checked name="flightdir" value="roundtrip"> <label id="radio_button"> Round trip</label>
-                      <input id="roundtripno" type="radio" name="flightdir" value="oneway"> <label id="radio_button">One way</label><br>
+                      <input id="roundtrip" type="radio" checked name="flightdir" value="roundtrip"> <label id="radio_button"> Round trip</label>
+                      <input id="oneway" type="radio" name="flightdir" value="oneway"> <label id="radio_button">One way</label><br>
                   </form>
                   <!-- <p> Date: <input type="text" id="date_input"></p>
                   <SingleDatePicker id="date_input" date={this.state.date} focused={this.state.focused}></SingleDatePicker> -->
@@ -59,7 +59,7 @@
 
                   </form>
 
-                  <div class="form-group">
+                  <div id = "returngroup" class="form-group">
                       <label for="return-date" class="control-label" id="return-text"> Return </label>
                       <input class="form-control" id="return-date" name="return-date" placeholder="MM/DD/YYYY" type="text"/>
                   </div>

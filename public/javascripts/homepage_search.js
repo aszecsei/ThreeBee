@@ -3,14 +3,14 @@
  */
 //checks whether or not user wants a return type
 //changes whether they can select return flight
-function oneway_or_roundtrip(){
-    if(document.getElementById('roundtripyes').checked){
-        document.getElementById('return-text').style.display = 'visible';
-    } else {
-        document.getElementById('return-text').styl
-    }
-}
-
+$(document).ready(function(){
+    $("#oneway").click(function (event) {
+        $("#returngroup").hide();
+    })
+    $("#roundtrip").click(function (event) {
+        $("#returngroup").show();
+    })
+})
 
 // handles the outward flight date picker
 $(document).ready(function(){

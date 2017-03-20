@@ -15,7 +15,7 @@ router.get('/', function(req, res) {
   }
 
   if(req.isAuthenticated() && req.user.user_type == 2 && req.user.auth_status == 1) {
-    res.render('adminindex', {title: 'ThreeBee', shouldDisplayLogin: 1});
+    res.render('admindashboard', {title: 'ThreeBee', shouldDisplayLogin: 1});
   } else if(req.isAuthenticated() && req.user.user_type == 1) {
     res.render('index', {title: 'ThreeBee', shouldDisplayLogin: 1}); // TODO: Change this if we have a manager portal
   } else {

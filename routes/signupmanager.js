@@ -50,7 +50,7 @@ router.post('/', auth.isManager, function(req, res) {
                 newUser.id = id;
 
                 // Now, send the email!
-                email.sendMail(newUser.email, "Your ThreeBee Account", "Hello!\n\nYou've recently been given a manager account at ThreeBee Airlines. To log in, please use this email and the password: '" + newUser.pass + "'.");
+                email.sendMail(newUser.email, "Your ThreeBee Account", "Hello!\n\nYou've recently been given a manager account at ThreeBee Airlines. To log in, please use this email and the password: '" + pass + "'.");
             });
         }
     });

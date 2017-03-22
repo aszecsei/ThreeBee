@@ -1,15 +1,85 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <% include ./partials/head.ejs %>
+
+      <% include ./partials/head.ejs %>
+      <% title = "Homepage"; %>
+      <meta charset="utf=8">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <link rel="stylesheet" href="/stylesheets/IndexBoot.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!--  jQuery -->
+      <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+      <script type="text/javascript" src="/javascripts/homepage_search.js"></script>
+      <!-- Bootstrap Date-Picker Plugin -->
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
   </head>
-  <body class="container">
+  <main>
+      <header>
+          <% include ./partials/header.ejs %>
+      </header>
+      <div class="layout" id="signup_image">
+          <div id="searchbox" class="jumbotron">
+              <label id="form">
+                  <form action="">
 
-  <header>
-      <% include ./partials/header.ejs %>
-  </header>
+                      <input id="roundtrip" type="radio" checked name="flightdir" value="roundtrip"> <label id="radio_button"> Round trip</label>
+                      <input id="oneway" type="radio" name="flightdir" value="oneway"> <label id="radio_button">One way</label><br>
+                  </form>
+                  <!-- <p> Date: <input type="text" id="date_input"></p>
+                  <SingleDatePicker id="date_input" date={this.state.date} focused={this.state.focused}></SingleDatePicker> -->
 
-    <h1><%= title %></h1>
-    <p><%= body %></p>
-  </body>
+                  <div class="form-group">
+                      <label for="dep_city" id="city_menu">From</label>
+                      <select class="form-control" id="dep_city">
+                          <option>Burlington, IA (BRL)</option>
+                          <option>Cedar Rapids, IA (CID)</option>
+                          <option>Mason City, IA (MCW)</option>
+                          <option>Chicago, IL (ORD)</option>
+                      </select>
+                  </div>
+                  <div class="form-group">
+                      <label for="arr_city" id="city_menu">To</label>
+                      <select class="form-control" id="dep_city">
+                          <option>Burlington, IA (BRL)</option>
+                          <option>Cedar Rapids, IA (CID)</option>
+                          <option>Mason City, IA (MCW)</option>
+                          <option>Chicago, IL (ORD)</option>
+                      </select>
+                  </div>
+
+                  <form method="post">
+                      <div class="form-group">
+                          <label for="outward-date" class="control-label" id="outward-text"> Outward </label>
+                          <input class="form-control" id="outward-date" name="outward-date" placeholder="MM/DD/YYYY" type="text"/>
+                      </div>
+
+                  </form>
+
+                  <div id = "returngroup" class="form-group">
+                      <label for="return-date" class="control-label" id="return-text"> Return </label>
+                      <input class="form-control" id="return-date" name="return-date" placeholder="MM/DD/YYYY" type="text"/>
+                  </div>
+                  <div class="form-group">
+                      <button class="btn btn-primary" name="submit" type="submit">Submit</button>
+                  </div>
+              </label>
+
+          </div>
+      </div>
+
+
+
+      <div>
+          <SingleDatePicker id="date_input" date={this.state.date} focused={this.state.focused}></SingleDatePicker>
+
+      </div>
+
+
+  </main>
+
+
 </html>

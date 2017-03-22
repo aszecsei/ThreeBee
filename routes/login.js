@@ -5,6 +5,7 @@ var router = express.Router();
 
 var passport = require('passport');
 
+
 /* GET login page. */
 router.get('/', function(req, res, next) {
     var msg = req.flash('message');

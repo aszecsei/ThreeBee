@@ -5,9 +5,8 @@ var router = express.Router();
 var Plane = require('../src/models/plane');
 
 router.get('/', function(req, res) {
-    Plane.query(function (err,row) {
-
-        res.render('planes', {shouldDisplayLogin: 2, result: row});
+    Plane.query(function (err,rower) {
+        res.render('planes', {shouldDisplayLogin: 2, result: rower});
     });
 });
 
@@ -44,7 +43,6 @@ router.post('/addplane', function(req, res) {
 });
 
 router.post('/removeplane', function(req, res){
-
     Plane.findOne({'name': req.body.rename}, function (err, plane) {
         if (err)
             res.status(400);
@@ -58,6 +56,10 @@ router.post('/removeplane', function(req, res){
 
     });
 
+});
+router.get('/:id/delete', function(){
+    console.log("Here");
+    Plane.delete(id);
 });
 
 

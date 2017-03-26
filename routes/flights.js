@@ -6,9 +6,14 @@
 var express = require('express');
 var router = express.Router();
 var Flight = require('../src/models/flight');
+var Plane = require('../src/models/plane')
 
 router.get('/', function(req, res, next) {
-    res.render('flights', {shouldDisplayLogin: 2});
+    Flight.query(function (err,row) {
+        Plane.query(function (err,rower) {
+            res.render('flights', {shouldDisplayLogin: 2, result: row, planes: rower});
+        })
+    });
 });
 
 router.post('/addflight', function(req, res) {

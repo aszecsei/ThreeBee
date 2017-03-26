@@ -25,10 +25,7 @@ function Flight(id,duration, firstFlight, turnover, planeID, takeoff, landing) {
                 callback(err, this.lastID);
             }
         });
-        var secondFlightDate = new Date("'" + this.firstFlight.value + "'");
-        var tryIT = secondFlightDate.toISOString();
-        secondFlightDate =  secondFlightDate.setTime(secondFlightDate.getTime()*60000+this.duration*60000+this.turnover*60000);
-        db.query("INSERT INTO flight_data (flight_duration, flight_firstFlight, flight_turnover, planeID, flight_takeoff, flight_landing) VALUES (?,?,?,?,?,?)", [this.duration,tryIT, this.turnover, this.planeID, this.landing,this.takeoff], function (err) {
+        db.query("INSERT INTO flight_data (flight_duration, flight_firstFlight, flight_turnover, planeID, flight_takeoff, flight_landing) VALUES (?,?,?,?,?,?)", [this.duration, this.firstFlight, this.turnover, this.planeID, this.landing,this.takeoff], function (err) {
             if (err) {
                 callback(err);
             } else {

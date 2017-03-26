@@ -58,14 +58,14 @@ Plane.findById = function (id, callback) {
 };
 
 Plane.query = function (callback) {
-    db.query("SELECT * FROM AIRPLANE_TYPE", function (err, row) {
+    db.query("SELECT * FROM AIRPLANE_TYPE", function (err, rower) {
         if (err) {
             callback(err, undefined);
             return;
         }
-        if (row.length > 0) {
+        if (rower.length > 0) {
 
-            callback(err,row);
+            callback(err,rower);
             return;
         }
         callback(err, undefined);

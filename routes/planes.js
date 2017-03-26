@@ -4,8 +4,11 @@ var express = require('express');
 var router = express.Router();
 var Plane = require('../src/models/plane');
 
-router.get('/', function(req, res, next) {
-    res.render('planes', {shouldDisplayLogin: 2});
+router.get('/', function(req, res) {
+    Plane.query(function (err,row) {
+
+        res.render('planes', {shouldDisplayLogin: 2, result: row});
+    });
 });
 
 router.post('/addplane', function(req, res) {

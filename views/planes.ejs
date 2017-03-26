@@ -53,7 +53,7 @@
         </form>
     </div>
     <div class="jumbotron">
-        <form id="addplane" action="planes/removeplane" method="post" class="form-horizontal">
+        <form id="removeplane" action="planes/removeplane" method="post" class="form-horizontal">
             <div class="form-group">
                 <label class="col-xs-3 control-label">Plane Name:  </label>
                 <div class="col-xs-5">
@@ -66,6 +66,23 @@
                 </div>
             </div>
         </form>
+    </div>
+    <div class="jumbotron">
+        <table class="table">
+            <thread>
+                <th>#</th>
+                <th>Plane Name</th>
+                <th>Delete</th>
+            </thread>
+            <tbody>
+                <%var j = 1; for(var i = 0; i < result.length; i++){ %>
+                    <tr>
+                        <th scope="row"><%=j%></th>
+                        <td><%=result[i].airplane_name%></td>
+                    </tr>
+                <%j++;}%>
+            </tbody>
+        </table>
     </div>
 
 </main>

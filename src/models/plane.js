@@ -25,8 +25,8 @@ function Plane(id,name, numFirstSeat, numBizSeat, numCoachSeat) {
 
     }
 }
-Plane.delete = function (name,callback) {
-    db.query("DELETE FROM threebee.airplane_type WHERE airplane_name = '" +name+"';");
+Plane.delete = function (id) {
+    db.query("DELETE FROM threebee.airplane_type WHERE airplaneID = '" +id+"';");
 };
 Plane.findOne = function (params, callback) {
     // create the array
@@ -55,6 +55,21 @@ Plane.findOne = function (params, callback) {
 
 Plane.findById = function (id, callback) {
     return Plane.findOne({id: id}, callback);
+};
+
+Plane.query = function (callback) {
+    db.query("SELECT * FROM AIRPLANE_TYPE", function (err, row) {
+        if (err) {
+            callback(err, undefined);
+            return;
+        }
+        if (row.length > 0) {
+
+            callback(err,row);
+            return;
+        }
+        callback(err, undefined);
+    });
 };
 
 module.exports = Plane;

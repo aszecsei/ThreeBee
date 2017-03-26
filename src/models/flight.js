@@ -72,4 +72,17 @@ Flight.findById = function (id, callback) {
     return Flight.findOne({id: id}, callback);
 };
 
+Flight.query = function (callback) {
+    db.query("SELECT * FROM threebee.flight_data", function (err, row) {
+        if (err) {
+            callback(err, undefined);
+            return;
+        }
+        if (row.length > 0) {
+            callback(err,row);
+            return;
+        }
+        callback(err, undefined);
+    });
+};
 module.exports = Flight;

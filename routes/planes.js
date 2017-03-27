@@ -57,9 +57,10 @@ router.post('/removeplane', function(req, res){
     });
 
 });
-router.get('/:id/delete', function(){
-    console.log("Here");
-    Plane.delete(id);
+router.get('/:id/delete', function(req,res){
+    console.log(req.id);
+    Plane.delete(req.id);
+    res.redirect("/planes")
 });
 
 

@@ -18,7 +18,6 @@ router.get('/', function(req, res) {
 
 // process the signup form
 router.post('/', function(req, res) {
-    res.redirect('/registrationsuccess');
     // find a user whose email is the same as the forms email
     // we are checking to see if the user trying to login already exists
     User.findOne({ 'email' :  req.body.email }, function(err, user) {
@@ -55,7 +54,9 @@ router.post('/', function(req, res) {
                         throw err;
                     }
 
-                    email.sendMail(newUser.email, "Authenticate Your ThreeBee Account", "We recently received a registration for ThreeBee Airlines associated with this account.\n\nIf this is you, please either click the link or paste it into your browser: <a href='http://localhost:3000/signup/" + authToken + "'>http://localhost:3000/signup/" + authToken + "</a>");
+                    email.sendMail(newUser.email, "Authenticate Your ThreeBee Account", "We recently received a registration for ThreeBee Airlines associated with this account.\n\nIf this is you, please either click the link or paste it into your browser: <a href='http://localhost:3000/signup/" + authToken + "'>http://localhost:3000/signup/" + authToken + "</a>", function() {
+                        res.redirect('/registrationsuccess');
+                    });
 
                 });
             });

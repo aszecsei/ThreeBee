@@ -11,7 +11,7 @@ var transporter = nodemailer.createTransport({
 });
 
 module.exports = {
-    sendMail: function(recipients, subject, text) {
+    sendMail: function(recipients, subject, text, callback) {
         // setup email data with unicode symbols
         var mailOptions = {
             from: '"ThreeBee Airlines ✈" <threebeeairline@gmail.com>', // sender address
@@ -27,6 +27,7 @@ module.exports = {
                 return console.log(error);
             }
             console.log('Message %s sent: %s', info.messageId, info.response);
+            callback();
         });
     }
 };

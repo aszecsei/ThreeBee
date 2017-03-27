@@ -10,13 +10,19 @@ var Plane = require('../src/models/plane')
 
 router.get('/', function(req, res, next) {
     Flight.query(function (err,row) {
+        if (row == undefined){
+            row = new Array();
+        }
         Plane.query(function (err,rower) {
+            if (rower == undefined){
+                rower = new Array();
+            }
             res.render('flights', {shouldDisplayLogin: 2, result: row, planes: rower});
         })
     });
 });
 
-router.post('/addflight', function(req, res) {
+router.post('/:id/newflight/addflight', function(req, res) {
     Flight.findOne({'name': req.body.addname}, function (err, plane) {
         // if there are any errors, return the error
         if (err)
@@ -34,7 +40,7 @@ router.post('/addflight', function(req, res) {
             newFlight.duration = req.body.duration;
             newFlight.firstFlight = req.body.dateTime;
             newFlight.turnover = req.body.turnover;
-            newFlight.planeID = req.body.planeID;
+            newFlight.planeID = req.params.id;
             newFlight.takeoff = req.body.firstStop;
             newFlight.landing = req.body.secondStop;
 
@@ -46,6 +52,7 @@ router.post('/addflight', function(req, res) {
                 }
 
             });
+            res.redirect("/flights");
         }
     });
 });
@@ -64,6 +71,15 @@ router.post('/removeplane', function(req, res){
 
     });
 
+});
+router.get('/:id/delete', function(req,res){
+    console.log(req.params.id);
+    Flight.delete(req.params.id);
+    res.redirect("/flights");
+});
+
+router.get('/:id/newflight', function (req,res) {
+    res.render('newFlight',{ shouldDisplayLogin: 2});
 });
 
 

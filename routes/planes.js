@@ -6,6 +6,9 @@ var Plane = require('../src/models/plane');
 
 router.get('/', function(req, res) {
     Plane.query(function (err,rower) {
+        if (rower == undefined){
+            rower = new Array();
+        }
         res.render('planes', {shouldDisplayLogin: 2, result: rower});
     });
 });
@@ -38,28 +41,14 @@ router.post('/addplane', function(req, res) {
                 }
 
             });
+            res.redirect("/planes")
         }
     });
 });
 
-router.post('/removeplane', function(req, res){
-    Plane.findOne({'name': req.body.rename}, function (err, plane) {
-        if (err)
-            res.status(400);
-        // if there are any errors, return the error
-        if (err)
-            res.status(400);
-
-        // check to see if theres already a user with that email
-
-            Plane.delete(req.body.rename)
-
-    });
-
-});
 router.get('/:id/delete', function(req,res){
-    console.log(req.id);
-    Plane.delete(req.id);
+    console.log(req.params.id);
+    Plane.delete(req.params.id);
     res.redirect("/planes")
 });
 

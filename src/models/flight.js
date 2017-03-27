@@ -37,8 +37,8 @@ function Flight(id,duration, firstFlight, turnover, planeID, takeoff, landing) {
 
     }
 }
-Flight.delete = function (name,callback) {
-    db.query("DELETE FROM threebee.flight_data WHERE airplane_name = '" +name+"';");
+Flight.delete = function (id) {
+    db.query("DELETE FROM threebee.flight_data WHERE flightID = '" +id+"';");
 };
 Flight.findOne = function (params, callback) {
     // create the array

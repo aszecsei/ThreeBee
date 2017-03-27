@@ -14,72 +14,6 @@
 
 <main>
     <div class="jumbotron">
-        <form id="addplane" action="flights/addflight" method="post" class="form-horizontal">
-            <div class="form-group">
-                <label class="col-xs-3 control-label">Duration: </label>
-                <div class="col-xs-5">
-                    <input type="number" class="form-control" name="duration" required/>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-xs-3 control-label">Day and Time of First Flight:  </label>
-                <div class="col-xs-5">
-                    <input type="datetime-local" class="form-control" name="dateTime" required/>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-xs-3 control-label">Turnover time:   </label>
-                <div class="col-xs-5">
-                    <input type="number" class="form-control" name="turnover" required/>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-xs-3 control-label">Plane ID:  </label>
-                <div class="col-xs-5">
-                    <input type="number" class="form-control" name="planeID" required/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-xs-3 control-label">Stop 1:  </label>
-                <div class="col-xs-5">
-                    <input type="text" class="form-control" name="firstStop" required/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-xs-3 control-label">Stop 2:  </label>
-                <div class="col-xs-5">
-                    <input type="text" class="form-control" name="secondStop" required/>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-xs-9 col-xs-offset-3">
-                    <button type="submit" class="btn btn-primary">Add Plane</button>
-                </div>
-            </div>
-
-
-        </form>
-    </div>
-    <div class="jumbotron">
-        <form id="addplane" action="planes/removeplane" method="post" class="form-horizontal">
-            <div class="form-group">
-                <label class="col-xs-3 control-label">Plane Name:  </label>
-                <div class="col-xs-5">
-                    <input type="text" class="form-control" name="rename" required/>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-xs-9 col-xs-offset-3">
-                    <button type="submit" class="btn btn-primary">Remove Plane</button>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="jumbotron">
         <table class="table">
             <thread>
                 <th>#</th>
@@ -91,7 +25,7 @@
             <tr>
                 <th scope="row"><%=j%></th>
                 <td><%=planes[i].airplane_name%></td>
-                <td><a href=/planes/+id>Select</a> </td>
+                <td><a href= flights/<%= planes[i].airplaneID%>/newflight>Select</a> </td>
             </tr>
             <%j++;}%>
             </tbody>
@@ -111,7 +45,7 @@
                 <th scope="row"><%=j%></th>
                 <td><%=result[i].flight_takeoff%></td>
                 <td><%=result[i].flight_landing%></td>
-                <td><a href=/planes/+id>Delete</a> </td>
+                <td><a href=/flights/<%= result[i].flightID%>/delete>Delete</a> </td>
             </tr>
             <%j++;}%>
             </tbody>

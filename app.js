@@ -48,7 +48,9 @@ app.use('/registrationsuccess', registrationsuccess);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  res.render('404');
+  var err = new Error('Not Found');
+  err.status = 404;
+  res.render('404', {shouldDisplayLogin: 2});
 });
 
 // error handler
@@ -59,7 +61,6 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
 });
 
 module.exports = app;

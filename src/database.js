@@ -4,9 +4,17 @@ This will be used to handle the database connection
 
 'use strict';
 
-module.exports = function () {
-    var sqlite3 = require('sqlite3').verbose();
-    return new sqlite3.Database(':memory:');
-    //Switch :memory: to filename .sqllite
+var mysql      = require('mysql');
 
-};
+var pool  = mysql.createPool({
+    connectionLimit : 10,
+    host            : 'localhost',
+    user            : 'threebee',
+    password        : '3bees!',
+    database        : 'threebee'
+});
+
+
+// TODO: Check if database is set up; if not, do it
+
+module.exports = pool;

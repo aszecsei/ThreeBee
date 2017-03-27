@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% title = "Signup"; %>
+    <% include ./partials/head.ejs %>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.js"></script>
+</head>
+<body class="container">
+
+<header>
+    <% include ./partials/header.ejs %>
+</header>
+
+<main>
+    <div class="jumbotron">
+        <h1>Register</h1>
+        <form data-toggle="validator" role="form" id="signupform" method="post" class="form-horizontal">
+            <div class="form-group has-feedback">
+                <label class="col-xs-3 control-label">First Name</label>
+                <div class="col-xs-5">
+                    <input type="text" class="form-control" id="firstName" name="firstName" placeholder="John" minlength="3" pattern="^([A-Za-z])+$"  data-error="Please enter your first name"  required/>
+                </div>
+                <div class="help-block with-errors"></div>
+            </div>
+
+            <div class="form-group has-feedback">
+                <label class="col-xs-3 control-label">Last Name</label>
+                <div class="col-xs-5">
+                    <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Doe" minlength="3" pattern="/^[A-Za-z]+(((\'|\-|\.)?([A-Za-z])+))?$/" data-error="Please enter your last name"  required/>
+                </div>
+                <div class="help-block with-errors"></div>
+            </div>
+
+            <div class="form-group has-feedback">
+                <label class="col-xs-3 control-label">Email</label>
+                <div class="col-xs-5">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="johndoe@Example.com" minlength="3" pattern= "^([a-z0-9_\.\+-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$" data-error="Please enter a valid email address"  required/>
+                </div>
+                <div class="help-block with-errors"></div>
+            </div>
+
+            <div class="form-group has-feedback">
+                <label class="col-xs-3 control-label">Street Address</label>
+                <div class="col-xs-5">
+                    <input type="text" class="form-control" id="address" name="address" required/>
+                </div>
+                <div class="help-block with-errors"></div>
+            </div>
+
+            <div class="form-group has-feedback">
+                <label class="col-xs-3 control-label">City</label>
+                <div class="col-xs-5">
+                    <input type="text" class="form-control" id="city" name="city" required/>
+                </div>
+                <div class="help-block with-errors"></div>
+            </div>
+
+            <div class="form-group has-feedback">
+                <label class="col-xs-3 control-label">State</label>
+                <div class="col-xs-5">
+                    <input type="text" class="form-control" id="state" name="state" required/>
+                </div>
+                <div class="help-block with-errors"></div>
+            </div>
+
+            <div class="form-group has-feedback">
+                <label class="col-xs-3 control-label">Zip Code</label>
+                <div class="col-xs-5">
+                    <input type="text" class="form-control" id="zipCode" name="zipCode" pattern="(^\d{5}$)|(^\d{5}-\d{4}$)" data-error="Please enter a valid zipcode" required/>
+                </div>
+                <div class="help-block with-errors"></div>
+            </div>
+
+            <div class="form-group has-feedback">
+                <label class="col-xs-3 control-label">Country</label>
+                <div class="col-xs-5">
+                    <select class="form-control" id="country" name="country">
+                        <option value="usa">USA</option>
+                        <option value="canada">Canada</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group has-feedback">
+                <div class="col-xs-9 col-xs-offset-3">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+<footer>
+    <% include ./partials/footer.ejs %>
+</footer>
+
+</body>
+</html>

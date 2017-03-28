@@ -25,8 +25,9 @@ function Plane(id,name, numFirstSeat, numBizSeat, numCoachSeat) {
 
     }
 }
-Plane.delete = function (id) {
+Plane.delete = function (id, callback) {
     db.query("DELETE FROM threebee.airplane_type WHERE airplaneID = '" +id+"';");
+    callback();
 };
 Plane.findOne = function (params, callback) {
     // create the array

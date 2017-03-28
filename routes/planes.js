@@ -49,8 +49,11 @@ router.post('/addplane', function(req, res) {
 
 router.get('/:id/delete', function(req,res){
     console.log(req.params.id);
-    Plane.delete(req.params.id);
-    res.redirect("/planes");
+    Plane.delete(req.params.id, function() {
+        Flight.deletePlane(req.params.id, function () {
+            res.redirect("/planes");
+        });
+    });
 });
 router.get('/:id', function(req,res){
     console.log("hello");

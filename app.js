@@ -16,7 +16,6 @@ var signup = require('./routes/signup');
 var login = require('./routes/login');
 var logout = require('./routes/logout');
 var signupmanager = require('./routes/signupmanager');
-var registrationsuccess = require('./routes/registrationsuccess');
 
 var app = express();
 
@@ -44,7 +43,6 @@ app.use('/signup', signup);
 app.use('/signupmanager', signupmanager);
 app.use('/login', login);
 app.use('/logout', logout);
-app.use('/registrationsuccess', registrationsuccess);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

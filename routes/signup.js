@@ -55,7 +55,7 @@ router.post('/', function(req, res) {
                     }
 
                     email.sendMail(newUser.email, "Authenticate Your ThreeBee Account", "We recently received a registration for ThreeBee Airlines associated with this account.\n\nIf this is you, please either click the link or paste it into your browser: <a href='http://localhost:3000/signup/" + authToken + "'>http://localhost:3000/signup/" + authToken + "</a>", function() {
-                        res.redirect('/registrationsuccess');
+                        res.render('userlanding', {shouldDisplayLogin: 2});
                     });
 
                 });

@@ -65,11 +65,49 @@ router.get('/:id', function(req,res){
         Plane.queryOne(req.params.id, function (err,rower) {
             console.log(rower);
             if (rower == undefined){
-                res.redirect("/error");
+                res.redirect("/planes");
             }
             res.render('planeInfo', {shouldDisplayLogin: 2, result: row, planes: rower});
         })
     });
 });
+router.get('/:id/newflight', function (req,res) {
+    res.render('newFlight',{ shouldDisplayLogin: 2});
+});
+router.post('/:id/newflight/addflight', function(req, res) {
+    Flight.findOne({'name': req.body.addname}, function (err, plane) {
+        // if there are any errors, return the error
+        if (err)
+            res.status(400);
+
+        // check to see if theres already a user with that email
+        if (plane) {
+            res.status(400);
+        } else {
+            // if there is no user with that email
+            // create the user
+            var newFlight = new Flight();
+
+            // set the user's local credentials
+            newFlight.duration = req.body.duration;
+            newFlight.firstFlight = req.body.dateTime;
+            newFlight.turnover = req.body.turnover;
+            newFlight.planeID = req.params.id;
+            newFlight.takeoff = req.body.firstStop;
+            newFlight.landing = req.body.secondStop;
+
+            // save the user
+            newFlight.save(function (err, id) {
+                if (err) {
+                    console.log(err);
+                    throw err;
+                }
+
+            });
+            res.redirect("/flights");
+        }
+    });
+});
+
 
 module.exports = router;

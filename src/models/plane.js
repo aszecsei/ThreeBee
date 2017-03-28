@@ -71,5 +71,20 @@ Plane.query = function (callback) {
         callback(err, undefined);
     });
 };
+Plane.queryOne = function (id,callback) {
+    db.query("SELECT * FROM AIRPLANE_TYPE WHERE airplaneID = '" +id+"';", function (err, rower) {
+        console.log(rower);
+        if (err) {
+            callback(err, undefined);
+            return;
+        }
+        if (rower.length > 0) {
+
+            callback(err,rower);
+            return;
+        }
+        callback(err, undefined);
+    });
+};
 
 module.exports = Plane;

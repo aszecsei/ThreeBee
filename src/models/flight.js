@@ -79,7 +79,21 @@ Flight.query = function (callback) {
             callback(err,row);
             return;
         }
-        callback(err, undefined);
+        callback(err,undefined);
+    });
+};
+
+Flight.queryOne = function (id,callback) {
+    db.query("SELECT * FROM threebee.flight_data WHERE planeID = '" +id+"';", function (err, row) {
+        if (err) {
+            callback(err, undefined);
+            return;
+        }
+        if (row.length > 0) {
+            callback(err,row);
+            return;
+        }
+        callback(err,undefined);
     });
 };
 module.exports = Flight;

@@ -59,6 +59,7 @@
                 <th>First Class Seats</th>
                 <th>Buisness Class Seats</th>
                 <th>Coach Class Seats</th>
+                <th>Select</th>
             </thread>
             <tbody>
                 <%var j = 1; for(var i = 0; i < result.length; i++){ %>
@@ -68,6 +69,7 @@
                         <td><%=result[i].airplane_firstSeats%></td>
                         <td><%=result[i].airplane_buisnessSeats%></td>
                         <td><%=result[i].airplane_coachSeats%></td>
+                        <td><a href= planes/<%= result[i].airplaneID%>>Select</a> </td>
                     </tr>
                 <%j++;}%>
             </tbody>

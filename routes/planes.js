@@ -3,6 +3,7 @@
 var express = require('express');
 var router = express.Router();
 var Plane = require('../src/models/plane');
+var Flight = require('../src/models/flight');
 
 router.get('/', function(req, res) {
     Plane.query(function (err,rower) {
@@ -52,15 +53,18 @@ router.get('/:id/delete', function(req,res){
     res.redirect("/planes");
 });
 router.get('/:id', function(req,res){
-    Flight.query(function (err,row) {
+    console.log("hello");
+    Flight.queryOne(req.params.id, function (err,row) {
         if (row == undefined){
             row = new Array();
         }
-        Plane.query(function (err,rower) {
+
+        Plane.queryOne(req.params.id, function (err,rower) {
+            console.log(rower);
             if (rower == undefined){
-                rower = new Array();
+                res.redirect("/error");
             }
-            res.render('flights', {shouldDisplayLogin: 2, result: row, planes: rower});
+            res.render('planeInfo', {shouldDisplayLogin: 2, result: row, planes: rower});
         })
     });
 });

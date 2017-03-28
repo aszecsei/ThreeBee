@@ -2,12 +2,10 @@
 <head>
     <% title = "Planes"; %>
     <% include ./partials/head.ejs %>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 
 
 </head>
 <body class="container">
-<script type="text/javascript" src="./scripts/planes.js"></script>
 <header>
     <% include ./partials/header.ejs %>
 </header>
@@ -58,14 +56,18 @@
             <thread>
                 <th>#</th>
                 <th>Plane Name</th>
-                <th>Delete</th>
+                <th>First Class Seats</th>
+                <th>Buisness Class Seats</th>
+                <th>Coach Class Seats</th>
             </thread>
             <tbody>
                 <%var j = 1; for(var i = 0; i < result.length; i++){ %>
                     <tr>
                         <th scope="row"><%=j%></th>
                         <td><%=result[i].airplane_name%></td>
-                        <td><a href=/planes/<%= result[i].airplaneID%>/delete>Delete</a> </td>
+                        <td><%=result[i].airplane_firstSeats%></td>
+                        <td><%=result[i].airplane_buisnessSeats%></td>
+                        <td><%=result[i].airplane_coachSeats%></td>
                     </tr>
                 <%j++;}%>
             </tbody>

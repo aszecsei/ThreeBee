@@ -3,6 +3,7 @@
     <% title = "Flights"; %>
     <% include ./partials/head.ejs %>
 </head>
+
 <body class="container">
 <header>
     <% include ./partials/header.ejs %>
@@ -17,7 +18,7 @@
                 <th>First Class Seats</th>
                 <th>Buisness Class Seats</th>
                 <th>Coach Class Seats</th>
-                <th>Select</th>
+                <th>Delete</th>
             </thread>
             <tbody>
             <%var j = 1; for(var i = 0; i < planes.length; i++){ %>

@@ -49,8 +49,20 @@ router.post('/addplane', function(req, res) {
 router.get('/:id/delete', function(req,res){
     console.log(req.params.id);
     Plane.delete(req.params.id);
-    res.redirect("/planes")
+    res.redirect("/planes");
 });
-
+router.get('/:id', function(req,res){
+    Flight.query(function (err,row) {
+        if (row == undefined){
+            row = new Array();
+        }
+        Plane.query(function (err,rower) {
+            if (rower == undefined){
+                rower = new Array();
+            }
+            res.render('flights', {shouldDisplayLogin: 2, result: row, planes: rower});
+        })
+    });
+});
 
 module.exports = router;

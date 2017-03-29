@@ -8,7 +8,7 @@ var auth = require('../src/auth');
 router.get('/', function(req, res) {
   if(req.isAuthenticated()) { // check if we're logged in
       if (req.user.user_type == 1 && req.user.auth_status == 0) {
-          res.redirect('/signupmanager/changepassword');
+          res.redirect('/user/changepassword');
           return;
       }
   }

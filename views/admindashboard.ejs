@@ -20,24 +20,53 @@
         <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#managers">Add Managers</button>
         <div id="managers" class="collapse">
             <div class="panel panel-default">
-                <h1>Add Manager</h1>
-                <form data-toggle="validator" role="form" id="signupform" method="post" class="form-horizontal" action="/signupmanager">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Add Manager</h2>
+                </div>
+                <div class="panel-body">
+                    <form data-toggle="validator" role="form" id="signupform" method="post" class="form-horizontal" action="/signupmanager">
 
-                    <div class="form-group has-feedback">
-                        <label class="col-xs-3 control-label">Email</label>
-                        <div class="col-xs-5">
-                            <input type="email" class="form-control" id="email" name="email" placeholder="johndoe@Example.com" minlength="3" pattern= "^([a-z0-9_\.\+-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$" data-error="Please enter a valid email address"  required/>
+                        <div class="form-group has-feedback">
+                            <label class="col-xs-3 control-label">Email</label>
+                            <div class="col-xs-5">
+                                <input type="email" class="form-control" id="email" name="email" placeholder="johndoe@Example.com" minlength="3" pattern= "^([a-z0-9_\.\+-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$" data-error="Please enter a valid email address"  required/>
+                            </div>
+                            <div class="help-block with-errors"></div>
                         </div>
-                        <div class="help-block with-errors"></div>
-                    </div>
 
 
-                    <div class="form-group has-feedback">
-                        <div class="col-xs-9 col-xs-offset-3">
-                            <button type="submit" class="btn btn-primary">Register</button>
+                        <div class="form-horizontal has-feedback">
+                            <div class="col-xs-9 col-xs-offset-3">
+                                <button type="submit" class="btn btn-primary">Register</button>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Edit Managers</h2>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-hover table-responsive">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Auth Status</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for(var i=0; i<managerList.length; i++) { %>
+                            <tr>
+                                <td><%= managerList[i].email %></td>
+                                <td><%= managerList[i].auth_status %></td>
+                                <td><a href="/signupmanager/delete/<%= managerList[i].id %>">Delete</a></td>
+                            </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

@@ -11,6 +11,10 @@ var User = require('../src/models/user');
 
 var email = require('../src/email');
 
+var errorHandle = function(res, message) {
+    res.status(500).json(message);
+};
+
 /* GET signup page. */
 router.get('/', function(req, res) {
     res.render('signup', {shouldDisplayLogin: 2});
@@ -22,12 +26,10 @@ router.post('/', function(req, res) {
     // we are checking to see if the user trying to login already exists
     User.findOne({ 'email' :  req.body.email }, function(err, user) {
         // if there are any errors, return the error
-        if (err)
-            res.status(400);
-
-        // check to see if theres already a user with that email
-        if (user) {
-            res.status(400);
+        if (err) {
+            errorHandle(res, err);
+        } else if (user) { // check to see if theres already a user with that email
+            errorHandle(res, "A user with that email already exists.");
         } else {
             // if there is no user with that email
             // create the user
@@ -42,25 +44,23 @@ router.post('/', function(req, res) {
             // save the user
             newUser.save(function(err, id) {
                 if (err) {
-                    console.log(err);
-                    throw err;
-                }
-                newUser.id = id;
+                    errorHandle(res, err);
+                } else {
+                    newUser.id = id;
 
-                // Now, save the auth token
-                var authToken = newUser.generateToken();
-                db.query("INSERT INTO `auth_keys` (`user_id`, `auth_key`) VALUES (?, ?)", [newUser.id, authToken], function(err) {
-                    if(err) {
-                        throw err;
-                    }
-
-                    email.sendMail(newUser.email, "Authenticate Your ThreeBee Account", "We recently received a registration for ThreeBee Airlines associated with this account.\n\nIf this is you, please either click the link or paste it into your browser: <a href='http://localhost:3000/signup/" + authToken + "'>http://localhost:3000/signup/" + authToken + "</a>", function() {
-                        res.render('userlanding', {shouldDisplayLogin: 2});
+                    // Now, save the auth token
+                    var authToken = newUser.generateToken();
+                    db.query("INSERT INTO `auth_keys` (`user_id`, `auth_key`) VALUES (?, ?)", [newUser.id, authToken], function (err) {
+                        if (err) {
+                            errorHandle(res, err);
+                        } else {
+                            email.sendMail(newUser.email, "Authenticate Your ThreeBee Account", "We recently received a registration for ThreeBee Airlines associated with this account.\n\nIf this is you, please either click the link or paste it into your browser: <a href='http://localhost:3000/signup/" + authToken + "'>http://localhost:3000/signup/" + authToken + "</a>", function () {
+                                res.json({message: 'Successfully registered'})
+                            });
+                        }
                     });
-
-                });
+                }
             });
-
         }
     });
 });

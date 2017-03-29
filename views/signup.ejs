@@ -15,6 +15,10 @@
 <main>
     <div class="jumbotron">
         <h1>Register</h1>
+        <div class="alert alert-danger alert-dismissable fade in collapse" id="errorDiv">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <span id="errorMessage"></span>
+        </div>
         <form data-toggle="validator" role="form" id="signupform" method="post" class="form-horizontal">
             <div class="form-group has-feedback">
                 <label class="col-xs-3 control-label">First Name</label>
@@ -88,6 +92,32 @@
                 </div>
             </div>
         </form>
+        <script>
+            // this is the id of the form
+            $("#errorDiv").hide();
+
+            $("#signupform").submit(function(e) {
+
+                var url = "/signup"; // the script where you handle the form input.
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: $("#signupform").serialize(), // serializes the form's elements.
+                    success: function(data)
+                    {
+                        alert(data); // show response from the php script.
+                    },
+                    error: function(req, ajaxOptions, thrownError) {
+                        $("#errorDiv").show();
+                        $("#errorMessage").text(req.responseText.slice(1, -1));
+                    }
+
+                });
+
+                e.preventDefault(); // avoid to execute the actual submit of the form.
+            });
+        </script>
     </div>
 </main>
 

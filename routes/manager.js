@@ -54,26 +54,25 @@ router.post('/signup', auth.isAdmin, function(req, res) {
 });
 
 // Handle deleting managers
-router.get("/:id/delete", auth.isAdmin, function(req, res) {
-    console.log("id: " + req.params.id);
+router.delete("/:id", auth.isAdmin, function(req, res) {
     db.query("SELECT * FROM `USERS` WHERE `user_id`=? AND `user_type`=1", [req.params.id], function(err, row) {
-        console.log("2");
         if(err) {
             console.log("Error!");
-            res.redirect("/");
+            res.send(err);
         } else if(row.length > 0) {
             var user = new User(row[0].user_id, row[0].email, row[0].password, row[0].user_type, row[0].auth_status, row[0].deleted);
             user.deleted = 1;
             user.update(function(err, id) {
                 console.log("4");
                 if(err) {
-                    throw err;
+                    res.send(err);
+                } else {
+                    res.json({message: 'Successfully deleted'});
                 }
-                res.redirect('/');
             });
         } else {
             console.log("Error! No manager found!");
-            res.redirect('/');
+            res.send(new Error("No manager found"));
         }
     });
 });

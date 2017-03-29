@@ -10,9 +10,10 @@ var User = require('../src/models/user');
 var email = require('../src/email');
 
 var auth = require('../src/auth');
+var db = require('../src/database');
 
 // process the signup form
-router.post('/', auth.isManager, function(req, res) {
+router.post('/signup', auth.isAdmin, function(req, res) {
     // find a user whose email is the same as the forms email
     // we are checking to see if the user trying to login already exists
     User.findOne({ 'email' :  req.body.email }, function(err, user) {
@@ -48,6 +49,31 @@ router.post('/', auth.isManager, function(req, res) {
                     res.render('managerlanding', {shouldDisplayLogin: 2});
                 });
             });
+        }
+    });
+});
+
+// Handle deleting managers
+router.get("/:id/delete", auth.isAdmin, function(req, res) {
+    console.log("id: " + req.params.id);
+    db.query("SELECT * FROM `USERS` WHERE `user_id`=? AND `user_type`=1", [req.params.id], function(err, row) {
+        console.log("2");
+        if(err) {
+            console.log("Error!");
+            res.redirect("/");
+        } else if(row.length > 0) {
+            var user = new User(row[0].user_id, row[0].email, row[0].password, row[0].user_type, row[0].auth_status, row[0].deleted);
+            user.deleted = 1;
+            user.update(function(err, id) {
+                console.log("4");
+                if(err) {
+                    throw err;
+                }
+                res.redirect('/');
+            });
+        } else {
+            console.log("Error! No manager found!");
+            res.redirect('/');
         }
     });
 });

@@ -64,7 +64,7 @@ module.exports = function() {
                     return done(err);
 
                 // if no user is found
-                if(!user)
+                if(!user || user.deleted == 1)
                     return done(null, false, req.flash('message', 'No such user.'));
 
                 // if the user is found but the password is wrong

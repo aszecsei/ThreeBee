@@ -17,17 +17,13 @@ router.get('/', function(req, res) {
 
   if(req.isAuthenticated() && req.user.user_type == 2 && req.user.auth_status == 1) {
       // Get list of managers
-      console.log("1");
-      db.query("SELECT * FROM `USERS` WHERE `user_type`=1", function(err, rows) {
-          console.log("2");
+      db.query("SELECT * FROM `USERS` WHERE `user_type`=1 AND `deleted`=0", function(err, rows) {
           var mManagers = [];
           if(rows) {
-              console.log("3");
               for (var i = 0; i < rows.length; i++) {
                   mManagers.push({id: rows[i].user_id, email: rows[i].email, auth_status: (rows[i].auth_status == 0) ? "Unauthorized" : "Authorized"});
               }
           }
-          console.log("4");
           res.render('admindashboard', {title: 'ThreeBee', shouldDisplayLogin: 1, managerList: mManagers});
       });
 

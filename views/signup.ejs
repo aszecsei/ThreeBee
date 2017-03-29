@@ -3,7 +3,6 @@
 <head>
     <% title = "Signup"; %>
     <% include ./partials/head.ejs %>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.js"></script>
 </head>
 <body class="container">
@@ -92,6 +91,24 @@
                 </div>
             </div>
         </form>
+        <div id="RegistrationSuccess" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Registration Success</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>You've successfully registered an account with ThreeBee Airlines! Please check your email for a link to confirm your account.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
         <script>
             // this is the id of the form
             $("#errorDiv").hide();
@@ -106,7 +123,7 @@
                     data: $("#signupform").serialize(), // serializes the form's elements.
                     success: function(data)
                     {
-                        alert(data); // show response from the php script.
+                        $("#RegistrationSuccess").modal("toggle");
                     },
                     error: function(req, ajaxOptions, thrownError) {
                         $("#errorDiv").show();

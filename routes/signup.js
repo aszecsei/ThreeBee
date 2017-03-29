@@ -80,32 +80,40 @@ router.get('/:auth', function(req, res) {
 });
 
 router.post('/:auth', function(req, res) {
-    var auth = req.params.auth;
-    db.query("SELECT * FROM `auth_keys` WHERE `auth_key` = ?", auth, function(err, results) {
-        if(err)
-            throw err;
+    var usr = new User();
+    if(usr.checkPass(req.body.password)) {
 
-        if(results.length > 0) {
-            // We're gonna authorize the user!
-            var userid = results[0].user_id;
+        var auth = req.params.auth;
 
+        db.query("SELECT * FROM `auth_keys` WHERE `auth_key` = ?", auth, function (err, results) {
+            if (err) {
+                errorHandle(res, err);
+            } else if (results.length > 0) {
+                // We're gonna authorize the user!
+                var userid = results[0].user_id;
 
-            db.query("DELETE FROM `auth_keys` WHERE `auth_key`=?", auth, function(err) {
-                if(err)
-                    throw err;
+                db.query("DELETE FROM `auth_keys` WHERE `auth_key`=?", auth, function (err) {
+                    if (err) {
+                        errorHandle(res, err);
+                    } else {
 
-                var usr = User.findById(userid);
-                usr.auth_status = 1;
-                usr.password = usr.generateHash(req.body.password);
-                usr.update(function(err, newID) {
-                    if(err)
-                        throw err;
-
-                    res.redirect("/login");
+                        var usr = User.findById(userid);
+                        usr.auth_status = 1;
+                        usr.password = usr.generateHash(req.body.password);
+                        usr.update(function (err, newID) {
+                            if (err) {
+                                errorHandle(res, err);
+                            } else {
+                                res.json({message: 'Successfully authorized'});
+                            }
+                        });
+                    }
                 });
-            });
-        }
-    });
+            }
+        });
+    } else {
+        errorHandle(res, "Passwords must be at least 8 characters long, and must contain at least one uppercase letter, lowercase letter, and letter.");
+    }
 });
 
 module.exports = router;

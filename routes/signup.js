@@ -17,7 +17,7 @@ var errorHandle = function(res, message) {
 
 /* GET signup page. */
 router.get('/', function(req, res) {
-    res.render('signup', {shouldDisplayLogin: 2});
+    res.render('signup', {shouldDisplayLogin: (req.isAuthenticated() ? 1 : 0)});
 });
 
 // process the signup form

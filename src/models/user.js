@@ -131,5 +131,5 @@ User.findById = function (id, callback) {
     return User.findOne({user_id: id}, callback);
 };
 
-module.exports = User;
+
 module.exports = User;

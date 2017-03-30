@@ -18,14 +18,14 @@ function Flight(id,duration, firstFlight, turnover, planeID, takeoff, landing) {
     this.landing = landing;
 
     this.save = function (callback) {
-        db.query("INSERT INTO flight_data (flight_duration, flight_firstFlight, flight_turnover, planeID, flight_takeoff, flight_landing) VALUES (?,?,?,?,?,?)", [this.duration, this.firstFlight, this.turnover, this.planeID, this.takeoff,this.landing], function (err) {
+        db.query("INSERT INTO flight_data (flight_duration, flight_firstFlight, flight_turnover, planeID, flight_takeoff, flight_landing, flight_isActive) VALUES (?,?,?,?,?,?,1)", [this.duration, this.firstFlight, this.turnover, this.planeID, this.takeoff,this.landing], function (err) {
             if (err) {
                 callback(err);
             } else {
                 callback(err, this.lastID);
             }
         });
-        db.query("INSERT INTO flight_data (flight_duration, flight_firstFlight, flight_turnover, planeID, flight_takeoff, flight_landing) VALUES (?,?,?,?,?,?)", [this.duration, this.firstFlight, this.turnover, this.planeID, this.landing,this.takeoff], function (err) {
+        db.query("INSERT INTO flight_data (flight_duration, flight_firstFlight, flight_turnover, planeID, flight_takeoff, flight_landing, flight_isActive) VALUES (?,?,?,?,?,?,1)", [this.duration, this.firstFlight, this.turnover, this.planeID, this.landing,this.takeoff], function (err) {
             if (err) {
                 callback(err);
             } else {
@@ -38,11 +38,11 @@ function Flight(id,duration, firstFlight, turnover, planeID, takeoff, landing) {
     }
 }
 Flight.delete = function (id, callback) {
-    db.query("DELETE FROM threebee.flight_data WHERE flightID = '" +id+"';");
+    db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE flightID = '" +id+"';");
     callback();
 };
 Flight.deletePlane = function (id, callback) {
-    db.query("DELETE FROM threebee.flight_data WHERE planeID = '" +id+"';");
+    db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE planeID = '" +id+"';");
     callback();
 };
 Flight.findOne = function (params, callback) {
@@ -75,7 +75,7 @@ Flight.findById = function (id, callback) {
 };
 
 Flight.query = function (callback) {
-    db.query("SELECT * FROM threebee.flight_data", function (err, row) {
+    db.query("SELECT * FROM threebee.flight_data WHERE flight_isActive = 1", function (err, row) {
         if (err) {
             callback(err, undefined);
             return;
@@ -89,7 +89,7 @@ Flight.query = function (callback) {
 };
 
 Flight.queryOne = function (id,callback) {
-    db.query("SELECT * FROM threebee.flight_data WHERE planeID = '" +id+"';", function (err, row) {
+    db.query("SELECT * FROM threebee.flight_data WHERE planeID = '" +id+"' AND flight_isActive = 1;", function (err, row) {
         if (err) {
             callback(err, undefined);
             return;

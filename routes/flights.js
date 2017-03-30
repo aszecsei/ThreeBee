@@ -68,6 +68,7 @@ router.post('/removeplane', function(req, res){
         // check to see if theres already a user with that email
 
         Plane.delete(req.body.rename)
+        res.redirect("/flights");
 
     });
 

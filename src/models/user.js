@@ -5,12 +5,13 @@
 var db = require('../database');
 var bcrypt   = require('bcrypt-nodejs');
 
-function User(id, email, password, userType, authStatus) {
+function User(id, email, password, userType, authStatus, deleted) {
     this.id = id;
     this.email = email;
     this.password = password;
     this.user_type = userType;
     this.auth_status = authStatus;
+    this.deleted = deleted;
 
     this.generateHash = function(password) {
         return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
@@ -78,8 +79,19 @@ function User(id, email, password, userType, authStatus) {
             return (password.search('/[A-Z]/') == -1) && (password.search('/[0-9]/') == -1) && (password.search('/[a-z]/') == -1);
         }
     };
+
     this.save = function (callback) {
-        db.query("INSERT INTO `users` (email, password, user_type, auth_status) VALUES (?,?,?, ?)", [this.email, this.password, this.user_type, this.auth_status],  function(err) {
+        db.query("INSERT INTO `users` (email, password, user_type, auth_status, deleted) VALUES (?,?,?, ?, 0)", [this.email, this.password, this.user_type, this.auth_status],  function(err) {
+            if(err) {
+                callback(err);
+            } else {
+                callback(err, this.lastID);
+            }
+        });
+    };
+
+    this.update = function(callback) {
+        db.query("UPDATE `users` SET email=?, password=?, user_type=?, auth_status=?, deleted=? WHERE user_id=?", [this.email, this.password, this.user_type, this.auth_status, this.deleted, this.id], function(err) {
             if(err) {
                 callback(err);
             } else {
@@ -96,18 +108,18 @@ User.findOne = function (params, callback) {
     var paramArray = [];
     for(var prop in params) {
         if(params.hasOwnProperty(prop)) {
-            stringArray.push("?=?");
-            paramArray.push(prop);
+            stringArray.push("`" + prop + "`=?");
             paramArray.push(params[prop]);
         }
     }
-    db.query("SELECT * FROM USER WHERE (" + stringArray.join(" AND ") + ")", paramArray, function(err, row) {
+    var query = "SELECT * FROM `USERS` WHERE " + stringArray.join(" AND ");
+    db.query(query, paramArray, function(err, row) {
         if(err) {
             callback(err, undefined);
             return;
         }
         if(row.length > 0) {
-            var result = new User(row[0].id, row[0].email, row[0].password, row[0].user_type, row[0].auth_status);
+            var result = new User(row[0].user_id, row[0].email, row[0].password, row[0].user_type, row[0].auth_status, row[0].deleted);
             callback(err, result);
             return;
         }
@@ -116,7 +128,7 @@ User.findOne = function (params, callback) {
 };
 
 User.findById = function (id, callback) {
-    return User.findOne({id: id}, callback);
+    return User.findOne({user_id: id}, callback);
 };
 
 

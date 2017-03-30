@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% title = "Manager Registered"; %>
+    <% include ./partials/head.ejs %>
+</head>
+<body class="container">
+
+<header>
+    <% include ./partials/header.ejs %>
+</header>
+
+<main>
+    <div class="jumbotron">
+        <h1>Admin Dashboard</h1>
+    </div>
+    <div class="jumbotron">
+        <button type="button" class="btn btn-default">Add or Remove Flights</button>
+        <button type="button" class="btn btn-default">Add or Remove Airplanes</button>
+        <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#managers">Add Managers</button>
+        <div id="managers" class="collapse">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Add Manager</h2>
+                </div>
+                <div class="panel-body">
+                    <form data-toggle="validator" role="form" id="signupform" method="post" class="form-horizontal" action="/signupmanager">
+
+                        <div class="form-group has-feedback">
+                            <label class="col-xs-3 control-label">Email</label>
+                            <div class="col-xs-5">
+                                <input type="email" class="form-control" id="email" name="email" placeholder="johndoe@Example.com" minlength="3" pattern= "^([a-z0-9_\.\+-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$" data-error="Please enter a valid email address"  required/>
+                            </div>
+                            <div class="help-block with-errors"></div>
+                        </div>
+
+
+                        <div class="form-horizontal has-feedback">
+                            <div class="col-xs-9 col-xs-offset-3">
+                                <button type="submit" class="btn btn-primary">Register</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Edit Managers</h2>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-hover table-responsive">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Auth Status</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for(var i=0; i<managerList.length; i++) { %>
+                            <tr id="ManagerRow<%= managerList[i].id %>">
+                                <td><%= managerList[i].email %></td>
+                                <td><%= managerList[i].auth_status %></td>
+                                <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#ManagerDeleteConfirm<%= managerList[i].id %>">Delete</button></td>
+                            </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                    <% for(var i=0; i<managerList.length; i++) { %>
+                    <div id="ManagerDeleteConfirm<%= managerList[i].id %>" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Confirm Delete</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are you sure you want to delete this manager's account? This action cannot be easily undone.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal" onclick="deleteManager(<%= managerList[i].id %>)">Delete</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <% } %>
+                    <script>
+                        function deleteManager(id) {
+                            $.ajax({
+                                url: '/manager/' + id,
+                                type: 'DELETE',
+                                success: function() {
+                                    $("#ManagerRow" + id).remove();
+                                },
+                                error: function(req, status, error) {
+
+                                }
+                            });
+                        }
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

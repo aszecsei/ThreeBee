@@ -1,0 +1,45 @@
+.layout {
+    white-space: normal;
+    overflow: hidden;
+    vertical-align: top;
+    background: url("../images/stock-photo.jpg") no-repeat;
+    background-size: 1290px;
+}
+#searchbox{
+    width: 400px;
+}
+#form{
+    max-width: 400px;
+    padding-right: 20px;
+    padding-left: 20px;
+    vertical-align:top;
+    min-height: 450px;
+}
+
+#city_menu{
+    font-size: 1.5em;
+}
+#top_logo{
+    padding-bottom: 20px;
+    padding-top: 20px;
+    padding-left: 20px;
+}
+
+#logo_container{
+    background-color: rgba(84, 123, 133, 0);
+    width: 100%;
+}
+
+#radio_button{
+    font-size: 1.5em;
+    padding-right: 20px;
+    padding-left: 10px;
+}
+
+#outward-text{
+    font-size: 1.5em;
+}
+
+#return-text{
+    font-size: 1.5em;
+}

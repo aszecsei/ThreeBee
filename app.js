@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var session = require('express-session');
+var flash    = require('connect-flash');
 
 
 require('./src/passport')(); // Configure passport
@@ -13,6 +14,9 @@ require('./src/passport')(); // Configure passport
 var index = require('./routes/index');
 var signup = require('./routes/signup');
 var login = require('./routes/login');
+var logout = require('./routes/logout');
+var manager = require('./routes/manager');
+var user = require('./routes/user');
 var planes = require('./routes/planes');
 var flights = require('./routes/flights');
 
@@ -35,10 +39,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({secret: 'badabingbadaboom'})); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
 
 app.use('/', index);
 app.use('/signup', signup);
+app.use('/manager', manager);
 app.use('/login', login);
+app.use('/logout', logout);
+app.use('/user', user);
 app.use('/planes', planes);
 app.use('/flights',flights);
 
@@ -46,7 +54,7 @@ app.use('/flights',flights);
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
-  next(err);
+  res.render('404', {shouldDisplayLogin: 2});
 });
 
 // error handler
@@ -57,7 +65,6 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
 });
 
 module.exports = app;

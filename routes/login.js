@@ -5,20 +5,19 @@ var router = express.Router();
 
 var passport = require('passport');
 
+
 /* GET login page. */
 router.get('/', function(req, res, next) {
-    res.render('login', {shouldDisplayLogin: 2});
+    var msg = req.flash('message');
+    console.log(msg);
+    res.render('login', {shouldDisplayLogin: 2, message: msg});
 });
 
 // process the login form
-router.post('/', passport.authenticate('local-login-user'), function(req, res) {
-    // If this function gets called, authentication was successful.
-    // `req.user` contains the authenticated user.
-    if(req) {
-        res.send({user: req.user});
-    } else {
-        res.status(401);
-    }
-});
+router.post('/', passport.authenticate('local-login-user', {
+    successRedirect : '/',
+    failureRedirect : '/login',
+    failureFlash : true
+}));
 
 module.exports = router;

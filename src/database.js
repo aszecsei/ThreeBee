@@ -2,8 +2,6 @@
 This will be used to handle the database connection
  */
 
-var shouldUseMemory = true;
-
 'use strict';
 
 var mysql      = require('mysql');

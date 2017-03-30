@@ -40,9 +40,9 @@ router.post('/addplane', function(req, res) {
                     console.log(err);
                     throw err;
                 }
-
+                res.redirect("/planes")
             });
-            res.redirect("/planes")
+
         }
     });
 });
@@ -102,9 +102,9 @@ router.post('/:id/newflight/addflight', function(req, res) {
                     console.log(err);
                     throw err;
                 }
-
+                res.redirect("/flights");
             });
-            res.redirect("/flights");
+
         }
     });
 });

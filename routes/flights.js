@@ -50,9 +50,9 @@ router.post('/:id/newflight/addflight', function(req, res) {
                     console.log(err);
                     throw err;
                 }
-
+                res.redirect("/flights");
             });
-            res.redirect("/flights");
+
         }
     });
 });

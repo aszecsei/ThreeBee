@@ -25,17 +25,7 @@ function Flight(id,duration, firstFlight, turnover, planeID, takeoff, landing) {
                 callback(err, this.lastID);
             }
         });
-        db.query("INSERT INTO flight_data (flight_duration, flight_firstFlight, flight_turnover, planeID, flight_takeoff, flight_landing, flight_isActive) VALUES (?,?,?,?,?,?,1)", [this.duration, this.firstFlight, this.turnover, this.planeID, this.landing,this.takeoff], function (err) {
-            if (err) {
-                callback(err);
-            } else {
-                callback(err, this.lastID);
-            }
-        });
     };
-    this.delete = function (callback) {
-
-    }
 }
 Flight.delete = function (id, callback) {
     db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE flightID = '" +id+"';");

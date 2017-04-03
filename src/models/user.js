@@ -80,11 +80,11 @@ function User(id, email, password, userType, authStatus) {
     };
 
     this.save = function (callback) {
-        db.query("INSERT INTO `users` (email, password, user_type, auth_status) VALUES (?,?,?, ?)", [this.email, this.password, this.user_type, this.auth_status],  function(err) {
+        db.query("INSERT INTO `users` (email, password, user_type, auth_status) VALUES (?,?,?, ?)", [this.email, this.password, this.user_type, this.auth_status],  function(err, results, fields) {
             if(err) {
                 callback(err);
             } else {
-                callback(err, this.lastID);
+                callback(err, results.insertId);
             }
         });
     };

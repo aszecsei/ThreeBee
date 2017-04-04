@@ -12,12 +12,12 @@
 
 <main>
     <div class="jumbotron">
-        <h1>Log In</h1>
+        <h1>Set Password</h1>
         <div class="alert alert-danger alert-dismissable fade in collapse" id="errorDiv">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             <span id="errorMessage"></span>
         </div>
-        <form id="signupform" method="post" class="form-horizontal">
+        <form id="signupform" method="post" class="form-horizontal" onsubmit="return validateForm();">
             <div class="form-group">
                 <label class="col-xs-3 control-label">Password</label>
                 <div class="col-xs-5">

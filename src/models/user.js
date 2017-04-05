@@ -91,11 +91,11 @@ function User(id, email, password, userType, authStatus, deleted) {
     };
 
     this.update = function(callback) {
-        db.query("UPDATE `users` SET email=?, password=?, user_type=?, auth_status=?, deleted=? WHERE user_id=?", [this.email, this.password, this.user_type, this.auth_status, this.deleted, this.id], function(err) {
+        db.query("UPDATE `users` SET email=?, password=?, user_type=?, auth_status=?, deleted=? WHERE user_id=?", [this.email, this.password, this.user_type, this.auth_status, this.deleted, this.id], function(err, results, fields) {
             if(err) {
                 callback(err);
             } else {
-                callback(err, this.lastID);
+                callback(err, results.insertId);
             }
         });
     }
@@ -131,5 +131,4 @@ User.findById = function (id, callback) {
     return User.findOne({user_id: id}, callback);
 };
 
-module.exports = User;
 module.exports = User;

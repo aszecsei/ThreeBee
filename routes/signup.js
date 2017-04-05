@@ -96,23 +96,23 @@ router.post('/:auth', function(req, res) {
                     if (err) {
                         errorHandle(res, err);
                     } else {
-
-                        var usr = User.findById(userid);
-                        usr.auth_status = 1;
-                        usr.password = usr.generateHash(req.body.password);
-                        usr.update(function (err, newID) {
-                            if (err) {
-                                errorHandle(res, err);
-                            } else {
-                                res.json({message: 'Successfully authorized'});
-                            }
+                        User.findById(userid, function(err, usr){
+                            usr.auth_status = 1;
+                            usr.password = usr.generateHash(req.body.password);
+                            usr.update(function (err, newID) {
+                                if (err) {
+                                    errorHandle(res, err);
+                                } else {
+                                    res.json({message: 'Successfully authorized'});
+                                }
+                            });
                         });
                     }
                 });
             }
         });
     } else {
-        errorHandle(res, "Passwords must be at least 8 characters long, and must contain at least one uppercase letter, lowercase letter, and letter.");
+        errorHandle(res, "Passwords must be at least 8 characters long, and must contain at least one uppercase letter, lowercase letter, and a number.");
     }
 });
 

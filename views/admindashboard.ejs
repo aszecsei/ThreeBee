@@ -189,6 +189,7 @@
                             <table class="table">
                                 <thread>
                                     <th>#</th>
+                                    <th>Plane</th>
                                     <th>Flight Takeoff</th>
                                     <th>Flight Landing</th>
                                     <th>Delete</th>
@@ -197,8 +198,9 @@
                                 <% for(i = 0; i < flights.length; i++){ %>
                                 <tr id="FlightRow<%= flights[i].flightID %>">
                                     <th scope="row"><%= i+1 %></th>
-                                    <td><%= flights[i].flight_takeoff %></td>
-                                    <td><%= flights[i].flight_landing %></td>
+                                    <td><%= flights[i].planeName %></td>
+                                    <td><%= flights[i].takeoff %> (<%= flights[i].takeoffAbbr %>)</td>
+                                    <td><%= flights[i].landing %> (<%= flights[i].landingAbbr %>)</td>
                                     <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#FlightDeleteConfirm<%= flights[i].flightID %>">Delete</button></td>
                                 </tr>
                                 <% } %>

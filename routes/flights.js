@@ -6,6 +6,7 @@
 var express = require('express');
 var router = express.Router();
 var Flight = require('../src/models/flight');
+var auth = require('../src/auth');
 
 router.post('/', function(req, res) {
     Flight.findOne({'name': req.body.addname}, function (err, plane) {

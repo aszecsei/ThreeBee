@@ -28,7 +28,8 @@ router.get('/', function(req, res) {
               combinedResult.flights = combinedResult.flights || results[i].flights;
               combinedResult.airports = combinedResult.airports || results[i].airports;
           }
-          // console.log(JSON.stringify(combinedResult));
+          console.log(JSON.stringify(combinedResult, null, 4));
+
           res.render('admindashboard',
               {
                   title: 'ThreeBee',

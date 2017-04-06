@@ -25,8 +25,10 @@ function Plane(id,name, numFirstSeat, numBizSeat, numCoachSeat) {
 
     }
 }
-Plane.delete = function (id) {
-    db.query("DELETE FROM threebee.airplane_type WHERE airplaneID = '" +id+"';");
+Plane.delete = function (id, callback) {
+    db.query("UPDATE `airplane_type` SET `isActive`=? WHERE `user_id`=?", [0, id], function(err) {
+        callback(err);
+    });
 };
 Plane.findOne = function (params, callback) {
     // create the array
@@ -45,7 +47,7 @@ Plane.findOne = function (params, callback) {
             return;
         }
         if (row.length > 0) {
-            var result = new Plane(row[0].idairplane_type, row[0].name, row[0].numFirstSeat, row[0].numBizSeat, row[0].numCoachSeat);
+            var result = new Plane(row[0].airplaneID, row[0].name, row[0].numFirstSeat, row[0].numBizSeat, row[0].numCoachSeat);
             callback(err, result);
             return;
         }
@@ -58,7 +60,7 @@ Plane.findById = function (id, callback) {
 };
 
 Plane.query = function (callback) {
-    db.query("SELECT * FROM AIRPLANE_TYPE", function (err, rower) {
+    db.query("SELECT * FROM AIRPLANE_TYPE WHERE `airplane_isActive`=1", function (err, rower) {
         if (err) {
             callback(err, undefined);
             return;

@@ -3,14 +3,9 @@
 var express = require('express');
 var router = express.Router();
 var Plane = require('../src/models/plane');
+var auth = require('../src/auth');
 
-router.get('/', function(req, res) {
-    Plane.query(function (err,rower) {
-        res.render('planes', {shouldDisplayLogin: 2, result: rower});
-    });
-});
-
-router.post('/addplane', function(req, res) {
+router.post('/addplane', auth.isManager, function(req, res) {
     Plane.findOne({'name': req.body.addname}, function (err, plane) {
         // if there are any errors, return the error
         if (err)
@@ -36,31 +31,17 @@ router.post('/addplane', function(req, res) {
                     console.log(err);
                     throw err;
                 }
-
+                newPlane.id = id;
+                res.json(newPlane);
             });
         }
     });
 });
 
-router.post('/removeplane', function(req, res){
-    Plane.findOne({'name': req.body.rename}, function (err, plane) {
-        if (err)
-            res.status(400);
-        // if there are any errors, return the error
-        if (err)
-            res.status(400);
-
-        // check to see if theres already a user with that email
-
-            Plane.delete(req.body.rename)
-
-    });
-
-});
-router.get('/:id/delete', function(req,res){
-    console.log(req.id);
-    Plane.delete(req.id);
-    res.redirect("/planes")
+router.delete('/:id', auth.isManager, function(req,res){
+    console.log(req.params.id);
+    Plane.delete(req.params.id);
+    res.json({message: 'Successfully deleted'});
 });
 
 

@@ -5,6 +5,10 @@ var router = express.Router();
 var auth = require('../src/auth');
 
 var db = require('../src/database');
+var Plane = require('../src/models/plane');
+var Flight = require('../src/models/flight');
+
+var async = require('async');
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -16,17 +20,16 @@ router.get('/', function(req, res) {
   }
 
   if(req.isAuthenticated() && req.user.user_type == 2 && req.user.auth_status == 1) {
-      // Get list of managers
-      db.query("SELECT * FROM `USERS` WHERE `user_type`=1 AND `deleted`=0", function(err, rows) {
-          var mManagers = [];
-          if(rows) {
-              for (var i = 0; i < rows.length; i++) {
-                  mManagers.push({id: rows[i].user_id, email: rows[i].email, auth_status: (rows[i].auth_status == 0) ? "Unauthorized" : "Authorized"});
-              }
+      async.parallel([getManagers, getPlanes, getFlights], function(err, results) {
+          var combinedResult = {};
+          for(var i = 0; i < results.length; i++) {
+              combinedResult.managers = combinedResult.managers || results[i].managers;
+              combinedResult.planes = combinedResult.planes || results[i].planes;
+              combinedResult.flights = combinedResult.flights || results[i].flights;
           }
-          res.render('admindashboard', {title: 'ThreeBee', shouldDisplayLogin: 1, managerList: mManagers});
+          console.log("Render START");
+          res.render('admindashboard', {title: 'ThreeBee', shouldDisplayLogin: 1, managerList: combinedResult.managers, planes:combinedResult.planes, flights:combinedResult.flights});
       });
-
   } else if(req.isAuthenticated() && req.user.user_type == 1) {
     res.render('managerdashboard', {title: 'ThreeBee', shouldDisplayLogin: 1});
   } else {
@@ -37,5 +40,49 @@ router.get('/', function(req, res) {
       });
   }
 });
+
+function getManagers(callback) {
+    var interimResult = {};
+    db.query("SELECT * FROM `USERS` WHERE `user_type`=1 AND `deleted`=0", function(err, rows) {
+        var mManagers = [];
+        if (rows) {
+            for (var i = 0; i < rows.length; i++) {
+                mManagers.push({
+                    id: rows[i].user_id,
+                    email: rows[i].email,
+                    auth_status: (rows[i].auth_status == 0) ? "Unauthorized" : "Authorized"
+                });
+            }
+        }
+        interimResult.managers = mManagers;
+        callback(null, interimResult);
+    });
+}
+
+function getPlanes(callback) {
+    var interimResult = {};
+    console.log("Plane START");
+    Plane.query(function (err,rows) {
+        if(rows == undefined) {
+            rows = [];
+        }
+        console.log("Planes: " + rows);
+        interimResult.planes = rows;
+        callback(null, interimResult);
+    });
+}
+
+function getFlights(callback) {
+    var interimResult = {};
+    console.log("Flight START");
+    Flight.query(function(err, rows) {
+        if(rows == undefined) {
+            rows = [];
+        }
+        console.log("Flights: " + rows);
+        interimResult.flights = rows;
+        callback(null, interimResult);
+    });
+}
 
 module.exports = router;

@@ -213,6 +213,29 @@
                             </form>
                         </div>
                     </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">Edit Planes</h2>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-hover table-responsive">
+                                <thread>
+                                    <th>#</th>
+                                    <th>Plane Name</th>
+                                    <th>Delete</th>
+                                </thread>
+                                <tbody>
+                                <% for(i = 0; i < planes.length; i++){ %>
+                                <tr>
+                                    <th scope="row"><%= i+1 %></th>
+                                    <td><%= planes[i].airplane_name%></td>
+                                    <td><a href=/planes/<%= planes[i].airplaneID%>/delete>Delete</a> </td>
+                                </tr>
+                                <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

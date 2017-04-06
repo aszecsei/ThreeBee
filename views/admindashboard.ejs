@@ -76,7 +76,7 @@
                                     <% } %>
                                 </tbody>
                             </table>
-                            <% for(var i=0; i<managerList.length; i++) { %>
+                            <% for(i=0; i<managerList.length; i++) { %>
                             <div id="ManagerDeleteConfirm<%= managerList[i].id %>" class="modal fade" role="dialog">
                                 <div class="modal-dialog">
                                     <!-- Modal content-->
@@ -120,7 +120,18 @@
                             <h2 class="panel-title">Add Flight</h2>
                         </div>
                         <div class="panel-body">
-                            <form id="addflight" action="newflight/addflight" method="post" class="form-horizontal">
+                            <form id="addflight" action="/flights" method="post" class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-xs-3 control-label">Plane:  </label>
+                                    <div class="col-xs-5">
+                                        <select class="form-control" id="planeID" name="planeID">
+                                            <% for(var i=0; i<planes.length; i++) { %>
+                                            <option value="<%= planes[i].airplaneID %>"><%= planes[i].airplane_name %></option>
+                                            <% } %>
+                                        </select>
+                                    </div>
+                                </div>
+
                                 <div class="form-group">
                                     <label class="col-xs-3 control-label">Duration: </label>
                                     <div class="col-xs-5">
@@ -144,13 +155,21 @@
                                 <div class="form-group">
                                     <label class="col-xs-3 control-label">Stop 1:  </label>
                                     <div class="col-xs-5">
-                                        <input type="text" class="form-control" name="firstStop" required/>
+                                        <select class="form-control" id="arr_city" name="firstStop">
+                                            <% for(var i=0; i<airports.length; i++) { %>
+                                            <option value="<%= airports[i].airportID %>"><%= airports[i].printName %> (<%= airports[i].abbr %>)</option>
+                                            <% } %>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-xs-3 control-label">Stop 2:  </label>
                                     <div class="col-xs-5">
-                                        <input type="text" class="form-control" name="secondStop" required/>
+                                        <select class="form-control" id="arr_city" name="secondStop">
+                                            <% for(var i=0; i<airports.length; i++) { %>
+                                            <option value="<%= airports[i].airportID %>"><%= airports[i].printName %> (<%= airports[i].abbr %>)</option>
+                                            <% } %>
+                                        </select>
                                     </div>
                                 </div>
 
@@ -178,8 +197,8 @@
                                 <% for(i = 0; i < flights.length; i++){ %>
                                 <tr id="FlightRow<%= flights[i].flightID %>">
                                     <th scope="row"><%= i+1 %></th>
-                                    <td><%=flights[i].flight_takeoff%></td>
-                                    <td><%=flights[i].flight_landing%></td>
+                                    <td><%= flights[i].flight_takeoff %></td>
+                                    <td><%= flights[i].flight_landing %></td>
                                     <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#FlightDeleteConfirm<%= flights[i].flightID %>">Delete</button></td>
                                 </tr>
                                 <% } %>
@@ -276,7 +295,7 @@
                                 <% } %>
                                 </tbody>
                             </table>
-                            <% for(var i=0; i<planes.length; i++) { %>
+                            <% for(i=0; i<planes.length; i++) { %>
                             <div id="PlaneDeleteConfirm<%= planes[i].airplaneID %>" class="modal fade" role="dialog">
                                 <div class="modal-dialog">
                                     <!-- Modal content-->

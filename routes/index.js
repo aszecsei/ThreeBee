@@ -20,14 +20,24 @@ router.get('/', function(req, res) {
   }
 
   if(req.isAuthenticated() && req.user.user_type == 2 && req.user.auth_status == 1) {
-      async.parallel([getManagers, getPlanes, getFlights], function(err, results) {
+      async.parallel([getManagers, getPlanes, getFlights, getAirports], function(err, results) {
           var combinedResult = {};
           for(var i = 0; i < results.length; i++) {
               combinedResult.managers = combinedResult.managers || results[i].managers;
               combinedResult.planes = combinedResult.planes || results[i].planes;
               combinedResult.flights = combinedResult.flights || results[i].flights;
+              combinedResult.airports = combinedResult.airports || results[i].airports;
           }
-          res.render('admindashboard', {title: 'ThreeBee', shouldDisplayLogin: 1, managerList: combinedResult.managers, planes:combinedResult.planes, flights:combinedResult.flights});
+          // console.log(JSON.stringify(combinedResult));
+          res.render('admindashboard',
+              {
+                  title: 'ThreeBee',
+                  shouldDisplayLogin: 1,
+                  managerList: combinedResult.managers,
+                  planes:combinedResult.planes,
+                  flights:combinedResult.flights,
+                  airports:combinedResult.airports
+              });
       });
   } else if(req.isAuthenticated() && req.user.user_type == 1) {
     res.render('managerdashboard', {title: 'ThreeBee', shouldDisplayLogin: 1});
@@ -67,7 +77,7 @@ function getManagers(callback) {
 function getPlanes(callback) {
     var interimResult = {};
     Plane.query(function (err,rows) {
-        if(rows == undefined) {
+        if(!rows) {
             rows = [];
         }
         interimResult.planes = rows;
@@ -78,10 +88,21 @@ function getPlanes(callback) {
 function getFlights(callback) {
     var interimResult = {};
     Flight.query(function(err, rows) {
-        if(rows == undefined) {
+        if(!rows) {
             rows = [];
         }
         interimResult.flights = rows;
+        callback(null, interimResult);
+    });
+}
+
+function getAirports(callback) {
+    var interimResult = {};
+    db.query("SELECT * FROM `airports`", function(err, rows) {
+        if(!rows) {
+            rows = [];
+        }
+        interimResult.airports = rows;
         callback(null, interimResult);
     });
 }

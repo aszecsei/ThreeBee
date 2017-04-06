@@ -4,8 +4,6 @@ var express = require('express');
 var router = express.Router();
 var Plane = require('../src/models/plane');
 var auth = require('../src/auth');
-
-router.post('/addplane', auth.isManager, function(req, res) {
 var Flight = require('../src/models/flight');
 
 router.get('/', function(req, res) {

@@ -27,16 +27,21 @@ router.get('/', function(req, res) {
               combinedResult.planes = combinedResult.planes || results[i].planes;
               combinedResult.flights = combinedResult.flights || results[i].flights;
           }
-          console.log("Render START");
           res.render('admindashboard', {title: 'ThreeBee', shouldDisplayLogin: 1, managerList: combinedResult.managers, planes:combinedResult.planes, flights:combinedResult.flights});
       });
   } else if(req.isAuthenticated() && req.user.user_type == 1) {
     res.render('managerdashboard', {title: 'ThreeBee', shouldDisplayLogin: 1});
   } else {
-      res.render('index', {
-          title: 'ThreeBee',
-          body: 'We be three bees! Alic, Emma, and Tanner.',
-          shouldDisplayLogin: (req.isAuthenticated() ? 1 : 0)
+      db.query("SELECT * FROM `airports`", function(err, rows) {
+          if(!rows) {
+              rows = [];
+          }
+          res.render('index', {
+              title: 'ThreeBee',
+              body: 'We be three bees! Alic, Emma, and Tanner.',
+              shouldDisplayLogin: (req.isAuthenticated() ? 1 : 0),
+              airports: rows
+          });
       });
   }
 });
@@ -61,12 +66,10 @@ function getManagers(callback) {
 
 function getPlanes(callback) {
     var interimResult = {};
-    console.log("Plane START");
     Plane.query(function (err,rows) {
         if(rows == undefined) {
             rows = [];
         }
-        console.log("Planes: " + rows);
         interimResult.planes = rows;
         callback(null, interimResult);
     });
@@ -74,12 +77,10 @@ function getPlanes(callback) {
 
 function getFlights(callback) {
     var interimResult = {};
-    console.log("Flight START");
     Flight.query(function(err, rows) {
         if(rows == undefined) {
             rows = [];
         }
-        console.log("Flights: " + rows);
         interimResult.flights = rows;
         callback(null, interimResult);
     });

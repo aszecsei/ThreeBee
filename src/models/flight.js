@@ -115,7 +115,7 @@ Flight.queryOne = function (id,callback) {
     });
 };
 
-Flight.flightFromAndTo = function(numStops, startAirport, endAirport, date, callback) {
+Flight.flightSearch = function(numStops, startAirport, endAirport, date, callback) {
     var q = "";
     if(numStops == 0) {
         // We want a direct flight
@@ -139,6 +139,24 @@ Flight.flightFromAndTo = function(numStops, startAirport, endAirport, date, call
         flight_data as fd3 ON (fd2.flight_landing=fd3.flight_takeoff AND fd3.flight_firstFlight >= fd2.flight_firstFlight + interval (fd2.flight_duration + 10) minute)\
         WHERE fd1.flight_takeoff=? AND fd3.flight_landing=? AND DATE(fd1.flight_firstFlight)=DATE(?)";
     }
+    db.query(q, [startAirport, endAirport, date], function(err, rows) {
+        if(err) {
+            callback(err, null);
+        } else {
+            var result = [];
+            for (var i = 0; i < rows.length; i++) {
+                var row = [];
+                if (numStops >= 0)
+                    row.push(rows[i].flightID1);
+                if (numStops >= 1)
+                    row.push(rows[i].flightID2);
+                if (numStops >= 2)
+                    row.push(rows[i].flightID3);
+                result.push(row);
+            }
+            callback(null, result);
+        }
+    });
 };
 
 module.exports = Flight;

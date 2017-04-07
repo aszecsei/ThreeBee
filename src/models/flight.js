@@ -114,4 +114,31 @@ Flight.queryOne = function (id,callback) {
         callback(err,undefined);
     });
 };
+
+Flight.flightFromAndTo = function(numStops, startAirport, endAirport, date, callback) {
+    var q = "";
+    if(numStops == 0) {
+        // We want a direct flight
+        q = "SELECT fd1.flightID as flightID1 FROM\
+        flight_data as fd1\
+        WHERE fd1.flight_takeoff=? AND fd1.flight_landing=? AND DATE(fd1.flight_firstFlight)=DATE(?)";
+    } else if(numStops == 1) {
+        // We want one layover
+        q = "SELECT fd1.flightID as flightID1, fd2.flightID as flightID2 FROM\
+        flight_data as fd1\
+        JOIN\
+        flight_data as fd2 ON (fd1.flight_landing=fd2.flight_takeoff AND fd2.flight_firstFlight >= fd1.flight_firstFlight + interval (fd1.flight_duration + 10) minute)\
+        WHERE fd1.flight_takeoff=? AND fd2.flight_landing=? AND DATE(fd1.flight_firstFlight)=DATE(?)";
+    } else if(numStops == 2) {
+        // We want 2 layovers
+        q = "SELECT fd1.flightID as flightID1, fd2.flightID as flightID2, fd3.flightID as flightID3 FROM\
+        flight_data as fd1\
+        JOIN\
+        flight_data as fd2 ON (fd1.flight_landing=fd2.flight_takeoff AND fd2.flight_firstFlight >= fd1.flight_firstFlight + interval (fd1.flight_duration + 10) minute)\
+        JOIN\
+        flight_data as fd3 ON (fd2.flight_landing=fd3.flight_takeoff AND fd3.flight_firstFlight >= fd2.flight_firstFlight + interval (fd2.flight_duration + 10) minute)\
+        WHERE fd1.flight_takeoff=? AND fd3.flight_landing=? AND DATE(fd1.flight_firstFlight)=DATE(?)";
+    }
+};
+
 module.exports = Flight;

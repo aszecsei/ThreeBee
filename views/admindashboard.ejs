@@ -203,7 +203,8 @@
                                     <td><%= flights[i].planeName %></td>
                                     <td><%= flights[i].takeoff %> (<%= flights[i].takeoffAbbr %>)</td>
                                     <td><%= flights[i].landing %> (<%= flights[i].landingAbbr %>)</td>
-                                    <td><%= (new Date(flights[i].flight_firstFlight)). %></td>
+                                    <td><%= flights[i].departureTime %></td>
+                                    <td><%= flights[i].arrivalTime %></td>
                                     <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#FlightDeleteConfirm<%= flights[i].flightID %>">Delete</button></td>
                                 </tr>
                                 <% } %>

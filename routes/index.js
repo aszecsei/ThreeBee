@@ -9,6 +9,7 @@ var Plane = require('../src/models/plane');
 var Flight = require('../src/models/flight');
 
 var async = require('async');
+var moment = require('moment');
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -91,6 +92,12 @@ function getFlights(callback) {
     Flight.query(function(err, rows) {
         if(!rows) {
             rows = [];
+        }
+        for(var i=0; i<rows.length; i++) {
+            var departureTime = new Date(rows[i].flight_firstFlight);
+            departureTime = moment(departureTime);
+            rows[i].departureTime = departureTime.format("LLL");
+            rows[i].arrivalTime = departureTime.add(rows[i].flight_duration, 'minutes').format("LLL");
         }
         interimResult.flights = rows;
         callback(null, interimResult);

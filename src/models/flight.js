@@ -141,6 +141,7 @@ Flight.flightSearch = function(numStops, startAirport, endAirport, date, callbac
     }
     db.query(q, [startAirport, endAirport, date], function(err, rows) {
         if(err) {
+            console.log(err);
             callback(err, null);
         } else {
             var result = [];

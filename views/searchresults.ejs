@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <% include ./partials/head.ejs %>
+    <% title = "Search Results"; %>
+    <script type="text/javascript" src="/javascripts/homepage_search.js"></script>
+
+</head>
+<body class="container">
+<main>
+    <header>
+        <% include ./partials/header.ejs %>
+    </header>
+
+    <div class="jumbotron">
+        <h1>Search Results</h1>
+    </div>
+    <div class="jumbotron">
+        <table class="table table-hover table-responsive">
+            <thead>
+            <tr>
+                <th>Flight ID</th>
+                <th>Departure</th>
+                <th>Departure Time</th>
+                <th>Arrival</th>
+                <th>Arrival Time</th>
+                <th>Price</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <% for(var i=0; i<flightList.length; i++) { %>
+            <tr id="FlightRow<%= i %>">
+                <td><% for(var j=0; j<flightList[i].length; j++) { %><p><%= flightList[i][j].flightID %></p><% } %></td>
+                <td><% for(var j=0; j<flightList[i].length; j++) { %><p><%= flightList[i][j].departure %></p><% } %></td>
+                <td><% for(var j=0; j<flightList[i].length; j++) { %><p><%= flightList[i][j].departureTime %></p><% } %></td>
+                <td><% for(var j=0; j<flightList[i].length; j++) { %><p><%= flightList[i][j].arrival %></p><% } %></td>
+                <td><% for(var j=0; j<flightList[i].length; j++) { %><p><%= flightList[i][j].arrivalTime %></p><% } %></td>
+                <td><%= priceList[i] %></td>
+                <td><button type="button" class="btn btn-primary">Purchase</button></td>
+            </tr>
+            <% } %>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+
+</html>

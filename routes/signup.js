@@ -91,20 +91,23 @@ router.post('/:auth', function(req, res) {
             } else if (results.length > 0) {
                 // We're gonna authorize the user!
                 var userid = results[0].user_id;
-
-                db.query("DELETE FROM `auth_keys` WHERE `auth_key`=?", auth, function (err) {
-                    if (err) {
+                User.findById(userid, function(err, usr) {
+                    if(err) {
                         errorHandle(res, err);
                     } else {
-
-                        var usr = User.findById(userid);
                         usr.auth_status = 1;
                         usr.password = usr.generateHash(req.body.password);
                         usr.update(function (err, newID) {
-                            if (err) {
+                            if(err) {
                                 errorHandle(res, err);
                             } else {
-                                res.json({message: 'Successfully authorized'});
+                                db.query("DELETE FROM `auth_keys` WHERE `auth_key`=?", auth, function (err) {
+                                    if (err) {
+                                        errorHandle(res, err);
+                                    } else {
+                                        res.json({message: 'Successfully authorized'});
+                                    }
+                                });
                             }
                         });
                     }

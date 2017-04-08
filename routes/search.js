@@ -25,12 +25,15 @@ router.post('/', function(req, res) {
         async.apply(doSearch, 2, fromCity, toCity, date)], function(err, results) {
         console.log("woo!");
             var flightList = [];
+            var priceList = [];
             for(var i=0; i<results.length; i++) {
                 flightList = flightList.concat(results[i]);
+                priceList.push(0);
             }
             console.log(JSON.stringify(flightList, null, 4));
             res.render('searchresults', {
-                flightList:flightList
+                flightList:flightList,
+                priceList:priceList
             });
     });
 });

@@ -114,16 +114,17 @@ User.findOne = function (params, callback) {
     }
     var query = "SELECT * FROM `USERS` WHERE " + stringArray.join(" AND ");
     db.query(query, paramArray, function(err, row) {
+        console.log(row);
         if(err) {
             callback(err, undefined);
             return;
-        }
-        if(row.length > 0) {
+        } else if(row.length > 0) {
             var result = new User(row[0].user_id, row[0].email, row[0].password, row[0].user_type, row[0].auth_status, row[0].deleted);
             callback(err, result);
             return;
+        } else {
+            callback(err, undefined);
         }
-        callback(err, undefined);
     });
 };
 

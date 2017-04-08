@@ -102,13 +102,36 @@ Flight.query = function (callback) {
 };
 
 Flight.queryOne = function (id,callback) {
-    db.query("SELECT * FROM threebee.flight_data WHERE planeID = '" +id+"' AND flight_isActive = 1;", function (err, row) {
+    db.query("SELECT \
+    fd.flightID,\
+        fd.flight_duration,\
+        fd.flight_firstFlight,\
+        fd.flight_turnover,\
+        fd.planeID,\
+        fd.flight_takeoff,\
+        fd.flight_landing,\
+        fd.flight_isActive,\
+        fd.flight_basePrice,\
+        a1.printName AS takeoff,\
+        a1.abbr AS takeoffAbbr,\
+        a2.printName AS landing,\
+        a2.abbr AS landingAbbr,\
+        a.airplane_name AS planeName\
+    FROM\
+    threebee.flight_data fd\
+    JOIN\
+    threebee.airports a1 ON fd.flight_takeoff = a1.airportID\
+    JOIN\
+    threebee.airports a2 ON fd.flight_landing = a2.airportID\
+    JOIN\
+    threebee.airplane_type a ON fd.planeID = a.airplaneID\
+    WHERE fd.flight_isActive=1 AND fd.flightID=?", [id], function (err, row) {
         if (err) {
             callback(err, undefined);
             return;
         }
         if (row.length > 0) {
-            callback(err,row);
+            callback(err,row[0]);
             return;
         }
         callback(err,undefined);
@@ -155,7 +178,6 @@ Flight.flightSearch = function(numStops, startAirport, endAirport, date, callbac
                     row.push(rows[i].flightID3);
                 result.push(row);
             }
-            console.log("Query result: " + result);
             callback(null, result);
         }
     });

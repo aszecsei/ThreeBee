@@ -23,29 +23,41 @@ router.post('/', function(req, res) {
         async.apply(doSearch, 0, fromCity, toCity, date),
         async.apply(doSearch, 1, fromCity, toCity, date),
         async.apply(doSearch, 2, fromCity, toCity, date)], function(err, results) {
-        console.log("woo!");
             var flightList = [];
             var priceList = [];
+            var bookingList = [];
             for(var i=0; i<results.length; i++) {
                 flightList = flightList.concat(results[i]);
+            }
+            for(i=0;i<flightList.length; i++) {
                 priceList.push(0);
+                var fIDs = [];
+                for(var j=0; j<flightList[i].length; j++) {
+                    fIDs.push(flightList[i][j].flightID);
+                }
+                bookingList.push(fIDs);
             }
             console.log(JSON.stringify(flightList, null, 4));
+
             res.render('searchresults', {
+                title:"Search Results",
+                shouldDisplayLogin:(req.isAuthenticated() ? 1 : 0),
                 flightList:flightList,
-                priceList:priceList
+                priceList:priceList,
+                bookingList:bookingList
             });
     });
 });
 
 function doSearch(numStops, fromCity, toCity, date, callback) {
-    console.log("Doing search " + numStops);
     Flight.flightSearch(numStops, fromCity, toCity, date, function(err, results) {
-        console.log("RESULTS: " + JSON.stringify(results, null, 4));
         async.map(results, function(result, callback) {
             async.map(result, function(flightID, callback2) {
-                db.query("SELECT * FROM `flight_data` WHERE flightID=?", [flightID], function(err, rows) {
-                    callback2(err, rows[0]);
+                Flight.queryOne(flightID, function(err, result) {
+                    console.log(JSON.stringify(result, null, 4));
+                    result.departureTime = moment(result.flight_firstFlight).format("LLL");
+                    result.arrivalTime = moment(result.flight_firstFlight).add(result.flight_duration, "minutes").format("LLL");
+                    callback2(err, result);
                 });
             }, function(err, results) {
                 callback(err, results);

@@ -39,7 +39,7 @@
                     <td><% for(j=0; j<flightList[i].length; j++) { %><%= flightList[i][j].landing %><% if(j != flightList[i].length-1) { %><br/><% } } %></td>
                     <td><% for(j=0; j<flightList[i].length; j++) { %><%= flightList[i][j].arrivalTime %><% if(j != flightList[i].length-1) { %><br/><% } } %></td>
                     <td><%= priceList[i] %></td>
-                    <input type="hidden" value="<%= JSON.stringify(bookingList[i]) %>" name="user_id" />
+                    <input type="hidden" value="<%= JSON.stringify(bookingList[i]) %>" name="booking_flights" />
                     <td><button type="submit" name="submit" class="btn btn-primary">Purchase</button></td>
                 </form>
             </tr>

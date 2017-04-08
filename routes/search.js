@@ -4,12 +4,15 @@ var Flight = require('../src/models/flight');
 
 var async = require('async');
 var moment = require('moment');
+var db = require('../src/database');
 
 router.post('/', function(req, res) {
-    var fromCity = req.body.dep-city;
-    var toCity = req.body.arr-city;
+    var fromCity = req.body.depcity;
+    var toCity = req.body.arrcity;
     var isRoundTrip = req.body.isroundtrip;
-    var date = req.body.outward-date;
+    var date = req.body.date;
+
+    console.log("1");
 
     async.parallel([
         async.apply(doSearch, 0, fromCity, toCity, date),
@@ -20,7 +23,7 @@ router.post('/', function(req, res) {
             for(var i=0; i<results.length; i++) {
                 flightList = flightList.concat(results[i]);
             }
-            console.log(json.stringify(flightList, null, 4));
+            console.log(JSON.stringify(flightList, null, 4));
             res.render('searchresults', {
                 flightList:flightList
             });
@@ -28,8 +31,9 @@ router.post('/', function(req, res) {
 });
 
 function doSearch(numStops, fromCity, toCity, date, callback) {
+    console.log("Doing search " + numStops);
     Flight.flightSearch(numStops, fromCity, toCity, date, function(err, results) {
-        console.log("RESULTS: " + json.stringify(results, null, 4));
+        console.log("RESULTS: " + JSON.stringify(results, null, 4));
         async.map(results, function(result, callback) {
             async.map(result, function(flightID, callback2) {
                 db.query("SELECT * FROM `flight_data` WHERE flightID=?", [flightID], function(err, rows) {

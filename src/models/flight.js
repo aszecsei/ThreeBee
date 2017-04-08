@@ -155,6 +155,7 @@ Flight.flightSearch = function(numStops, startAirport, endAirport, date, callbac
                     row.push(rows[i].flightID3);
                 result.push(row);
             }
+            console.log("Query result: " + result);
             callback(null, result);
         }
     });

@@ -15,48 +15,44 @@
       <div class="layout" id="signup_image">
           <div id="searchbox" class="jumbotron">
               <label id="form">
-                  <form action="">
+                  <form action="/search" method="post">
 
-                      <input id="roundtrip" type="radio" checked name="flightdir" value="roundtrip"> <label id="radio_button"> Round trip</label>
-                      <input id="oneway" type="radio" name="flightdir" value="oneway"> <label id="radio_button">One way</label><br>
-                  </form>
-                  <!-- <p> Date: <input type="text" id="date_input"></p>
-                  <SingleDatePicker id="date_input" date={this.state.date} focused={this.state.focused}></SingleDatePicker> -->
+                      <input id="roundtrip" type="radio" checked name="isroundtrip" value="roundtrip"> <label id="radio_button"> Round trip</label>
+                      <input id="oneway" type="radio" name="isroundtrip" value="oneway"> <label id="radio_button">One way</label><br>
+                      <!-- <p> Date: <input type="text" id="date_input"></p>
+                      <SingleDatePicker id="date_input" date={this.state.date} focused={this.state.focused}></SingleDatePicker> -->
 
-                  <div class="form-group">
-                      <label for="dep_city" id="city_menu">From</label>
-                      <select class="form-control" id="dep_city" name="dep-city">
-                          <% for(var i=0; i<airports.length; i++) { %>
-                          <option value="<%= airports[i].airportID %>"><%= airports[i].printName %> (<%= airports[i].abbr %>)</option>
-                          <% } %>
-                      </select>
-                  </div>
-                  <div class="form-group">
-                      <label for="arr_city" id="city_menu">To</label>
-                      <select class="form-control" id="arr_city" name="arr-city">
-                          <% for(var i=0; i<airports.length; i++) { %>
-                          <option value="<%= airports[i].airportID %>"><%= airports[i].printName %> (<%= airports[i].abbr %>)</option>
-                          <% } %>
-                      </select>
-                  </div>
-
-                  <form method="post">
                       <div class="form-group">
-                          <label for="outward-date" class="control-label" id="outward-text"> Outward </label>
-                          <input class="form-control" id="outward-date" name="outward-date" placeholder="MM/DD/YYYY" type="text"/>
+                          <label for="dep_city" id="city_menu">From</label>
+                          <select class="form-control" id="dep_city" name="depcity">
+                              <% for(var i=0; i<airports.length; i++) { %>
+                              <option value="<%= airports[i].airportID %>"><%= airports[i].printName %> (<%= airports[i].abbr %>)</option>
+                              <% } %>
+                          </select>
+                      </div>
+                      <div class="form-group">
+                          <label for="arr_city" id="city_menu">To</label>
+                          <select class="form-control" id="arr_city" name="arrcity">
+                              <% for(var i=0; i<airports.length; i++) { %>
+                              <option value="<%= airports[i].airportID %>"><%= airports[i].printName %> (<%= airports[i].abbr %>)</option>
+                              <% } %>
+                          </select>
                       </div>
 
+                      <div class="form-group">
+                          <label for="outward-date" class="control-label" id="outward-text"> Outward </label>
+                          <input class="form-control" id="outward-date" name="outdate" placeholder="MM/DD/YYYY" type="text"/>
+                      </div>
+
+                      <div id = "returngroup" class="form-group">
+                          <label for="return-date" class="control-label" id="return-text"> Return </label>
+                          <input class="form-control" id="return-date" name="returndate" placeholder="MM/DD/YYYY" type="text"/>
+                      </div>
+                      <div class="form-group">
+                          <button class="btn btn-primary" name="submit" type="submit">Submit</button>
+                      </div>
                   </form>
-
-                  <div id = "returngroup" class="form-group">
-                      <label for="return-date" class="control-label" id="return-text"> Return </label>
-                      <input class="form-control" id="return-date" name="return-date" placeholder="MM/DD/YYYY" type="text"/>
-                  </div>
-                  <div class="form-group">
-                      <button class="btn btn-primary" name="submit" type="submit">Submit</button>
-                  </div>
               </label>
-
           </div>
       </div>
 

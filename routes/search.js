@@ -9,10 +9,15 @@ var db = require('../src/database');
 router.post('/', function(req, res) {
     var fromCity = req.body.depcity;
     var toCity = req.body.arrcity;
-    var isRoundTrip = req.body.isroundtrip;
-    var date = req.body.date;
+    var isRoundTrip = (req.body.isroundtrip == "roundtrip");
+    var date = moment(req.body.outdate, "MM/DD/YYYY").format("YYYY-MM-DD") + " 00:00:00";
+    var returnDate = req.body.returndate;
 
-    console.log("1");
+    console.log("1: " + fromCity);
+    console.log("2: " + toCity);
+    console.log("3: " + isRoundTrip);
+    console.log("4: " + date);
+    console.log("5: " + returnDate);
 
     async.parallel([
         async.apply(doSearch, 0, fromCity, toCity, date),

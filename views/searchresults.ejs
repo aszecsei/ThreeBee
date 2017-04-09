@@ -32,7 +32,7 @@
             <tbody>
             <% for(var i=0; i<flightList.length; i++) { %>
             <tr id="FlightRow<%= i %>">
-                <form action="/book" method="post">
+                <form action="/search/book" method="post">
                     <td><% for(var j=0; j<flightList[i].length; j++) { %><%= flightList[i][j].flightID %><% if(j != flightList[i].length-1) { %><br/><% } } %></td>
                     <td><% for(j=0; j<flightList[i].length; j++) { %><%= flightList[i][j].takeoff %><% if(j != flightList[i].length-1) { %><br/><% } } %></td>
                     <td><% for(j=0; j<flightList[i].length; j++) { %><%= flightList[i][j].departureTime %><% if(j != flightList[i].length-1) { %><br/><% } } %></td>

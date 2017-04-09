@@ -18,12 +18,12 @@ function Booking(id, flightID, userID,type, lastID) {
     this.type = type;
     this.lastId = lastID;
 
-    this.save = function (callback) {
-        db.query("INSERT INTO bookings (flightID, userID, bookingType,nextBook VALUES (?,?,?,?)", [this.flightID,this.userID,this.type,this.lastID], function (err) {
+    this.save = function (callback, results) {
+        db.query("INSERT INTO bookings (flightID, userID, bookingType,nextBook) VALUES (?,?,?,?)", [this.flightID,this.userID,this.type,this.lastId], function (err, results, fields) {
             if (err) {
                 callback(err);
             } else {
-                callback(err);
+                callback(err, results.insertId);
             }
         });
     };
@@ -46,5 +46,5 @@ Booking.query = function (callback) {
         callback(err,undefined);
     });
 };
-Booking.
+
 module.exports = Booking;

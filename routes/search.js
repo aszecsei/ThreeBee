@@ -10,12 +10,15 @@ var db = require('../src/database');
 router.post('/book', function (req,res) {
     var flights = JSON.parse(req.body.booking_flights)
     var newBook = new Booking();
-    newBook.userID =;
+    newBook.userID =13;
+
     newBook.type = 1;
+    console.log("Test Here");
     switch (flights.length){
         case 1:
             newBook.flightID = flights[0];
-            newBook.lastId = null;
+            newBook.lastId = 0;
+            console.log("Test at 1");
             newBook.save(function (err) {
                 if (err) {
                     console.log(err);
@@ -26,14 +29,15 @@ router.post('/book', function (req,res) {
             break;
         case 2:
             newBook.flightID = flights[1];
-            newBook.lastId = null;
-            newBook.save(function (err) {
+            newBook.lastId = 0;
+            console.log("Test at 2");
+            newBook.save(function (err,test){
                 if (err) {
                     console.log(err);
                     throw err;
                 }
                 newBook.flightID = flights[0];
-                newBook.lastId = null;
+                newBook.lastId = test;
                 newBook.save(function (err) {
                     if (err) {
                         console.log(err);
@@ -45,26 +49,22 @@ router.post('/book', function (req,res) {
             break;
         case 3:
             newBook.flightID = flights[2];
-            newBook.lastId = null;
-            newBook.save(function (err) {
+            newBook.lastId = 0;
+            console.log("Test at 3");
+            newBook.save(function (err,id1) {
                 if (err) {
                     console.log(err);
                     throw err;
                 }
                 newBook.flightID = flights[1];
-                newBook.lastId = null;
-                newBook.save(function (err) {
+                newBook.lastId = id1;
+                newBook.save(function (err,id2) {
                     if (err) {
                         console.log(err);
                         throw err;
                     }
-                    newBook.save(function (err) {
-                        if (err) {
-                            console.log(err);
-                            throw err;
-                        }
-                        newBook.flightID = flights[0];
-                        newBook.lastId = null;
+                    newBook.flightID = flights[0];
+                    newBook.lastId = id2;
                         newBook.save(function (err) {
                             if (err) {
                                 console.log(err);
@@ -74,12 +74,8 @@ router.post('/book', function (req,res) {
                         });
                     });
                 });
-            });
             break;
     }
-
-
-
 });
 router.post('/', function(req, res) {
     var fromCity = req.body.depcity;

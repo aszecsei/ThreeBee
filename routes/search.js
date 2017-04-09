@@ -24,7 +24,7 @@ router.post('/book', function (req,res) {
                     console.log(err);
                     throw err;
                 }
-                res.redirect("/index");
+                res.render('payment', {shouldDisplayLogin: 2});
             });
             break;
         case 2:
@@ -43,7 +43,7 @@ router.post('/book', function (req,res) {
                         console.log(err);
                         throw err;
                     }
-                    res.redirect("/index");
+                    res.render('payment', {shouldDisplayLogin: 2});
                 });
             });
             break;
@@ -70,7 +70,7 @@ router.post('/book', function (req,res) {
                                 console.log(err);
                                 throw err;
                             }
-                            res.redirect("/index");
+                            res.render('payment', {shouldDisplayLogin: 2});
                         });
                     });
                 });

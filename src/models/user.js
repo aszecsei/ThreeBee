@@ -90,11 +90,11 @@ function User(id, email, password, userType, authStatus) {
     };
 
     this.update = function(callback) {
-        db.query("UPDATE `users` SET email=?, password=?, user_type=?, auth_status=? WHERE user_id=?", [this.email, this.password, this.user_type, this.auth_status, this.id], function(err) {
+        db.query("UPDATE `users` SET email=?, password=?, user_type=?, auth_status=? WHERE user_id=?", [this.email, this.password, this.user_type, this.auth_status, this.id], function(err, results, fields) {
             if(err) {
                 callback(err);
             } else {
-                callback(err, this.lastID);
+                callback(err, results.insertId);
             }
         });
     }

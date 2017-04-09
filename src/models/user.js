@@ -113,6 +113,7 @@ User.findOne = function (params, callback) {
         }
     }
     var query = "SELECT * FROM `USERS` WHERE " + stringArray.join(" AND ");
+    console.log(query);
     db.query(query, paramArray, function(err, row) {
         console.log(row);
         if(err) {

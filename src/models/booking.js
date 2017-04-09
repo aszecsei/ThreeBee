@@ -11,18 +11,19 @@
 
 var db = require('../database');
 
-function Booking(id, flightID, userID,type) {
+function Booking(id, flightID, userID,type, lastID) {
     this.id = id;
     this.flightID = flightID;
     this.userID = userID;
     this.type = type;
+    this.lastId = lastID;
 
     this.save = function (callback) {
-        db.query("INSERT INTO bookings (flightID, userID, bookingType VALUES (?,?,?)", [this.flightID,this.userID,title.type], function (err) {
+        db.query("INSERT INTO bookings (flightID, userID, bookingType,nextBook VALUES (?,?,?,?)", [this.flightID,this.userID,this.type,this.lastID], function (err) {
             if (err) {
                 callback(err);
             } else {
-                callback(err, this.lastID);
+                callback(err);
             }
         });
     };
@@ -45,4 +46,5 @@ Booking.query = function (callback) {
         callback(err,undefined);
     });
 };
+Booking.
 module.exports = Booking;

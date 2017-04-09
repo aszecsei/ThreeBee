@@ -41,6 +41,15 @@ router.post('/', function(req, res) {
             newUser.user_type = 0; // Normal user
             newUser.auth_status = 0;
 
+            newUser.first_name = req.body.firstName;
+            newUser.last_name = req.body.lastName;
+            newUser.street_addr = req.body.address;
+            newUser.zip = req.body.zipCode;
+            newUser.city = req.body.city;
+            newUser.state = req.body.state;
+            newUser.country = req.body.country;
+
+
             // save the user
             newUser.save(function(err, id) {
                 if (err) {
@@ -59,8 +68,14 @@ router.post('/', function(req, res) {
                             });
                         }
                     });
+                    newUser.insertUserInfo(function(err, id) {
+                        if(err){
+                            errorHandle(res, err);
+                        }
+                    });
                 }
             });
+
         }
     });
 });
@@ -109,8 +124,10 @@ router.post('/:auth', function(req, res) {
                         });
                     }
                 });
+
             }
         });
+
     } else {
         errorHandle(res, "Passwords must be at least 8 characters long, and must contain at least one uppercase letter, lowercase letter, and a number.");
     }

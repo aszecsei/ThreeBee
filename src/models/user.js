@@ -13,6 +13,15 @@ function User(id, email, password, userType, authStatus, deleted) {
     this.auth_status = authStatus;
     this.deleted = deleted;
 
+    //user info
+    this.first_name ="";
+    this.last_name ="";
+    this.street_addr ="";
+    this.city ="";
+    this.state ="";
+    this.zip ="";
+    this.country ="";
+
     this.generateHash = function(password) {
         return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
     };
@@ -98,6 +107,19 @@ function User(id, email, password, userType, authStatus, deleted) {
                 callback(err, results.insertId);
             }
         });
+    };
+
+
+    this.insertUserInfo = function(callback) {
+        db.query("INSERT INTO `user_info` (user_id, first_name, last_name, street_addr, city, state, zip, country) VALUES (?,?,?,?,?,?,?,?)", [this.id, this.first_name, this.last_name, this.street_addr, this.city, this.state, this.zip, this.country], function(err, results, fields){
+            if(err) {
+                callback(err);
+            } else {
+                //intertId will be the autoincrement primary key iduser_info
+                callback(err, results.insertId);
+            }
+
+        });
     }
 }
 
@@ -119,7 +141,8 @@ User.findOne = function (params, callback) {
             return;
         }
         if(row.length > 0) {
-            var result = new User(row[0].user_id, row[0].email, row[0].password, row[0].user_type, row[0].auth_status, row[0].deleted);
+            var result = new User(row[0].user_id, row[0].email, row[0].password, row[0].user_type, row[0].auth_status, row[0].deleted,
+                row[0].first_name, row[0].last_name, row[0].street_addr, row[0].city, row[0].state, row[0].zip, row[0].country );
             callback(err, result);
             return;
         }

@@ -20,7 +20,7 @@ var user = require('./routes/user');
 var planes = require('./routes/planes');
 var flights = require('./routes/flights');
 var search = require('./routes/search');
-var booking = require('./routes/bookings');
+var bookings = require('./routes/bookings');
 
 var app = express();
 
@@ -52,7 +52,7 @@ app.use('/user', user);
 app.use('/planes', planes);
 app.use('/flights',flights);
 app.use('/search', search);
-app.use('/booking', booking);
+app.use('/bookings', bookings);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

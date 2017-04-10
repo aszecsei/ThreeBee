@@ -33,7 +33,7 @@ Booking.delete = function (id, callback) {
     callback();
 };
 
-Booking.query = function (callback) {
+Booking.query = function (callback,row) {
     db.query("SELECT * FROM threebee.flight_data WHERE flight_isActive = 1", function (err, row) {
         if (err) {
             callback(err, undefined);
@@ -46,5 +46,38 @@ Booking.query = function (callback) {
         callback(err,undefined);
     });
 };
+Booking.findOne = function (id, callback) {
+    db.query("SELECT * FROM threebee.bookings WHERE bookingID = '" +id+"' AND isActive = 1;", function (err, rower) {
+        console.log(rower);
+        if (err) {
+            callback(err, undefined);
+            return;
+        }
+        if (rower.length > 0) {
 
+            callback(err,rower);
+            return;
+        }
+        callback(err, undefined);
+    });
+}
+Booking.findHead = function (callback, row) {
+    db.query("SELECT * \
+    FROM bookings b\
+    WHERE NOT EXISTS (\
+        SELECT *\
+        FROM bookings other\
+    WHERE b.bookingID = other.nextBook AND \ \
+    fd.flight_isActive=1;", function (err, row) {
+        if (err) {
+            callback(err, undefined);
+            return;
+        }
+        if (row.length > 0) {
+            callback(err,row);
+            return;
+        }
+        callback(err,undefined);
+    });
+}
 module.exports = Booking;

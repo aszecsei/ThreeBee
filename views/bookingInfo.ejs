@@ -1,0 +1,41 @@
+<html>
+<head>
+    <% title = "Flights"; %>
+    <% include ./partials/head.ejs %>
+</head>
+<body class="container">
+<header>
+    <% include ./partials/header.ejs %>
+</header>
+
+<main>
+    <%for(var k =0; k<result.length; k++){%>
+    <div class="jumbotron">
+        <table class="table">
+            <thread>
+                <th>#</th>
+                <th>Flight Takeoff</th>
+                <th>Flight Landing</th>
+                <th>Duration</th>
+            </thread>
+            <tbody>
+            <%var j = 1; for(var i = 0; i < result[k].length; i++){ %>
+            <tr>
+                <th scope="row"><%=j%></th>
+                <td><%=result[k][i].flight_takeoff%></td>
+                <td><%=result[k][i].flight_landing%></td>
+                <td><%=result[k][i].flight_duration%></td>
+            </tr>
+            <%j++;}%>
+        </table>
+    </div>
+    <%}%>
+
+</main>
+
+<footer>
+    <% include ./partials/footer.ejs %>
+</footer>
+
+</body>
+</html>

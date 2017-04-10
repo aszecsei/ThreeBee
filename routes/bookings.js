@@ -10,7 +10,7 @@ var Flight = require('../src/models/flight')
 router.get('/', function(req, res) {
     console.log("Test In");
     var toPass = [];
-    Booking.findHead(13, function(err, row) {
+    Booking.findHead(req.passport.user.id, function(err, row) {
         console.log("Test 1");
         for (var i = 0; i < row.length; i++) {
             console.log(i);
@@ -41,7 +41,7 @@ router.get('/', function(req, res) {
     console.log(toPass)
     var toSend = [];
     for(var r =0; r < toPass.length; r++){
-        for(var l = 0; l<toPass[i].length; i++){
+        for(var l = 0; l<toPass[l].length; i++){
 
             Flight.findById(toPass[r][l].flightID, function (err, result) {
                 toSend[r][l] = result;

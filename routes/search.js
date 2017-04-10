@@ -10,7 +10,7 @@ var db = require('../src/database');
 router.post('/book', function (req,res) {
     var flights = JSON.parse(req.body.booking_flights)
     var newBook = new Booking();
-    newBook.userID =req.passport.user_id;
+    newBook.userID =req.passport.user.id;
 
     newBook.type = 1;
     console.log("Test Here");

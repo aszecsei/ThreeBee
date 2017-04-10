@@ -14,17 +14,17 @@
         <table class="table">
             <thread>
                 <th>#</th>
-                <th>Flight Takeoff</th>
-                <th>Flight Landing</th>
-                <th>Duration</th>
+                <th>Booking ID</th>
+                <th>Flight ID</th>
+                <th>Booking Type</th>
             </thread>
             <tbody>
             <%var j = 1; for(var i = 0; i < result[k].length; i++){ %>
             <tr>
                 <th scope="row"><%=j%></th>
                 <td><%=result[k][i].bookingID%></td>
-                <td><%=result[k][i].flight_landing%></td>
-                <td><%=result[k][i].flight_duration%></td>
+                <td><%=result[k][i].flightID%></td>
+                <td><%=result[k][i].bookingType%></td>
             </tr>
             <%j++;}%>
         </table>

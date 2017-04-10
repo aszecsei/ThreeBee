@@ -95,7 +95,7 @@ function User(id, email, password, userType, authStatus, deleted) {
             if(err) {
                 callback(err);
             } else {
-                callback(err, this.lastID);
+                callback(err, results.insertId);
             }
         });
     }

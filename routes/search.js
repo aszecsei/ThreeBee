@@ -17,7 +17,7 @@ router.post('/book', function (req,res) {
     switch (flights.length){
         case 1:
             newBook.flightID = flights[0];
-            newBook.lastId = 0;
+            newBook.lastId = null;
             console.log("Test at 1");
             newBook.save(function (err) {
                 if (err) {
@@ -29,7 +29,7 @@ router.post('/book', function (req,res) {
             break;
         case 2:
             newBook.flightID = flights[1];
-            newBook.lastId = 0;
+            newBook.lastId = null;
             console.log("Test at 2");
             newBook.save(function (err,test){
                 if (err) {
@@ -49,7 +49,7 @@ router.post('/book', function (req,res) {
             break;
         case 3:
             newBook.flightID = flights[2];
-            newBook.lastId = 0;
+            newBook.lastId = null;
             console.log("Test at 3");
             newBook.save(function (err,id1) {
                 if (err) {

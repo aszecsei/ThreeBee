@@ -18,7 +18,7 @@ function Booking(id, flightID, userID,type, lastID) {
     this.type = type;
     this.lastId = lastID;
 
-    this.save = function (callback, results) {
+    this.save = function (callback) {
         db.query("INSERT INTO bookings (flightID, userID, bookingType,nextBook) VALUES (?,?,?,?)", [this.flightID,this.userID,this.type,this.lastId], function (err, results, fields) {
             if (err) {
                 callback(err);

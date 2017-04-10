@@ -26,7 +26,7 @@ router.get('/', function(req, res) {
             })
     }
     else {
-        Booking.findOne(res.passport.user.id, function (err,result) {
+        Booking.findOne(req.passport.user.id, function (err,result) {
             res.render('bookingInfo', {shouldDisplayLogin: 2, result: result});
         })
     }

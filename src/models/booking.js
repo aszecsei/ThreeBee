@@ -57,34 +57,35 @@ Booking.getAllForUser = function(userid, callback) {
                 if(row.nextBook) {
                     db.query("SELECT * FROM threebee.bookings WHERE isActive=1 AND bookingID=?", [row.nextBook], function (err, rows2) {
                         if (err) {
-                            callback(err, null);
+                            callback1(err, null);
                         } else {
                             if (rows2 && rows2.length > 0) {
                                 if(rows2[0].nextBook) {
                                     db.query("SELECT * FROM threebee.bookings WHERE isActive=1 AND bookingID=?", [rows2[0].nextBook], function (err, rows3) {
                                         if (err) {
-                                            callback(err, null);
+                                            callback1(err, null);
                                         } else {
                                             if (rows3 && rows3.length > 0) {
-                                                callback(null, [row, rows2[0], rows3[0]]);
+                                                callback1(null, [row, rows2[0], rows3[0]]);
                                             } else {
-                                                callback(null, [row, rows2[0]]);
+                                                callback1(null, [row, rows2[0]]);
                                             }
                                         }
                                     });
                                 } else {
-                                    callback(null, [row, rows2[0]]);
+                                    callback1(null, [row, rows2[0]]);
                                 }
                             } else {
-                                callback(null, [row]);
+                                callback1(null, [row]);
                             }
                         }
                     });
                 } else {
-                    callback(null, [row]);
+                    callback1(null, [row]);
                 }
             }, function(err, results) {
-                callback(results);
+                console.log("User Query: " + results);
+                callback(null, results);
             });
         }
     });

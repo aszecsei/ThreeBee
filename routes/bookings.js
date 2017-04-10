@@ -9,7 +9,8 @@ var Booking = require('../src/models/booking');
 var Flight = require('../src/models/flight')
 var async = require('async');
 router.get('/', function(req, res) {
-
+    console.log("here");
+    console.log(req.user.id);
     if(req.isAuthenticated() && req.user.user_type == 2 && req.user.auth_status == 1){
         Booking.query(function (err, result) {
             res.render('managerbookings', {shouldDisplayLogin: 2, result: result});
@@ -25,7 +26,7 @@ router.get('/', function(req, res) {
             })
     }
     else {
-        Booking.findOne(req.passport.user.id, function (err,result) {
+        Booking.findOne(res.passport.user.id, function (err,result) {
             res.render('bookingInfo', {shouldDisplayLogin: 2, result: result});
         })
     }

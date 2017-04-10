@@ -26,9 +26,9 @@ router.get('/', function(req, res) {
             })
     }
     else {
-        Booking.findOne(req.passport.user.id, function (err,result) {
+        Booking.getAllForUser(req.user.id, function(err, results) {
             res.render('bookingInfo', {shouldDisplayLogin: 2, result: result});
-        })
+        });
     }
 });
 

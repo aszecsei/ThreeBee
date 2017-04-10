@@ -13,8 +13,6 @@ var errorHandle = function(res, message) {
 };
 
 router.get('/',function(req, res) {
-    console.log(req.user.id);
-    //user.lookupUserInfo();
     User.findOne({ 'user_id' :  req.user.id }, function(err, user) {
         var results = user.lookupUserInfo( function(err, results){
             if(err) {
@@ -27,7 +25,8 @@ router.get('/',function(req, res) {
 
             res.render('userinfo', {
                 shouldDisplayLogin: 2,
-                userinfoList: userinfoList
+                userinfoList: userinfoList,
+                user: user
             });
         });
 

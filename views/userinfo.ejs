@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <% title = "Manager Registered"; %>
+    <% title = "User Info"; %>
     <% include ./partials/head.ejs %>
 </head>
 <body class="container">
@@ -13,7 +13,7 @@
 <main>
     <div class="jumbotron">
         <h1>Account Information</h1>
-        <form data-toggle="validator" role="form" id="signupform" method="post" class="form-horizontal">
+        <form data-toggle="validator" role="form" id="userinfoform" method="post" class="form-horizontal">
             <div class="form-group has-feedback">
                 <label class="col-xs-3 control-label">First Name</label>
                 <div class="col-xs-5">
@@ -89,7 +89,56 @@
                 </div>
             </div>
         </form>
+        <div id="UpdateSuccess" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Update Success</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>You've successfully updated your account with ThreeBee Airlines!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
+    <script>
+        // this is the id of the form
+        $("#errorDiv").hide();
+
+        $("#userinfoform").submit(function(e) {
+
+            var url = "/userinfo"; // the script where you handle the form input.
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $("#userinfoform").serialize(), // serializes the form's elements.
+                success: function(data)
+                {
+                    $("#UpdateSuccess").modal("toggle");
+                },
+                error: function(req, ajaxOptions, thrownError) {
+                    $("#errorDiv").show();
+                    $("#errorMessage").text(req.responseText.slice(1, -1));
+                }
+
+            });
+
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+        });
+    </script>
 </main>
+
+<footer>
+    <% include ./partials/footer.ejs %>
+</footer>
+
 </body>
 </html>

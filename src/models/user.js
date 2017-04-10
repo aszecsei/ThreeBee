@@ -123,6 +123,19 @@ function User(id, email, password, userType, authStatus, deleted) {
         });
     }
 
+    this.updateUserInfo = function(callback) {
+        db.query("UPDATE `user_info` SET first_name=?, last_name=?, street_addr=?, city=?, state=?, zip=?, country=? WHERE user_id=?",
+            [this.first_name, this.last_name, this.street_addr, this.city, this.state, this.zip, this.country, this.id], function(err, results, fields){
+                if(err) {
+                    callback(err);
+                } else {
+                    //intertId will be the autoincrement primary key iduser_info
+                    callback(err, results.insertId);
+                }
+
+            });
+    }
+
     this.lookupUserInfo = function(callback) {
         db.query("SELECT * FROM `USER_INFO` WHERE user_id=?", [this.id], function(err, results, fields){
             if(err) {

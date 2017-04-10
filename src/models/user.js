@@ -111,7 +111,8 @@ function User(id, email, password, userType, authStatus, deleted) {
 
 
     this.insertUserInfo = function(callback) {
-        db.query("INSERT INTO `user_info` (user_id, first_name, last_name, street_addr, city, state, zip, country) VALUES (?,?,?,?,?,?,?,?)", [this.id, this.first_name, this.last_name, this.street_addr, this.city, this.state, this.zip, this.country], function(err, results, fields){
+        db.query("INSERT INTO `user_info` (user_id, first_name, last_name, street_addr, city, state, zip, country) VALUES (?,?,?,?,?,?,?,?)",
+            [this.id, this.first_name, this.last_name, this.street_addr, this.city, this.state, this.zip, this.country], function(err, results, fields){
             if(err) {
                 callback(err);
             } else {
@@ -120,6 +121,17 @@ function User(id, email, password, userType, authStatus, deleted) {
             }
 
         });
+    }
+
+    this.lookupUserInfo = function(callback) {
+        db.query("SELECT * FROM `USER_INFO` WHERE user_id=?", [this.id], function(err, results, fields){
+            if(err) {
+                callback(err);
+            } else {
+                callback(err, results);
+            }
+        })
+
     }
 }
 

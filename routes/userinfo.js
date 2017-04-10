@@ -61,6 +61,8 @@ router.post('/', function(req, res) {
 
                 if (err){
                     errorHandle(err);
+                } else {
+                    res.json({message: 'Successfully updated user info'});
                 }
 
             });

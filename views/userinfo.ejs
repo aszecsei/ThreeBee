@@ -13,6 +13,10 @@
 <main>
     <div class="jumbotron">
         <h1>Account Information</h1>
+        <div class="alert alert-danger alert-dismissable fade in collapse" id="errorDiv">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <span id="errorMessage"></span>
+        </div>
         <form data-toggle="validator" role="form" id="userinfoform" method="post" class="form-horizontal">
             <div class="form-group has-feedback">
                 <label class="col-xs-3 control-label">First Name</label>

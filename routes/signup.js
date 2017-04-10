@@ -17,7 +17,7 @@ var errorHandle = function(res, message) {
 
 /* GET signup page. */
 router.get('/', function(req, res) {
-    res.render('signup', {shouldDisplayLogin: 2});
+    res.render('signup', {shouldDisplayLogin: (req.isAuthenticated() ? 1 : 0)});
 });
 
 // process the signup form
@@ -106,21 +106,24 @@ router.post('/:auth', function(req, res) {
             } else if (results.length > 0) {
                 // We're gonna authorize the user!
                 var userid = results[0].user_id;
-
-                db.query("DELETE FROM `auth_keys` WHERE `auth_key`=?", auth, function (err) {
-                    if (err) {
+                User.findById(userid, function(err, usr) {
+                    if(err) {
                         errorHandle(res, err);
                     } else {
-                        User.findById(userid, function(err, usr){
-                            usr.auth_status = 1;
-                            usr.password = usr.generateHash(req.body.password);
-                            usr.update(function (err, newID) {
-                                if (err) {
-                                    errorHandle(res, err);
-                                } else {
-                                    res.json({message: 'Successfully authorized'});
-                                }
-                            });
+                        usr.auth_status = 1;
+                        usr.password = usr.generateHash(req.body.password);
+                        usr.update(function (err, newID) {
+                            if(err) {
+                                errorHandle(res, err);
+                            } else {
+                                db.query("DELETE FROM `auth_keys` WHERE `auth_key`=?", auth, function (err) {
+                                    if (err) {
+                                        errorHandle(res, err);
+                                    } else {
+                                        res.json({message: 'Successfully authorized'});
+                                    }
+                                });
+                            }
                         });
                     }
                 });

@@ -1,0 +1,66 @@
+<html>
+<head>
+    <% title = "Flights"; %>
+    <% include ./partials/head.ejs %>
+</head>
+<body class="container">
+<header>
+    <% include ./partials/header.ejs %>
+</header>
+
+<main>
+    <div class="jumbotron">
+        <table class="table">
+            <thread>
+                <th>#</th>
+                <th>Plane Name</th>
+                <th>First Class Seats</th>
+                <th>Buisness Class Seats</th>
+                <th>Coach Class Seats</th>
+                <th>Select</th>
+            </thread>
+            <tbody>
+            <%var j = 1; for(var i = 0; i < planes.length; i++){ %>
+            <tr>
+                <th scope="row"><%=j%></th>
+                <td><%=planes[i].airplane_name%></td>
+                <td><%=planes[i].airplane_firstSeats%></td>
+                <td><%=planes[i].airplane_buisnessSeats%></td>
+                <td><%=planes[i].airplane_coachSeats%></td>
+                <td><a href= planes/<%= planes[i].airplaneID%>>Select</a> </td>
+            </tr>
+            <%j++;}%>
+            </tbody>
+        </table>
+    </div>
+    <div class="jumbotron">
+        <table class="table">
+            <thread>
+                <th>#</th>
+                <th>Flight Takeoff</th>
+                <th>Flight Landing</th>
+                <th>Duration</th>
+                <th>Delete</th>
+            </thread>
+            <tbody>
+            <%var j = 1; for(var i = 0; i < result.length; i++){ %>
+            <tr>
+                <th scope="row"><%=j%></th>
+                <td><%=result[i].flight_takeoff%></td>
+                <td><%=result[i].flight_landing%></td>
+                <td><%=result[i].flight_duration%></td>
+                <td><a href=/flights/<%= result[i].flightID%>/delete>Delete</a> </td>
+            </tr>
+            <%j++;}%>
+            </tbody>
+        </table>
+    </div>
+
+</main>
+
+<footer>
+    <% include ./partials/footer.ejs %>
+</footer>
+
+</body>
+</html>

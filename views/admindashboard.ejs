@@ -15,95 +15,337 @@
         <h1>Admin Dashboard</h1>
     </div>
     <div class="jumbotron">
-        <button type="button" class="btn btn-default">Add or Remove Flights</button>
-        <button type="button" class="btn btn-default">Add or Remove Airplanes</button>
-        <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#managers">Add Managers</button>
-        <div id="managers" class="collapse">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h2 class="panel-title">Add Manager</h2>
+        <div id="dashboardgroup">
+            <div class="btn-group btn-group-justified">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#flights" data-parent="#dashboardgroup">Add or Remove Flights</button>
                 </div>
-                <div class="panel-body">
-                    <form data-toggle="validator" role="form" id="signupform" method="post" class="form-horizontal" action="/signupmanager">
-
-                        <div class="form-group has-feedback">
-                            <label class="col-xs-3 control-label">Email</label>
-                            <div class="col-xs-5">
-                                <input type="email" class="form-control" id="email" name="email" placeholder="johndoe@Example.com" minlength="3" pattern= "^([a-z0-9_\.\+-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$" data-error="Please enter a valid email address"  required/>
-                            </div>
-                            <div class="help-block with-errors"></div>
-                        </div>
-
-
-                        <div class="form-horizontal has-feedback">
-                            <div class="col-xs-9 col-xs-offset-3">
-                                <button type="submit" class="btn btn-primary">Register</button>
-                            </div>
-                        </div>
-                    </form>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#planes" data-parent="#dashboardgroup">Add or Remove Airplanes</button>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#managers" data-parent="#dashboardgroup">Add Managers</button>
                 </div>
             </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h2 class="panel-title">Edit Managers</h2>
-                </div>
-                <div class="panel-body">
-                    <table class="table table-hover table-responsive">
-                        <thead>
-                            <tr>
-                                <th>Email</th>
-                                <th>Auth Status</th>
-                                <th>Delete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% for(var i=0; i<managerList.length; i++) { %>
-                            <tr id="ManagerRow<%= managerList[i].id %>">
-                                <td><%= managerList[i].email %></td>
-                                <td><%= managerList[i].auth_status %></td>
-                                <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#ManagerDeleteConfirm<%= managerList[i].id %>">Delete</button></td>
-                            </tr>
-                            <% } %>
-                        </tbody>
-                    </table>
-                    <% for(var i=0; i<managerList.length; i++) { %>
-                    <div id="ManagerDeleteConfirm<%= managerList[i].id %>" class="modal fade" role="dialog">
-                        <div class="modal-dialog">
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">Confirm Delete</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <p>Are you sure you want to delete this manager's account? This action cannot be easily undone.</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal" onclick="deleteManager(<%= managerList[i].id %>)">Delete</button>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                </div>
-                            </div>
+            <div class="accordion-group">
+                <div id="managers" class="collapse indent">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">Add Manager</h2>
+                        </div>
+                        <div class="panel-body">
+                            <form data-toggle="validator" role="form" id="signupform" method="post" class="form-horizontal" action="/manager/signup">
 
+                                <div class="form-group has-feedback">
+                                    <label class="col-xs-3 control-label">Email</label>
+                                    <div class="col-xs-5">
+                                        <input type="email" class="form-control" id="email" name="email" placeholder="johndoe@Example.com" minlength="3" pattern= "^([a-z0-9_\.\+-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$" data-error="Please enter a valid email address"  required/>
+                                    </div>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+
+
+                                <div class="form-horizontal has-feedback">
+                                    <div class="col-xs-9 col-xs-offset-3">
+                                        <button type="submit" class="btn btn-primary">Register</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                    <% } %>
-                    <script>
-                        function deleteManager(id) {
-                            $.ajax({
-                                url: '/manager/' + id,
-                                type: 'DELETE',
-                                success: function() {
-                                    $("#ManagerRow" + id).remove();
-                                },
-                                error: function(req, status, error) {
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">Edit Managers</h2>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-hover table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Email</th>
+                                        <th>Auth Status</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% for(var i=0; i<managerList.length; i++) { %>
+                                    <tr id="ManagerRow<%= managerList[i].id %>">
+                                        <td><%= managerList[i].email %></td>
+                                        <td><%= managerList[i].auth_status %></td>
+                                        <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#ManagerDeleteConfirm<%= managerList[i].id %>">Delete</button></td>
+                                    </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                            <% for(i=0; i<managerList.length; i++) { %>
+                            <div id="ManagerDeleteConfirm<%= managerList[i].id %>" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Confirm Delete</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to delete this manager's account? This action cannot be easily undone.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger pull-left" data-dismiss="modal" onclick="deleteManager(<%= managerList[i].id %>)">Delete</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </div>
 
+                                </div>
+                            </div>
+                            <% } %>
+                            <script>
+                                function deleteManager(id) {
+                                    $.ajax({
+                                        url: '/manager/' + id,
+                                        type: 'DELETE',
+                                        success: function() {
+                                            $("#ManagerRow" + id).remove();
+                                        },
+                                        error: function(req, status, error) {
+
+                                        }
+                                    });
                                 }
-                            });
-                        }
-                    </script>
+                            </script>
+                        </div>
+                    </div>
+                </div>
+                <div id="flights" class="collapse indent">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">Add Flight</h2>
+                        </div>
+                        <div class="panel-body">
+                            <form id="addflight" action="/flights" method="post" class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-xs-3 control-label">Plane:  </label>
+                                    <div class="col-xs-5">
+                                        <select class="form-control" id="planeID" name="planeID">
+                                            <% for(var i=0; i<planes.length; i++) { %>
+                                            <option value="<%= planes[i].airplaneID %>"><%= planes[i].airplane_name %></option>
+                                            <% } %>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-xs-3 control-label">Duration: </label>
+                                    <div class="col-xs-5">
+                                        <input type="number" class="form-control" name="duration" min="0" required/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-xs-3 control-label">Day and Time of First Flight:  </label>
+                                    <div class="col-xs-5">
+                                        <input type="datetime-local" class="form-control" name="dateTime" required/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-xs-3 control-label">Turnover time:   </label>
+                                    <div class="col-xs-5">
+                                        <input type="number" class="form-control" min="0" name="turnover" required/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-3 control-label">Stop 1:  </label>
+                                    <div class="col-xs-5">
+                                        <select class="form-control" id="arr_city" name="firstStop">
+                                            <% for(var i=0; i<airports.length; i++) { %>
+                                            <option value="<%= airports[i].airportID %>"><%= airports[i].printName %> (<%= airports[i].abbr %>)</option>
+                                            <% } %>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-3 control-label">Stop 2:  </label>
+                                    <div class="col-xs-5">
+                                        <select class="form-control" id="arr_city" name="secondStop">
+                                            <% for(var i=0; i<airports.length; i++) { %>
+                                            <option value="<%= airports[i].airportID %>"><%= airports[i].printName %> (<%= airports[i].abbr %>)</option>
+                                            <% } %>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-xs-9 col-xs-offset-3">
+                                        <button type="submit" class="btn btn-primary">Add Flight</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">Edit Flights</h2>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table">
+                                <thread>
+                                    <th>#</th>
+                                    <th>Plane</th>
+                                    <th>Flight Takeoff</th>
+                                    <th>Flight Landing</th>
+                                    <th>Departure Time</th>
+                                    <th>Arrival Time</th>
+                                    <th>Delete</th>
+                                </thread>
+                                <tbody>
+                                <% for(i = 0; i < flights.length; i++){ %>
+                                <tr id="FlightRow<%= flights[i].flightID %>">
+                                    <th scope="row"><%= i+1 %></th>
+                                    <td><%= flights[i].planeName %></td>
+                                    <td><%= flights[i].takeoff %> (<%= flights[i].takeoffAbbr %>)</td>
+                                    <td><%= flights[i].landing %> (<%= flights[i].landingAbbr %>)</td>
+                                    <td><%= flights[i].departureTime %></td>
+                                    <td><%= flights[i].arrivalTime %></td>
+                                    <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#FlightDeleteConfirm<%= flights[i].flightID %>">Delete</button></td>
+                                </tr>
+                                <% } %>
+                                </tbody>
+                            </table>
+                            <% for(i=0; i<flights.length; i++) { %>
+                            <div id="FlightDeleteConfirm<%= flights[i].flightID %>" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Confirm Delete</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to delete this flight? This action cannot be easily undone.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger pull-left" data-dismiss="modal" onclick="deleteFlight(<%= flights[i].flightID %>)">Delete</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+                <div id="planes" class="collapse">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">Add Plane</h2>
+                        </div>
+                        <div class="panel-body">
+                            <form id="addplane" action="planes/addplane" method="post" class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-xs-3 control-label">Plane Name: </label>
+                                    <div class="col-xs-5">
+                                        <input type="text" class="form-control" name="addname" required/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-xs-3 control-label">Number of First Class Seats:  </label>
+                                    <div class="col-xs-5">
+                                        <input type="number" class="form-control" name="numFirstSeat" required/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-xs-3 control-label">Number of Business Seats:  </label>
+                                    <div class="col-xs-5">
+                                        <input type="number" class="form-control" name="numBizSeat" required/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-xs-3 control-label">Number of Coach Seats:  </label>
+                                    <div class="col-xs-5">
+                                        <input type="number" class="form-control" name="numCoachSeat" required/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-xs-9 col-xs-offset-3">
+                                        <button type="submit" class="btn btn-primary">Add Plane</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">Edit Planes</h2>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-hover table-responsive">
+                                <thread>
+                                    <th>Plane Name</th>
+                                    <th>First Class Seats</th>
+                                    <th>Business Class Seats</th>
+                                    <th>Coach Class Seats</th>
+                                    <th>Delete</th>
+                                </thread>
+                                <tbody>
+                                <% for(i = 0; i < planes.length; i++){ %>
+                                <tr id="PlaneRow<%= planes[i].airplaneID %>">
+                                    <th scope="row"><%= planes[i].airplane_name %></th>
+                                    <td><%= planes[i].airplane_firstSeats %></td>
+                                    <td><%= planes[i].airplane_buisnessSeats %></td>
+                                    <td><%= planes[i].airplane_coachSeats %></td>
+                                    <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#PlaneDeleteConfirm<%= planes[i].airplaneID %>">Delete</button></td>
+                                </tr>
+                                <% } %>
+                                </tbody>
+                            </table>
+                            <% for(i=0; i<planes.length; i++) { %>
+                            <div id="PlaneDeleteConfirm<%= planes[i].airplaneID %>" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Confirm Delete</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to delete this plane? This action cannot be easily undone.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger pull-left" data-dismiss="modal" onclick="deletePlane(<%= planes[i].airplaneID %>)">Delete</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                            <script>
+                                function deletePlane(id) {
+                                    $.ajax({
+                                        url: '/planes/' + id,
+                                        type: 'DELETE',
+                                        success: function() {
+                                            $("#PlaneRow" + id).remove();
+                                        },
+                                        error: function(req, status, error) {
+
+                                        }
+                                    });
+                                }
+                            </script>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        <script>
+            var $myGroup = $('#dashboardgroup');
+            $myGroup.on('show.bs.collapse','.collapse', function() {
+                $myGroup.find('.collapse.in').collapse('hide');
+            });
+        </script>
     </div>
 </main>
 </body>

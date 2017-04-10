@@ -6,7 +6,6 @@
 
 <nav class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
-
         <div class="navbar-header">
             <a class="navbar-brand" href="/">
                 <span class="glyphicons glyphicons-plane"></span>
@@ -49,7 +48,12 @@
         </ul>
         <% } else if(shouldDisplayLogin == 1) { %>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="/userinfo"> User Info</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b><%= loggedInName %></b> <span class="caret"></span></a>
+                <ul id="login-dp" class="dropdown-menu">
+                    <li><a href="/userinfo" class="dropdown-item">User Info</a></li>
+                    <li><a href="/bookings" class="dropdown-item">Bookings</a></li>
+                </ul>
             <li><a href="/logout">Sign Out</a></li>
         </ul>
         <% } %>

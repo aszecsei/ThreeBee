@@ -17,6 +17,10 @@ var login = require('./routes/login');
 var logout = require('./routes/logout');
 var manager = require('./routes/manager');
 var user = require('./routes/user');
+var planes = require('./routes/planes');
+var flights = require('./routes/flights');
+var search = require('./routes/search');
+var bookings = require('./routes/bookings');
 var userinfo = require('./routes/userinfo');
 
 var app = express();
@@ -46,6 +50,10 @@ app.use('/manager', manager);
 app.use('/login', login);
 app.use('/logout', logout);
 app.use('/user', user);
+app.use('/planes', planes);
+app.use('/flights',flights);
+app.use('/search', search);
+app.use('/bookings', bookings);
 app.use('/userinfo', userinfo);
 
 // catch 404 and forward to error handler

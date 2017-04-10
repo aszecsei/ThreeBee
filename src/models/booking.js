@@ -84,7 +84,48 @@ Booking.getAllForUser = function(userid, callback) {
                     callback1(null, [row]);
                 }
             }, function(err, results) {
-                console.log("User Query: " + results);
+                callback(null, results);
+            });
+        }
+    });
+};
+
+Booking.getAll = function(callback) {
+    db.query("SELECT * FROM threebee.bookings b WHERE isActive=1 AND NOT EXISTS(SELECT 1 FROM threebee.bookings other WHERE b.bookingID=other.nextBook)", function(err, rows){
+        if(err) {
+            callback(err, undefined);
+        } else {
+            async.map(rows, function(row, callback1) {
+                if(row.nextBook) {
+                    db.query("SELECT * FROM threebee.bookings WHERE isActive=1 AND bookingID=?", [row.nextBook], function (err, rows2) {
+                        if (err) {
+                            callback1(err, null);
+                        } else {
+                            if (rows2 && rows2.length > 0) {
+                                if(rows2[0].nextBook) {
+                                    db.query("SELECT * FROM threebee.bookings WHERE isActive=1 AND bookingID=?", [rows2[0].nextBook], function (err, rows3) {
+                                        if (err) {
+                                            callback1(err, null);
+                                        } else {
+                                            if (rows3 && rows3.length > 0) {
+                                                callback1(null, [row, rows2[0], rows3[0]]);
+                                            } else {
+                                                callback1(null, [row, rows2[0]]);
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    callback1(null, [row, rows2[0]]);
+                                }
+                            } else {
+                                callback1(null, [row]);
+                            }
+                        }
+                    });
+                } else {
+                    callback1(null, [row]);
+                }
+            }, function(err, results) {
                 callback(null, results);
             });
         }

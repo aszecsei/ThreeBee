@@ -48,11 +48,13 @@ router.get('/', function(req, res) {
           if(!rows) {
               rows = [];
           }
+          console.log("User: " + JSON.stringify(req.user));
           res.render('index', {
               title: 'ThreeBee',
               body: 'We be three bees! Alic, Emma, and Tanner.',
               shouldDisplayLogin: (req.isAuthenticated() ? 1 : 0),
-              airports: rows
+              airports: rows,
+              loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : "")
           });
       });
   }

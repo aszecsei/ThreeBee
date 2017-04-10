@@ -5,7 +5,7 @@
 var db = require('../database');
 var bcrypt   = require('bcrypt-nodejs');
 
-function User(id, email, password, userType, authStatus, deleted) {
+function User(id, email, password, userType, authStatus, deleted, first_name, last_name, street_addr, city, state, zip, country) {
     this.id = id;
     this.email = email;
     this.password = password;
@@ -14,13 +14,13 @@ function User(id, email, password, userType, authStatus, deleted) {
     this.deleted = deleted;
 
     //user info
-    this.first_name ="";
-    this.last_name ="";
-    this.street_addr ="";
-    this.city ="";
-    this.state ="";
-    this.zip ="";
-    this.country ="";
+    this.first_name = first_name;
+    this.last_name = last_name;
+    this.street_addr = street_addr;
+    this.city = city;
+    this.state = state;
+    this.zip = zip;
+    this.country = country;
 
     this.generateHash = function(password) {
         return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
@@ -155,11 +155,14 @@ User.findOne = function (params, callback) {
     var paramArray = [];
     for(var prop in params) {
         if(params.hasOwnProperty(prop)) {
-            stringArray.push("`" + prop + "`=?");
+            stringArray.push("`USERS`." + prop + "=?");
             paramArray.push(params[prop]);
         }
     }
-    var query = "SELECT * FROM `USERS` WHERE " + stringArray.join(" AND ");
+    var query = "SELECT *\
+    FROM `USERS`\
+    LEFT JOIN	`USER_INFO`\
+    ON	`USERS`.user_id=`USER_INFO`.user_id WHERE " + stringArray.join(" AND ");
     console.log(query);
     db.query(query, paramArray, function(err, row) {
         console.log(row);

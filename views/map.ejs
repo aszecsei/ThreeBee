@@ -27,10 +27,13 @@
             zoom: 6
         };
         var map = new google.maps.Map(mapCanvas, mapOptions);
-        var marker = new google.maps.Marker({
-            position: test,
-            map: map
-        });
+
+        /* <%for(var i = 0; i < result.length; i++){%>
+            <%for(var j = 0; j < result[i].length; j++){
+                 <%= result[i][j].lat %>, <%= result[i][j].lon %>),
+
+            <%}%>
+        <%}%> */
     }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxHoE28IbTjzqC9o0HFtApYAabN7z-DkY&callback=myMap"></script>

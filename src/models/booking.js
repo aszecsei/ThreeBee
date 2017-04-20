@@ -10,7 +10,8 @@
 'use strict';
 
 var db = require('../database');
-var async = require('async')
+var async = require('async');
+var Flight = require('./flight');
 
 function Booking(id, flightID, userID,type, lastID) {
     this.id = id;
@@ -32,20 +33,6 @@ function Booking(id, flightID, userID,type, lastID) {
 Booking.delete = function (id, callback) {
     db.query("UPDATE `threebee`.`bookings` SET `isActive`='0' WHERE bookingid = '" +id+"';");
     callback();
-};
-
-Booking.query = function (callback) {
-    db.query("SELECT * FROM threebee.flight_data WHERE flight_isActive = 1", function (err, row) {
-        if (err) {
-            callback(err, undefined);
-            return;
-        }
-        if (row.length > 0) {
-            callback(err,row);
-            return;
-        }
-        callback(err,undefined);
-    });
 };
 
 Booking.getAllForUser = function(userid, callback) {
@@ -126,7 +113,7 @@ Booking.getAll = function(callback) {
                     callback1(null, [row]);
                 }
             }, function(err, results) {
-                callback(null, results);
+                callback(err, results);
             });
         }
     });

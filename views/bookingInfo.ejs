@@ -14,31 +14,25 @@
         <table class="table">
             <thread>
                 <th>#</th>
-                <th>Booking ID</th>
-                <th>Flight ID</th>
-                <th>Booking Type</th>
-                <th>Plane</th>
-                <th>Flight Takeoff</th>
-                <th>Flight Landing</th>
+                <th>Plane Name</th>
+                <th>Departure</th>
                 <th>Departure Time</th>
+                <th>Arrival</th>
                 <th>Arrival Time</th>
                 <th>Cancel</th>
             </thread>
             <tbody>
-            <%var j = 1; for(var i = 0; i < result[k].length; i++){ %>
+            <% for(var i = 0; i < result[k].length; i++){ %>
             <tr>
-                <th scope="row"><%=j%></th>
-                <td><%=result[k][i].bookingID%></td>
-                <td><%=result[k][i].flightID%></td>
-                <td><%=result[k][i].bookingType%></td>
+                <th scope="row"><%= (i+1); %></th>
                 <td><%= result[k][i].planeName %></td>
-                <td><%= result[k][i].takeoff %> (<%= flights[i].takeoffAbbr %>)</td>
-                <td><%= result[k][i].landing %> (<%= flights[i].landingAbbr %>)</td>
+                <td><%= result[k][i].takeoff %> (<%= result[k][i].takeoffAbbr %>)</td>
                 <td><%= result[k][i].departureTime %></td>
+                <td><%= result[k][i].landing %> (<%= result[k][i].landingAbbr %>)</td>
                 <td><%= result[k][i].arrivalTime %></td>
-                <td></td>
+                <td>Cancel Button Here</td>
             </tr>
-            <%j++;}%>
+            <% } %>
         </table>
     </div>
     <%}%>

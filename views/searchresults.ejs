@@ -64,16 +64,14 @@
 
         <%for(var i = 0; i < airports.length; i++){%>
         var trip =[]
-        <%for(var j = 0; j < airports[i].length; j++){%>
-        var test =new google.maps.LatLng(<%= airports[i][j].lat %>, <%= airports[i][j].lon %>);
-        trip.push(test);
-        var marker<%= i %><%= j %> = new google.maps.Marker({
-            position: test,
-            map: map
-        });
+            <%for(var j = 0; j < airports[i].length; j++){%>
+            var test =new google.maps.LatLng(<%= airports[i][j].lat %>, <%= airports[i][j].lon %>);
+            trip.push(test);
+            var marker<%= i %><%= j %> = new google.maps.Marker({
+                position: test,
+                map: map
+            });
         <%}%>
-
-
         <%}%>
         var flightPath = new google.maps.Polyline({
             path: trip,
@@ -84,6 +82,7 @@
         });
 
         flightPath.setMap(map);
+
     }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxHoE28IbTjzqC9o0HFtApYAabN7z-DkY&callback=myMap"></script>

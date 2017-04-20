@@ -97,9 +97,11 @@ router.post('/', function(req, res) {
             var flightList = [];
             var priceList = [];
             var bookingList = [];
+            var airportList = [];
             for(var i=0; i<results.length; i++) {
                 flightList = flightList.concat(results[i]);
             }
+
             for(i=0;i<flightList.length; i++) {
                 priceList.push(0);
                 var fIDs = [];
@@ -108,15 +110,47 @@ router.post('/', function(req, res) {
                 }
                 bookingList.push(fIDs);
             }
-            console.log(JSON.stringify(flightList, null, 4));
+            var airportIDs = [];
+            for(i=0;i<flightList.length; i++) {
+                airportIDs.push([]);
+                airportIDs[i].push(flightList[i][0].flight_takeoff);
+                for(var j=0; j<flightList[i].length; j++) {
+                    airportIDs[i].push(flightList[i][j].flight_landing)
+                }
+            }
+        console.log(airportIDs);
 
+        async.map(airportIDs, function(tripIDs, callback) {
+            async.map(tripIDs, function(airportID, callback2) {
+                db.query("SELECT * FROM threebee.airports WHERE airportID=?", [airportID], function(err, rows) {
+                    callback2(err, rows[0]);
+                });
+            }, function(err, tripData) {
+                callback(err, tripData);
+            });
+        }, function(err, airportData) {
+            console.log(airportData);
+            for(var i = 0; i<airportData.length; i++){
+                airportList[i] = [];
+                for(var j = 0; j<airportData[i].length; j++){
+                    airportList[i].push({lat: airportData[i][j].latitude,lon:airportData[i][j].longitude});
+                }
+            }
+
+            console.log(airportList);
             res.render('searchresults', {
                 title:"Search Results",
                 shouldDisplayLogin:(req.isAuthenticated() ? 1 : 0),
                 flightList:flightList,
                 priceList:priceList,
-                bookingList:bookingList
+                bookingList:bookingList,
+                airports:airportList
             });
+        });
+
+
+
+
     });
 });
 
@@ -139,4 +173,12 @@ function doSearch(numStops, fromCity, toCity, date, callback) {
     });
 }
 
+function searchAir(airportID) {
+    db.query("SELECT a.latitude, a.longitude FROM threebee.airports a WHERE a.airportID=?",[flightList[i][0].flight_takeoff], function(err, row) {
+        async.map(results, function(row, callback){
+        });
+    });
+
+
+}
 module.exports = router;

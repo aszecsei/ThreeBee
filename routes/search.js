@@ -137,14 +137,15 @@ router.post('/', function(req, res) {
                 }
             }
 
-            console.log(airportList);
+            var colors = ["red", "green","purple","orange","brown","grey"]
             res.render('searchresults', {
                 title:"Search Results",
                 shouldDisplayLogin:(req.isAuthenticated() ? 1 : 0),
                 flightList:flightList,
                 priceList:priceList,
                 bookingList:bookingList,
-                airports:airportList
+                airports:airportList,
+                colors:colors
             });
         });
 

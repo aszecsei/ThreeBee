@@ -137,7 +137,7 @@ router.post('/', function(req, res) {
                 }
             }
 
-            var colors = ["red", "green","purple","orange","brown","grey"]
+            var colors = ["#FF00FF","#FFD700","red", "green","purple","orange"]
             res.render('searchresults', {
                 title:"Search Results",
                 shouldDisplayLogin:(req.isAuthenticated() ? 1 : 0),

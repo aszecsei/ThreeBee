@@ -23,6 +23,7 @@ var search = require('./routes/search');
 var bookings = require('./routes/bookings');
 var userinfo = require('./routes/userinfo');
 var map = require('./routes/map');
+var about = require('./routes/about');
 var app = express();
 
 // view engine setup
@@ -56,6 +57,7 @@ app.use('/search', search);
 app.use('/bookings', bookings);
 app.use('/userinfo', userinfo);
 app.use('/map', map);
+app.use('/about', about);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -30,4 +30,8 @@ router.get('/', auth.isLoggedIn, function(req, res) {
     }
 });
 
+router.post('/:id', function (req,res) {
+    db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE planeID = '" +req.params.id+"';");
+    res.redirect('/');
+});
 module.exports = router;

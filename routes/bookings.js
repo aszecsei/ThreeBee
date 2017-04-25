@@ -14,12 +14,12 @@ router.get('/', auth.isLoggedIn, function(req, res) {
     console.log(req.user.id);
     if(req.isAuthenticated() && req.user.user_type == 2 && req.user.auth_status == 1){
         Booking.getAll(function (err, result) {
-            res.render('managerbookings', {shouldDisplayLogin: 2, result: result});
+            res.render('managerbookings', {shouldDisplayLogin: 2, result: result, loggedInName: "Admin"});
 
         })
     } else if(req.isAuthenticated() && req.user.user_type == 1){
             Booking.getAll(function (err, result) {
-                res.render('managerbookings', {shouldDisplayLogin: 2, result: result});
+                res.render('managerbookings', {shouldDisplayLogin: 2, result: result, loggedInName: "Admin"});
 
             })
     } else {

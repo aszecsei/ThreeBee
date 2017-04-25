@@ -39,15 +39,29 @@ router.get('/', function(req, res) {
                   planes:combinedResult.planes,
                   flights:combinedResult.flights,
                   airports:combinedResult.airports,
-                  loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : "")
+                  loggedInName: "Admin"
               });
       });
   } else if(req.isAuthenticated() && req.user.user_type == 1) {
-    res.render('managerdashboard',
-        {
-            title: 'ThreeBee', shouldDisplayLogin: 1,
-            loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : "")
-        });
+      async.parallel([getPlanes, getFlights, getAirports], function(err, results) {
+          var combinedResult = {};
+          for(var i = 0; i < results.length; i++) {
+              combinedResult.planes = combinedResult.planes || results[i].planes;
+              combinedResult.flights = combinedResult.flights || results[i].flights;
+              combinedResult.airports = combinedResult.airports || results[i].airports;
+          }
+          console.log(JSON.stringify(combinedResult, null, 4));
+          console.log(req.user.first_name);
+          res.render('managerdashboard',
+              {
+                  title: 'ThreeBee',
+                  shouldDisplayLogin: 1,
+                  planes:combinedResult.planes,
+                  flights:combinedResult.flights,
+                  airports:combinedResult.airports,
+                  loggedInName: "Manager"
+              });
+      });
   } else {
       db.query("SELECT * FROM `airports`", function(err, rows) {
           if(!rows) {

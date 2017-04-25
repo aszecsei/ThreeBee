@@ -13,6 +13,7 @@ var moment = require('moment');
 
 /* GET home page. */
 router.get('/', function(req, res) {
+    console.log("blorp");
   if(req.isAuthenticated()) { // check if we're logged in
       if (req.user.user_type == 1 && req.user.auth_status == 0) {
           res.redirect('/user/changepassword');

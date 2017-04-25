@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% title = "Manager Registered"; %>
+    <% include ./partials/head.ejs %>
+
+</head>
+
+<body class="container">
+
+<header>
+    <% include ./partials/header.ejs %>
+</header>
+
+<main>
+
+    <h1>My First Google Map</h1>
+    <div id="map" style="width:1000px;height:400px;background:yellow"></div>
+</main>
+
+<script>
+    function myMap() {
+        var test =  new google.maps.LatLng(41.8, -93);
+        var mapCanvas = document.getElementById("map");
+        var mapOptions = {
+            center: test,
+            zoom: 6
+        };
+        var map = new google.maps.Map(mapCanvas, mapOptions);
+
+        <%for(var i = 0; i < result.length; i++){%>
+        var trip =[]
+            <%for(var j = 0; j < result[i].length; j++){%>
+                var test =new google.maps.LatLng(<%= result[i][j].lat %>, <%= result[i][j].lon %>);
+                trip.push(test);
+                var marker<%= i %><%= j %> = new google.maps.Marker({
+                    position: test,
+                    map: map
+                });
+            <%}%>
+
+
+        <%}%>
+        var flightPath = new google.maps.Polyline({
+            path: trip,
+            geodesic: true,
+            strokeColor: '#ff2acd',
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+        });
+
+        flightPath.setMap(map);
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxHoE28IbTjzqC9o0HFtApYAabN7z-DkY&callback=myMap"></script>
+
+
+</body>
+</html>

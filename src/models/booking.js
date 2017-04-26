@@ -32,6 +32,7 @@ function Booking(id, flightID, userID,type, lastID) {
 Booking.delete = function (id, callback) {
     db.query("UPDATE `threebee`.`bookings` SET `isActive`='0' WHERE bookingid = '" +id+"';");
     console.log("UPDATE `threebee`.`bookings` SET `isActive`='0' WHERE bookingid = '" +id+"';");
+
     callback();
 };
 

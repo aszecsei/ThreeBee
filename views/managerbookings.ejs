@@ -57,12 +57,12 @@
         function deleteBooking(id) {
             console.log(id+"lol");
             $.ajax({
-                url: '/' + id,
+                url: '/bookings/' + id,
                 type: 'DELETE',
-                success: function() {
-                    $("#BookingRow" + id).remove();
-                },
+                success: $("#BookingRow" + id).remove(),
+
                 error: function(req, status, error) {
+                    $("#BookingRow" + id).remove();
                 }
             });}
     </script>

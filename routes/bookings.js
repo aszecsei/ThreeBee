@@ -31,14 +31,12 @@ router.get('/', auth.isLoggedIn, function(req, res) {
     }
 });
 
-router.post('/:id', function (req,res) {
-    db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE planeID = '" +req.params.id+"';");
-    res.redirect('/');
-});
-
 router.delete('/:id', auth.isManager, function(req,res) {
     console.log(req.params.id+"lol");
-    Booking.delete(req.params.id);
-    res.json({message: 'Successfully deleted'});
+    Booking.delete(req.params.id,function (err) {
+        console.log("not stuck");
+        return true;
+    });
+
 });
 module.exports = router;

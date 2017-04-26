@@ -8,7 +8,7 @@
 
 var db = require('../database');
 
-function Flight(id,duration, firstFlight, turnover, planeID, takeoff, landing) {
+function Flight(id,duration, firstFlight, turnover, planeID, takeoff, landing, basePrice) {
     this.id = id;
     this.duration = duration;
     this.firstFlight = firstFlight;
@@ -16,15 +16,33 @@ function Flight(id,duration, firstFlight, turnover, planeID, takeoff, landing) {
     this.planeID = planeID;
     this.takeoff = takeoff;
     this.landing = landing;
+    this.basePrice = basePrice;
 
     this.save = function (callback) {
-        db.query("INSERT INTO flight_data (flight_duration, flight_firstFlight, flight_turnover, planeID, flight_takeoff, flight_landing, flight_isActive) VALUES (?,?,?,?,?,?,1)", [this.duration, this.firstFlight, this.turnover, this.planeID, this.takeoff,this.landing], function (err) {
+        db.query("INSERT INTO flight_data (flight_duration, flight_firstFlight, flight_turnover, planeID, flight_takeoff, flight_landing, flight_basePrice, flight_isActive) VALUES (?,?,?,?,?,?,?,1)", [this.duration, this.firstFlight, this.turnover, this.planeID, this.takeoff,this.landing, this.basePrice], function (err) {
             if (err) {
                 callback(err);
             } else {
+                console.log("duration: "+this.duration);
+                console.log("firstFlight: "+this.firstFlight);
+                console.log("turnover: "+this.turnover);
+                console.log("takeoff: "+this.takeoff);
+                console.log("landing: "+this.landing);
                 callback(err, this.lastID);
             }
         });
+    };
+    this.updateFlightInfo = function(callback) {
+        db.query("UPDATE `flight_data` SET duration=?, firstFlight=?, turnover=?, takeoff=?, landing=?, basePrice=?, WHERE flightID=?",
+            [this.duration, this.firstFlight, this.turnover, this.takeoff, this.landing, this.basePrice, this.id], function(err, results){
+                if(err) {
+                    callback(err);
+                } else {
+                    //intertId will be the autoincrement primary key iduser_info
+                    callback(err, results.insertId);
+                }
+
+            });
     };
 }
 Flight.delete = function (id, callback) {
@@ -219,5 +237,6 @@ Flight.flightSearch = function(numStops, startAirport, endAirport, date, callbac
         }
     });
 };
+
 
 module.exports = Flight;

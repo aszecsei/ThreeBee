@@ -159,7 +159,7 @@ User.findOne = function (params, callback) {
             paramArray.push(params[prop]);
         }
     }
-    var query = "SELECT *\
+    var query = "SELECT `USERS`.*, first_name, last_name, street_addr, city, state, zip, country\
     FROM `USERS`\
     LEFT JOIN	`USER_INFO`\
     ON	`USERS`.user_id=`USER_INFO`.user_id WHERE " + stringArray.join(" AND ");

@@ -174,6 +174,13 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <label class="col-xs-3 control-label">Base price:   </label>
+                                    <div class="col-xs-5">
+                                        <input type="number" class="form-control" min="0" name="basePrice" required/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
                                     <div class="col-xs-9 col-xs-offset-3">
                                         <button type="submit" class="btn btn-primary">Add Flight</button>
                                     </div>
@@ -194,6 +201,8 @@
                                     <th>Flight Landing</th>
                                     <th>Departure Time</th>
                                     <th>Arrival Time</th>
+                                    <th>Base Price</th>
+                                    <th>Edit</th>
                                     <th>Delete</th>
                                 </thread>
                                 <tbody>
@@ -205,11 +214,101 @@
                                     <td><%= flights[i].landing %> (<%= flights[i].landingAbbr %>)</td>
                                     <td><%= flights[i].departureTime %></td>
                                     <td><%= flights[i].arrivalTime %></td>
+                                    <td><%= flights[i].flight_basePrice %></td>
+                                    <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#FlightEdit<%= flights[i].flightID %>">Edit</button></td>
                                     <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#FlightDeleteConfirm<%= flights[i].flightID %>">Delete</button></td>
                                 </tr>
                                 <% } %>
                                 </tbody>
                             </table>
+                            <% for(i=0; i<flights.length; i++) { %>
+                            <div id="FlightEdit<%= flights[i].flightID %>" class="modal fade" role="dialog">
+                                <div class="modal-dialog modal-xl">
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Edit Flight</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h2 class=" panel-title">Edit Flight</h2>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <table class="table-editable" cellspacing="10">
+                                                        <thread>
+                                                            <th>Plane</th>
+                                                            <th>Flight Takeoff</th>
+                                                            <th>Flight Landing</th>
+                                                            <th>Departure Time</th>
+                                                            <th>Arrival Time</th>
+                                                            <th>Base Price</th>
+                                                        </thread>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td><%= flights[i].planeName %></td>
+                                                            <td><%= flights[i].takeoff %> (<%= flights[i].takeoffAbbr %>)</td>
+                                                            <td><%= flights[i].landing %> (<%= flights[i].landingAbbr %>)</td>
+                                                            <td><%= flights[i].departureTime %></td>
+                                                            <td><%= flights[i].arrivalTime %></td>
+                                                            <td><%= flights[i].flight_basePrice %></td>
+                                                        </tr>
+                                                        <tr id="FlightRow<%= flights[i].flightID %>">
+
+                                                            <td class="select">
+                                                                <select class="form-control" id="editplaneID" name="editplaneID">
+                                                                    <% for(var p=0; p<planes.length; p++) { %>
+                                                                    <option value="<%= planes[p].airplaneID %>"><%= planes[p].airplane_name %></option>
+                                                                    <% } %>
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                <select class="form-control" id="edit_arr_city" name="editFirstStop">
+                                                                    <% for(var d=0; d<airports.length; d++) { %>
+                                                                    <option value="<%= airports[d].airportID %>"><%= airports[d].printName %> (<%= airports[d].abbr %>)</option>
+                                                                    <% } %>
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                <select class="form-control" id="edit_arr_city" name="editSecondStop">
+                                                                    <% for(var d=0; d<airports.length; d++) { %>
+                                                                    <option value="<%= airports[d].airportID %>"><%= airports[d].printName %> (<%= airports[d].abbr %>)</option>
+                                                                    <% } %>
+                                                                </select>
+                                                            </td>
+                                                            <td><input type="datetime-local" class="form-control" name="dateTime" required/></td>
+                                                            <td contenteditable="true"><input type="datetime-local" class="form-control" name="dateTime" required/></td>
+                                                            <td contenteditable="true"><input type="number" class="form-control" min="0" name="basePrice" default="<%= flights[i].flight_basePrice %>"/></td>
+
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary pull-left" data-dismiss="modal" onclick="editFlight(<%= flights[i].flightID %>)">Edit</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                            <script>
+                                function editFlight(id) {
+                                    $.ajax({
+                                        url: '/flights/' + id,
+                                        type: 'POST',
+                                        success: function() {
+                                            <!--$("#FlightRow" + id).remove();-->
+                                        },
+                                        error: function(req, status, error) {
+
+                                        }
+                                    });
+                                }
+                            </script>
                             <% for(i=0; i<flights.length; i++) { %>
                             <div id="FlightDeleteConfirm<%= flights[i].flightID %>" class="modal fade" role="dialog">
                                 <div class="modal-dialog">
@@ -230,6 +329,20 @@
                                 </div>
                             </div>
                             <% } %>
+                            <script>
+                                function deleteFlight(id) {
+                                    $.ajax({
+                                        url: '/flights/' + id,
+                                        type: 'DELETE',
+                                        success: function() {
+                                            $("#FlightRow" + id).remove();
+                                        },
+                                        error: function(req, status, error) {
+
+                                        }
+                                    });
+                                }
+                            </script>
                         </div>
                     </div>
                 </div>

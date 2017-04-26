@@ -29,6 +29,7 @@ router.post('/', function(req, res) {
             newFlight.planeID = req.body.planeID;
             newFlight.takeoff = req.body.firstStop;
             newFlight.landing = req.body.secondStop;
+            newFlight.basePrice = req.body.basePrice;
 
             // save the user
             newFlight.save(function (err, id) {
@@ -47,6 +48,35 @@ router.delete('/:id', auth.isManager, function(req,res) {
     console.log(req.params.id);
     Flight.delete(req.params.id);
     res.json({message: 'Successfully deleted'});
+});
+
+//updates the flight information
+router.post('/:id', auth.isManager, function(req,res) {
+
+
+    Flight.queryOne(req.params.id, function(err, result) {
+        if(err) {
+            errorHandle(res, err);
+        } else if (result.length>0) {
+            var flight = new Flight;
+            result.duration = req.body.duaration;
+            result.firstFlight = req.body.firstName;
+            result.turnover = req.body.lastName;
+            result.takeoff = req.body.takeoff;
+            result.landing = req.body.landing;
+            result.basePrice = req.body.basePrice;
+
+            flight.updateFlight( function(err) {
+               if(err){
+                   errorHandle(err);
+               } else {
+                   res.json({message: 'Successfully update flight info'});
+               }
+            });
+
+        }
+
+    });
 });
 
 module.exports = router;

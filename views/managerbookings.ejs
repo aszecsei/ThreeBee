@@ -60,9 +60,7 @@
                 url: '/bookings/' + id,
                 type: 'DELETE',
                 success: $("#BookingRow" + id).remove(),
-
                 error: function(req, status, error) {
-                    $("#BookingRow" + id).remove();
                 }
             });}
     </script>

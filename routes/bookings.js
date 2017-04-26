@@ -21,6 +21,7 @@ router.get('/', auth.isLoggedIn, function(req, res) {
             Booking.getAll(function (err, result) {
                 res.render('managerbookings', {shouldDisplayLogin: 2, result: result, loggedInName: "Admin"});
 
+
             })
     } else {
         Booking.getAllForUser(req.user.id, function(err, results) {
@@ -36,7 +37,7 @@ router.post('/:id', function (req,res) {
 });
 
 router.delete('/:id', auth.isManager, function(req,res) {
-    console.log(req.params.id);
+    console.log(req.params.id+"lol");
     Booking.delete(req.params.id);
     res.json({message: 'Successfully deleted'});
 });

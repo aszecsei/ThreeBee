@@ -26,7 +26,9 @@
                 <td><%=result[k][i].flightID%></td>
                 <td><%=result[k][i].bookingType%></td>
                 <td><a href= bookings/<%= result[k][i].bookingID%>/checkin>Check In</a> </td>
+                <%if (i == 0){%>
                 <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#BookingDeleteConfirm<%= result[k][i].bookingID %>">Delete</button></td>
+                <%}%>
             </tr>
             <%j++;}%>
         </table>

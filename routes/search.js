@@ -148,10 +148,6 @@ router.post('/', function(req, res) {
                 colors:colors
             });
         });
-
-
-
-
     });
 });
 

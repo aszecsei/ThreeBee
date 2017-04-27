@@ -30,8 +30,6 @@ router.get('/', function(req, res) {
               combinedResult.flights = combinedResult.flights || results[i].flights;
               combinedResult.airports = combinedResult.airports || results[i].airports;
           }
-          console.log(JSON.stringify(combinedResult, null, 4));
-    console.log(req.user.first_name);
           res.render('admindashboard',
               {
                   title: 'ThreeBee',

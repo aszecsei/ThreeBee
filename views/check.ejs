@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% title = "Manager Registered"; %>
+    <% include ./partials/head.ejs %>
+</head>
+<body class="container">
+
+<header>
+    <% include ./partials/header.ejs %>
+</header>
+
+<main>
+    <div class="jumbotron">
+
+            <table class="table">
+                <thread>
+                    <th>#</th>
+                    <th>Booking ID</th>
+                    <th>Flight ID</th>
+                    <th>Booking Type</th>
+                </thread>
+                <tbody>
+                <%for(var k =0; k<result.length;k++){%>
+                <tr>
+                    <th scope="row"><%=k+1%></th>
+                    <td><%=result[k][0].bookingID%></td>
+                    <td><%=flights[k].planeID%></td>
+                    <td><%=result[k][0].bookingType%></td>
+
+                </tr>
+                <%}%>
+                </tbody>
+            </table>
+            <%=flights[0].length%>
+    </div>
+
+</main>
+
+</body>
+</html>

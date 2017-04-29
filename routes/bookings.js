@@ -4,10 +4,11 @@ var router = express.Router();
 
 var passport = require('passport');
 var auth = require('../src/auth');
-var db = require('../src/database');
 var Booking = require('../src/models/booking');
 var Flight = require('../src/models/flight');
 var async = require('async');
+var PDFDocument = require ('pdfkit');
+var moment = require('moment');
 
 router.get('/', auth.isLoggedIn, function(req, res) {
     if(req.isAuthenticated() && req.user.user_type == 2 && req.user.auth_status == 1){
@@ -29,12 +30,17 @@ router.get('/', auth.isLoggedIn, function(req, res) {
     }
 });
 router.get('/:id/checkin', auth.isManager, function(req,res) {
+    var PDF = new PDFDocument();
+    PDF.pipe(res);
+
+
     var books = [];
     var flights = [];
     Booking.findOne(req.params.id, function (err, result1) {
         books.push(result1);
 
         Flight.queryOne(result1[0].flightID, function (err, flight1) {
+            addToPDF(flight1,PDF);
             flights.push(flight1);
 
             if (result1[0].nextBook != null) {
@@ -43,17 +49,19 @@ router.get('/:id/checkin', auth.isManager, function(req,res) {
                     books.push(result2);
 
                     Flight.queryOne(result2[0].flightID, function (err, flight2) {
+                        PDF.addPage();
+                        addToPDF(flight2,PDF);
                         flights.push(flight2);
 
                         if (result2[0].nextBook != null) {
 
                             Booking.findOne(result2[0].nextBook, function (err, result3) {
                                 books.push(result3);
-                                Flight.queryOne(result3[0].flightID, function (err,flight3) {
+                                Flight.queryOne(result3[0].flightID, function (err,flight3){
+                                    PDF.addPage();
+                                    addToPDF(flight3,PDF);
                                     flights.push(flight3);
-                                    console.log(flights);
-                                    console.log("test3");
-                                    res.render('check', {shouldDisplayLogin: 2, result: books,flights:flights});
+                                    PDF.end();
                                 });
                             });
                         }
@@ -62,7 +70,7 @@ router.get('/:id/checkin', auth.isManager, function(req,res) {
                             console.log(flights);
                             console.log(result2[0].flightID);
                             console.log("test2");
-                            res.render('check', {shouldDisplayLogin: 2, result: books,flights:flights});
+                            PDF.end();
                         }
                     });
                 });
@@ -70,7 +78,7 @@ router.get('/:id/checkin', auth.isManager, function(req,res) {
             else {
                 console.log(flights);
                 console.log("test1");
-                res.render('check', {shouldDisplayLogin: 2, result: books,flights:flights});
+                PDF.end();
             }
         });
     });
@@ -82,4 +90,17 @@ router.delete('/:id', auth.isManager, function(req,res) {
     });
 
 });
+
+function addToPDF(flightresult,PDF) {
+
+    PDF.fontSize(25)
+        .image('./public/images/threebee-logo_airlines.png', 100, 160)
+        .text('This is your ticket', 100, 100)
+
+
+    PDF.fontSize(10)
+        .text('Takeoff: ' + flightresult.takeoff + ' Landing: '+ flightresult.landing)
+        .text('Departure: '+ moment(flightresult.flight_firstFlight).format("LLL") + '  Arrival: '+ moment(flightresult.flight_firstFlight).add(flightresult.flight_duration, "minutes").format("LLL"))
+        .text('Plane: ' + flightresult.planeName)
+}
 module.exports = router;

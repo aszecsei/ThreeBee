@@ -40,7 +40,7 @@ router.get('/:id/checkin', auth.isManager, function(req,res) {
         books.push(result1);
 
         Flight.queryOne(result1[0].flightID, function (err, flight1) {
-            addToPDF(flight1,PDF);
+            addToPDF(flight1,result1,PDF);
             flights.push(flight1);
 
             if (result1[0].nextBook != null) {
@@ -50,7 +50,7 @@ router.get('/:id/checkin', auth.isManager, function(req,res) {
 
                     Flight.queryOne(result2[0].flightID, function (err, flight2) {
                         PDF.addPage();
-                        addToPDF(flight2,PDF);
+                        addToPDF(flight2,result2,PDF);
                         flights.push(flight2);
 
                         if (result2[0].nextBook != null) {
@@ -59,7 +59,7 @@ router.get('/:id/checkin', auth.isManager, function(req,res) {
                                 books.push(result3);
                                 Flight.queryOne(result3[0].flightID, function (err,flight3){
                                     PDF.addPage();
-                                    addToPDF(flight3,PDF);
+                                    addToPDF(flight3,result3,PDF);
                                     flights.push(flight3);
                                     PDF.end();
                                 });
@@ -91,7 +91,23 @@ router.delete('/:id', auth.isManager, function(req,res) {
 
 });
 
-function addToPDF(flightresult,PDF) {
+function addToPDF(flightresult,bookingresult,PDF) {
+    var bookClass;
+    switch (bookingresult.bookingType){
+        case 1:
+            bookClass = "Economy Class";
+            break;
+        case 2:
+            bookClass = "Business Class";
+            break;
+
+        case 3:
+            bookClass = "First Class"
+            break;
+
+
+    }
+
 
     PDF.fontSize(25)
         .image('./public/images/threebee-logo_airlines.png', 100, 160)
@@ -101,6 +117,6 @@ function addToPDF(flightresult,PDF) {
     PDF.fontSize(10)
         .text('Takeoff: ' + flightresult.takeoff + ' Landing: '+ flightresult.landing)
         .text('Departure: '+ moment(flightresult.flight_firstFlight).format("LLL") + '  Arrival: '+ moment(flightresult.flight_firstFlight).add(flightresult.flight_duration, "minutes").format("LLL"))
-        .text('Plane: ' + flightresult.planeName)
+        .text('Plane: ' + flightresult.planeName +' Booking Class: ' + bookClass);
 }
 module.exports = router;

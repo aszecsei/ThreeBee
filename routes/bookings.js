@@ -36,12 +36,12 @@ router.get('/:id/checkin', auth.isManager, function(req,res) {
                 if (result2[0].nextBook != null) {
                     Booking.findOne(result2[0].nextBook, function (err, result3) {
                         console.log("test3");
-                        res.render('seats', {flights: 3});
+                        res.render('seats', {shouldDisplayLogin: 2 ,flights: 3, loggedInName: "Manager"});
                     });
                 }
                 else {
                     console.log("test2");
-                    res.render('seats', {flights: 2});
+                    res.render('seats', {shouldDisplayLogin: 2 ,flights: 2, loggedInName: "Manager"});
                 }
             });
         }
@@ -55,8 +55,6 @@ router.get('/:id/checkin', auth.isManager, function(req,res) {
 router.post('/:id/checkin', auth.isManager, function(req,res) {
     var PDF = new PDFDocument();
     PDF.pipe(res);
-
-
     var books = [];
     var flights = [];
     Booking.findOne(req.params.id, function (err, result1) {
@@ -117,7 +115,7 @@ router.delete('/:id', auth.isManager, function(req,res) {
 
 function addToPDF(flightresult,bookingresult, seat, PDF) {
     var bookClass;
-    switch (bookingresult.bookingType){
+    switch (bookingresult[0].bookingType){
         case 1:
             bookClass = "Economy Class";
             break;

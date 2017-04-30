@@ -13,17 +13,12 @@
 <main>
     <div class="jumbotron">
         <h1>Check In</h1>
-        <div class="alert alert-danger alert-dismissable fade in collapse" id="errorDiv">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <span id="errorMessage"></span>
-        </div>
         <form data-toggle="validator" role="form" id="seatform" method="post" class="form-horizontal">
-
             <%for(var i =0;i<flights;i++){%>
             <div class="form-group has-feedback">
-                <label class="col-xs-3 control-label">Seat <%=i%>:</label>
+                <label class="col-xs-3 control-label">Seat <%=i+1%>:</label>
                 <div class="col-xs-5">
-                    <input type="text" class="form-control" id="seat<%=i%>" name="seat<%=i%>" required/>
+                    <input type="text" class="form-control" id="seat<%=i+1%>" name="seat<%=i+1%>" required/>
                 </div>
                 <div class="help-block with-errors"></div>
             </div>

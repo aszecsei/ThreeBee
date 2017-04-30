@@ -47,7 +47,7 @@ router.get('/:id/checkin', auth.isManager, function(req,res) {
         }
         else {
             console.log("test1");
-            res.render('seats',{flights: 1});
+            res.render('seats', {shouldDisplayLogin: 2 ,flights: 1, loggedInName: "Manager"});
         }
     });
 });

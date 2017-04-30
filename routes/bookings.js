@@ -30,6 +30,29 @@ router.get('/', auth.isLoggedIn, function(req, res) {
     }
 });
 router.get('/:id/checkin', auth.isManager, function(req,res) {
+    Booking.findOne(req.params.id, function (err, result1) {
+        if (result1[0].nextBook != null) {
+            Booking.findOne(result1[0].nextBook, function (err, result2) {
+                if (result2[0].nextBook != null) {
+                    Booking.findOne(result2[0].nextBook, function (err, result3) {
+                        console.log("test3");
+                        res.render('seats', {flights: 3});
+                    });
+                }
+                else {
+                    console.log("test2");
+                    res.render('seats', {flights: 2});
+                }
+            });
+        }
+        else {
+            console.log("test1");
+            res.render('seats',{flights: 1});
+        }
+    });
+});
+
+router.post('/:id/checkin', auth.isManager, function(req,res) {
     var PDF = new PDFDocument();
     PDF.pipe(res);
 
@@ -40,7 +63,7 @@ router.get('/:id/checkin', auth.isManager, function(req,res) {
         books.push(result1);
 
         Flight.queryOne(result1[0].flightID, function (err, flight1) {
-            addToPDF(flight1,result1,PDF);
+            addToPDF(flight1,result1,req.body.seat1, PDF);
             flights.push(flight1);
 
             if (result1[0].nextBook != null) {
@@ -50,7 +73,7 @@ router.get('/:id/checkin', auth.isManager, function(req,res) {
 
                     Flight.queryOne(result2[0].flightID, function (err, flight2) {
                         PDF.addPage();
-                        addToPDF(flight2,result2,PDF);
+                        addToPDF(flight2,result2,req.body.seat2,PDF);
                         flights.push(flight2);
 
                         if (result2[0].nextBook != null) {
@@ -59,7 +82,7 @@ router.get('/:id/checkin', auth.isManager, function(req,res) {
                                 books.push(result3);
                                 Flight.queryOne(result3[0].flightID, function (err,flight3){
                                     PDF.addPage();
-                                    addToPDF(flight3,result3,PDF);
+                                    addToPDF(flight3,result3,req.body.seat3,PDF);
                                     flights.push(flight3);
                                     PDF.end();
                                 });
@@ -84,6 +107,7 @@ router.get('/:id/checkin', auth.isManager, function(req,res) {
     });
 });
 
+
 router.delete('/:id', auth.isManager, function(req,res) {
     Booking.delete(req.params.id,function (err) {
         return true;
@@ -91,7 +115,7 @@ router.delete('/:id', auth.isManager, function(req,res) {
 
 });
 
-function addToPDF(flightresult,bookingresult,PDF) {
+function addToPDF(flightresult,bookingresult, seat, PDF) {
     var bookClass;
     switch (bookingresult.bookingType){
         case 1:
@@ -102,7 +126,7 @@ function addToPDF(flightresult,bookingresult,PDF) {
             break;
 
         case 3:
-            bookClass = "First Class"
+            bookClass = "First Class";
             break;
 
 
@@ -117,6 +141,6 @@ function addToPDF(flightresult,bookingresult,PDF) {
     PDF.fontSize(10)
         .text('Takeoff: ' + flightresult.takeoff + ' Landing: '+ flightresult.landing)
         .text('Departure: '+ moment(flightresult.flight_firstFlight).format("LLL") + '  Arrival: '+ moment(flightresult.flight_firstFlight).add(flightresult.flight_duration, "minutes").format("LLL"))
-        .text('Plane: ' + flightresult.planeName +' Booking Class: ' + bookClass);
+        .text('Plane: ' + flightresult.planeName +' Booking Class: ' + bookClass + ' Seat:'+ seat);
 }
 module.exports = router;

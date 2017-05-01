@@ -23,34 +23,32 @@ function Flight(id,duration, firstFlight, turnover, planeID, takeoff, landing, b
             if (err) {
                 callback(err);
             } else {
-                console.log("duration: "+this.duration);
-                console.log("firstFlight: "+this.firstFlight);
-                console.log("turnover: "+this.turnover);
-                console.log("takeoff: "+this.takeoff);
-                console.log("landing: "+this.landing);
                 callback(err, this.lastID);
             }
         });
     };
-    this.updateFlightInfo = function(callback) {
-        db.query("UPDATE `flight_data` SET duration=?, firstFlight=?, turnover=?, takeoff=?, landing=?, basePrice=?, WHERE flightID=?",
+
+    this.updateFlight = function(callback) {
+        db.query("UPDATE `threebee`.`flight_data` SET duration=?, firstFlight=?, turnover=?, takeoff=?, landing=?, basePrice=?, WHERE flightID=?",
             [this.duration, this.firstFlight, this.turnover, this.takeoff, this.landing, this.basePrice, this.id], function(err, results){
                 if(err) {
                     callback(err);
                 } else {
-                    //intertId will be the autoincrement primary key iduser_info
+                    //insertId will be the autoincrement primary key iduser_info
+                    console.log('we were apparently a success in updating that shit');
                     callback(err, results.insertId);
                 }
 
             });
     };
+
 }
 Flight.delete = function (id, callback) {
-    db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE flightID = '" +id+"';");
+    db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE flightID = ?", [id]);
     callback();
 };
 Flight.deletePlane = function (id, callback) {
-    db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE planeID = '" +id+"';");
+    db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE planeID = ?",[id]);
     callback();
 };
 Flight.findOne = function (params, callback) {
@@ -237,6 +235,7 @@ Flight.flightSearch = function(numStops, startAirport, endAirport, date, callbac
         }
     });
 };
+
 
 
 module.exports = Flight;

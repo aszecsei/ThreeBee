@@ -18,7 +18,7 @@ var errorHandle = function(res, message) {
 /* GET manager change password page. */
 router.get('/changepassword', function(req, res) {
     if(req.user)
-        res.render('changepassword', {shouldDisplayLogin: 1, required: req.user.user_type == 1 && req.user.auth_status == 0});
+        res.render('changepassword', {shouldDisplayLogin: 1, required: req.user.user_type == 1 && req.user.auth_status == 0, loggedInName: "Manager"});
     else
         res.redirect("/");
 });

@@ -165,7 +165,7 @@ User.findOne = function (params, callback) {
     ON	`USERS`.user_id=`USER_INFO`.user_id WHERE " + stringArray.join(" AND ");
     console.log(query);
     db.query(query, paramArray, function(err, row) {
-        console.log(row);
+        console.log("USER QUERY: " + JSON.stringify(row, null, 4));
         if(err) {
             callback(err, undefined);
             return;

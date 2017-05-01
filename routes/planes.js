@@ -6,6 +6,7 @@ var Plane = require('../src/models/plane');
 var auth = require('../src/auth');
 var Flight = require('../src/models/flight');
 
+
 router.get('/', function(req, res) {
     Plane.query(function (err,rower) {
         if (rower == undefined){

@@ -212,7 +212,8 @@ function renderPage(fromCity, toCity,date, isRoundTrip,req,res,returnDate, sortT
                 flightType: isRoundTrip,
                 returnDate: returnDate,
                 toCity: fromCity,
-                fromCity: toCity
+                fromCity: toCity,
+                sortType: sortType
             });
         });
     });

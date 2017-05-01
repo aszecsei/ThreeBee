@@ -16,7 +16,7 @@ router.post('/book', function (req,res) {
 
     var flightType = req.body.flightType;
 
-    var returnDate = req.body.returnDate;
+    var returnDate = req.body.returndate;
     var fromCity = req.body.fromCity;
     var toCity = req.body.toCity;
 
@@ -116,7 +116,7 @@ router.post('/', function(req, res) {
     var toCity = req.body.arrcity;
     var isRoundTrip = (req.body.isroundtrip == "roundtrip");
     var date = moment(req.body.outdate, "MM/DD/YYYY").format("YYYY-MM-DD") + " 00:00:00";
-    var returnDate = moment(req.body.returndate, "MM/DD/YYYY").format("YYYY-MM-DD") + " 00:00:00";
+    var returnDate = req.body.returndate ? moment(req.body.returndate, "MM/DD/YYYY").format("YYYY-MM-DD") + " 00:00:00" : "";
 
     var sortType = req.body.sortType ? req.body.sortType : "STOPS";
 
@@ -213,7 +213,10 @@ function renderPage(fromCity, toCity,date, isRoundTrip,req,res,returnDate, sortT
                 returnDate: returnDate,
                 toCity: fromCity,
                 fromCity: toCity,
-                sortType: sortType
+                sortType: sortType,
+                isRoundTrip: req.body.isroundtrip,
+                outDate: req.body.outdate,
+                rDate:req.body.returnDate
             });
         });
     });

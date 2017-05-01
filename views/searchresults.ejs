@@ -22,9 +22,11 @@
             <label class="col-xs-3 control-label">Sorting: </label>
             <input type="hidden" value="<%= JSON.stringify(bookingList[i]) %>" name="booking_flights" />
             <input type="hidden" value="<%=flightType%>" name="flightType"/>
-            <input type="hidden" value="<%=returnDate%>" name="returnDate"/>
-            <input type="hidden" value="<%=fromCity%>" name="fromCity"/>
-            <input type="hidden" value="<%=toCity%>" name="toCity"/>
+            <input type="hidden" value="<%=outDate%>" name="outdate"/>
+            <input type="hidden" value="<%=returnDate%>" name="returndate"/>
+            <input type="hidden" value="<%=toCity%>" name="depcity"/>
+            <input type="hidden" value="<%=fromCity%>" name="arrcity"/>
+            <input type="hidden" value="<%= isRoundTrip %>" name="isroundtrip"/>
             <select name="sortType" id="sortType" onchange="this.form.submit()">
                 <option value="STOPS"<% if(sortType=="STOPS") { %> selected<% } %>>Number of Stops</option>
                 <option value="PRICELH"<% if(sortType=="PRICELH") { %> selected<% } %>>Price (Low to High)</option>
@@ -59,7 +61,7 @@
                     <td><%= priceList[i] %></td>
                     <input type="hidden" value="<%= JSON.stringify(bookingList[i]) %>" name="booking_flights" />
                     <input type="hidden" value="<%=flightType%>" name="flightType"/>
-                    <input type="hidden" value="<%=returnDate%>" name="returnDate"/>
+                    <input type="hidden" value="<%=returnDate%>" name="returndate"/>
                     <input type="hidden" value="<%=fromCity%>" name="fromCity"/>
                     <input type="hidden" value="<%=toCity%>" name="toCity"/>
                     <td><button type="submit" name="submit" class="btn btn-primary">Purchase</button></td>

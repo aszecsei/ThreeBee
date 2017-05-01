@@ -13,11 +13,11 @@ function Plane(id,name, numFirstSeat, numBizSeat, numCoachSeat) {
     this.numCoachSeat = numCoachSeat;
 
     this.save = function (callback) {
-        db.query("INSERT INTO airplane_type (airplane_name, airplane_firstSeats, airplane_buisnessSeats, airplane_coachSeats,airplane_isActive) VALUES (?,?,?,?,1)", [this.name, this.numFirstSeat, this.numBizSeat, this.numCoachSeat], function (err) {
+        db.query("INSERT INTO airplane_type (airplane_name, airplane_firstSeats, airplane_buisnessSeats, airplane_coachSeats,airplane_isActive) VALUES (?,?,?,?,1)", [this.name, this.numFirstSeat, this.numBizSeat, this.numCoachSeat], function (err, results, fields) {
             if (err) {
                 callback(err);
             } else {
-                callback(err, this.lastID);
+                callback(err, results.insertId);
             }
         });
     };

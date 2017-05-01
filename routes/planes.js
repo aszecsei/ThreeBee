@@ -42,7 +42,7 @@ router.post('/addplane', function(req, res) {
                     console.log(err);
                     throw err;
                 }
-                newPlane.id = id;
+                newPlane.mId = id;
                 res.json(newPlane);
             });
 
@@ -52,8 +52,9 @@ router.post('/addplane', function(req, res) {
 
 router.delete('/:id', auth.isManager, function(req,res) {
     console.log(req.params.id);
-    Plane.delete(req.params.id);
-    res.json({message: 'Successfully deleted'});
+    Plane.delete(req.params.id, function() {
+        res.json({message: 'Successfully deleted'});
+    });
 });
 
 router.get('/:id', function(req,res){

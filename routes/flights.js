@@ -54,7 +54,13 @@ router.post('/', auth.isManager, function(req, res) {
             }
             console.log("SAVED");
             newFlight.id = id;
-            callback(err, newFlight);
+            Flight.queryOne(id, function(err, result) {
+                var departureTime = new Date(result.flight_firstFlight);
+                departureTime = moment(departureTime);
+                result.departureTime = departureTime.format("LLL");
+                result.arrivalTime = departureTime.add(result.flight_duration, 'minutes').format("LLL");
+                callback(err, result);
+            });
         });
     }, function(err, addedFlights) {
         if(err) {

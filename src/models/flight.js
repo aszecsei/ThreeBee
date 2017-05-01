@@ -187,16 +187,16 @@ Flight.flightSearch = function(numStops, startAirport, endAirport, date, callbac
         q = "SELECT fd1.flightID as flightID1, fd2.flightID as flightID2 FROM\
         flight_data as fd1\
         JOIN\
-        flight_data as fd2 ON (fd1.flight_landing=fd2.flight_takeoff AND fd2.flight_firstFlight >= fd1.flight_firstFlight + interval (fd1.flight_duration + 10) minute)\
+        flight_data as fd2 ON (fd1.flight_landing=fd2.flight_takeoff AND fd2.flight_firstFlight >= fd1.flight_firstFlight + interval (fd1.flight_duration + 10) minute AND fd2.flight_firstFlight < fd1.flight_firstFlight + interval (fd1.flight_duration + 360) minute)\
         WHERE fd1.flight_takeoff=? AND fd2.flight_landing=? AND DATE(fd1.flight_firstFlight)=DATE(?)";
     } else if(numStops == 2) {
         // We want 2 layovers
         q = "SELECT fd1.flightID as flightID1, fd2.flightID as flightID2, fd3.flightID as flightID3 FROM\
         flight_data as fd1\
         JOIN\
-        flight_data as fd2 ON (fd1.flight_landing=fd2.flight_takeoff AND fd2.flight_firstFlight >= fd1.flight_firstFlight + interval (fd1.flight_duration + 10) minute)\
+        flight_data as fd2 ON (fd1.flight_landing=fd2.flight_takeoff AND fd2.flight_firstFlight >= fd1.flight_firstFlight + interval (fd1.flight_duration + 10) minute AND fd2.flight_firstFlight < fd1.flight_firstFlight + interval (fd1.flight_duration + 360) minute)\
         JOIN\
-        flight_data as fd3 ON (fd2.flight_landing=fd3.flight_takeoff AND fd3.flight_firstFlight >= fd2.flight_firstFlight + interval (fd2.flight_duration + 10) minute)\
+        flight_data as fd3 ON (fd2.flight_landing=fd3.flight_takeoff AND fd3.flight_firstFlight >= fd2.flight_firstFlight + interval (fd2.flight_duration + 10) minute AND fd3.flight_firstFlight < fd2.flight_firstFlight + interval (fd2.flight_duration + 360) minute)\
         WHERE fd1.flight_takeoff=? AND fd3.flight_landing=? AND DATE(fd1.flight_firstFlight)=DATE(?)";
     }
     db.query(q, [startAirport, endAirport, date], function(err, rows) {

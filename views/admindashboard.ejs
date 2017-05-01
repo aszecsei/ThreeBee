@@ -434,7 +434,7 @@
                                         <div class="modal-body">
 
                                         <div id="PlaneEditRow<%= planes[j].airplaneID %>">
-                                            <form id="formid" role="form" class="form-horizontal">
+                                            <form id="formid<%= j %>" role="form" class="form-horizontal">
                                                 <div class="form-group">
                                                     <label class="col-xs-3 control-label">Plane Name: </label>
                                                     <div class="col-xs-5">
@@ -460,19 +460,19 @@
                                                         <input type="number" class="form-control" name="editNumCoachSeat" required/>
                                                     </div>
                                                 </div>
-                                                <input type="submit" id="editplane_submit" name="submit" class="btn btn-primary pull-left" value="Edit" data-dismiss="modal" ></input>
+                                                <input type="submit" id="editplane_submit" name="submit" class="btn btn-primary pull-left" value="Edit" ></input>
                                             </form>
                                             <script>
                                                 // Attach a submit handler to the form
-                                                $( "#formid" ).submit( function( event ) {
+                                                $( "#formid<%= j %>" ).submit( function( event ) {
                                                     // Stop form from submitting normally
                                                     event.preventDefault();
                                                     alert('hi there');
 
                                                     $.ajax({
                                                         type: 'POST',
-                                                        url: '/planes/editplane/'+id,
-                                                        data: $('#formid').serialize(),
+                                                        url: '/planes/editplane/<%= planes[j].airplaneID %>',
+                                                        data: $('#formid<%= j %>').serialize(),
                                                         success: function () {
                                                             alert('form was submitted');
                                                         },

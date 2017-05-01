@@ -113,8 +113,8 @@ router.post('/:id/newflight/addflight', function(req, res) {
 
 router.post('/editplane/:id', function(req, res) {
     console.log('we are in the edit plane post request.');
-    console.log('editname:'+ req.params.editname);
-})
+    console.log('editname:'+ JSON.stringify(req.body));
+});
 
 
 module.exports = router;

@@ -29,8 +29,8 @@ function Flight(id,duration, firstFlight, turnover, planeID, takeoff, landing, b
     };
 
     this.updateFlight = function(callback) {
-        db.query("UPDATE `threebee`.`flight_data` SET duration=?, firstFlight=?, turnover=?, takeoff=?, landing=?, basePrice=?, WHERE flightID=?",
-            [this.duration, this.firstFlight, this.turnover, this.takeoff, this.landing, this.basePrice, this.id], function(err, results){
+        db.query("UPDATE `threebee`.`flight_data` SET flight_duration=?, planeID=?, flight_firstFlight=?, flight_turnover=?, flight_takeoff=?, flight_landing=?, flight_basePrice=? WHERE flightID=?",
+            [this.duration, this.planeID, this.firstFlight, this.turnover, this.takeoff, this.landing, this.basePrice, this.id], function(err, results){
                 if(err) {
                     callback(err);
                 } else {

@@ -52,53 +52,28 @@ router.delete('/:id', auth.isManager, function(req,res) {
 
 //updates the flight information
 router.post('/:id', auth.isManager, function(req,res) {
-    console.log('we are in the update POST');
-    var flight = new Flight();
+    var updateFlight = new Flight();
 
-    console.log('we are updating the flight from flights.js');
-    //flight.planeID = req.body.editflight.editplaneID;
-    console.log(JSON.stringify(req.params));
-    console.log('editPlaneID: '+req.body.editplaneID);
-    console.log('editPlaneID: '+req.params.editplaneID);
-    flight.firstFlight = req.params.firstName;
-    console.log('editFirstStop: '+req.params.editFirstStop);
-    flight.turnover = req.params.lastName;
-    console.log('editSecondStop: '+req.params.editSecondStop);
-    flight.takeoff = req.params.takeoff;
-    console.log('editDepartDate: '+ req.params.editDepartDate);
-    flight.landing = req.params.landing;
-    console.log('editArriveDate: '+req.params.editArriveDate);
-    flight.basePrice = req.params.editBasePrice;
-    console.log('editBasePrice: '+req.params.editBasePrice);
-    flight.id = req.params.id;
-    console.log('id: '+ req.params.id);
+    updateFlight.id = req.body.editflight_id;
+    updateFlight.duration = req.body.editduration;
+    updateFlight.firstFlight = req.body.editdateTime;
+    updateFlight.turnover = req.body.editturnover;
+    updateFlight.planeID = req.body.planeID;
+    updateFlight.takeoff =req.body.editfirstStop;
+    updateFlight.landing = req.body.editsecondStop;
+    updateFlight.basePrice = req.body.editbasePrice;
 
-    /*
-    Flight.queryOne(req.params.id, function(err, result) {
-        console.log('we are in the query one');
-        if(err) {
+    updateFlight.updateFlight( function(err) {
+        if(err){
             console.log(err);
             throw err;
-        } else if (result) {
-
-            flight.updateFlight( function(err) {
-                console.log('we are attempting to update the flight..');
-               if(err){
-                   console.log(err);
-                   throw err;
-               } else {
-                   console.log('Apparently the update flight was a success...');
-                   res.json({message: 'Successfully update flight info'});
-               }
-            });
-
-        } else{
-            console.log('we didn\'t find that flight with id: '+req.params.id);
+        } else {
+            res.json({message: 'Successfully update flight info'});
         }
-
-
     });
-    */
+
+
+
 });
 
 module.exports = router;

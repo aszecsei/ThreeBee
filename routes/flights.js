@@ -19,6 +19,7 @@ router.post('/', auth.isManager, function(req, res) {
         endDate = moment(req.body.dateTime);
     }
 
+
     var mRecur = "days";
     if(recurrence == "weekly") {
         mRecur = "weeks";
@@ -76,6 +77,32 @@ router.delete('/:id', auth.isManager, function(req,res) {
     console.log(req.params.id);
     Flight.delete(req.params.id);
     res.json({message: 'Successfully deleted'});
+});
+
+//updates the flight information
+router.post('/:id', auth.isManager, function(req,res) {
+    var updateFlight = new Flight();
+
+    updateFlight.id = req.body.editflight_id;
+    updateFlight.duration = req.body.editduration;
+    updateFlight.firstFlight = req.body.editdateTime;
+    updateFlight.turnover = req.body.editturnover;
+    updateFlight.planeID = req.body.planeID;
+    updateFlight.takeoff =req.body.editfirstStop;
+    updateFlight.landing = req.body.editsecondStop;
+    updateFlight.basePrice = req.body.editbasePrice;
+
+    updateFlight.updateFlight( function(err) {
+        if(err){
+            console.log(err);
+            throw err;
+        } else {
+            res.json({message: 'Successfully update flight info'});
+        }
+    });
+
+
+
 });
 
 module.exports = router;

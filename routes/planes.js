@@ -113,5 +113,35 @@ router.post('/:id/newflight/addflight', function(req, res) {
     });
 });
 
+router.post('/editplane/:id', function(req, res) {
+    console.log('we are in the edit plane post request.');
+    console.log( req.body.original_name);
+    Plane.findPlaneForEdit( req.body.original_name, function(err, plane) {
+        if(err) {
+            res.status(400);
+        } else if(plane) {
+            var updatedPlane = new Plane();
+
+            //set the local credentials
+            updatedPlane.id=plane.id;
+            updatedPlane.name = req.body.editname;
+            updatedPlane.numFirstSeat = req.body.editNumFirstSeat;
+            updatedPlane.numBizSeat = req.body.editNumBizSeat;
+            updatedPlane.numCoachSeat = req.body.editNumCoachSeat;
+
+            updatedPlane.update(function (err, id) {
+                if (err) {
+                    console.log(err);
+                    throw err;
+                }else {
+                    res.json({message: 'Successfully update flight info'});
+                }
+            })
+        }
+    });
+
+
+});
+
 
 module.exports = router;

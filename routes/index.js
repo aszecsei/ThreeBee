@@ -114,6 +114,7 @@ function getFlights(callback) {
             rows = [];
         }
         for(var i=0; i<rows.length; i++) {
+            console.log("rows[i].flight_firstFlight: "+rows[i].flight_firstFlight);
             var departureTime = new Date(rows[i].flight_firstFlight);
             departureTime = moment(departureTime);
             rows[i].departureTime = departureTime.format("LLL");

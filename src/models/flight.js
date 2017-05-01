@@ -8,7 +8,7 @@
 
 var db = require('../database');
 
-function Flight(id,duration, firstFlight, turnover, planeID, takeoff, landing) {
+function Flight(id,duration, firstFlight, turnover, planeID, takeoff, landing, basePrice) {
     this.id = id;
     this.duration = duration;
     this.firstFlight = firstFlight;
@@ -16,9 +16,10 @@ function Flight(id,duration, firstFlight, turnover, planeID, takeoff, landing) {
     this.planeID = planeID;
     this.takeoff = takeoff;
     this.landing = landing;
+    this.basePrice = basePrice;
 
     this.save = function (callback) {
-        db.query("INSERT INTO flight_data (flight_duration, flight_firstFlight, flight_turnover, planeID, flight_takeoff, flight_landing, flight_isActive) VALUES (?,?,?,?,?,?,1)", [this.duration, this.firstFlight, this.turnover, this.planeID, this.takeoff,this.landing], function (err, results, fields) {
+        db.query("INSERT INTO flight_data (flight_duration, flight_firstFlight, flight_turnover, planeID, flight_takeoff, flight_landing, flight_basePrice, flight_isActive) VALUES (?,?,?,?,?,?,?,1)", [this.duration, this.firstFlight, this.turnover, this.planeID, this.takeoff,this.landing, this.basePrice], function (err, results, fields) {
             if (err) {
                 callback(err);
             } else {
@@ -26,13 +27,28 @@ function Flight(id,duration, firstFlight, turnover, planeID, takeoff, landing) {
             }
         });
     };
+
+    this.updateFlight = function(callback) {
+        db.query("UPDATE `threebee`.`flight_data` SET flight_duration=?, planeID=?, flight_firstFlight=?, flight_turnover=?, flight_takeoff=?, flight_landing=?, flight_basePrice=? WHERE flightID=?",
+            [this.duration, this.planeID, this.firstFlight, this.turnover, this.takeoff, this.landing, this.basePrice, this.id], function(err, results){
+                if(err) {
+                    callback(err);
+                } else {
+                    //insertId will be the autoincrement primary key iduser_info
+                    console.log('we were apparently a success in updating that shit');
+                    callback(err, results.insertId);
+                }
+
+            });
+    };
+
 }
 Flight.delete = function (id, callback) {
-    db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE flightID = '" +id+"';");
+    db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE flightID = ?", [id]);
     callback();
 };
 Flight.deletePlane = function (id, callback) {
-    db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE planeID = '" +id+"';");
+    db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE planeID = ?",[id]);
     callback();
 };
 Flight.findOne = function (params, callback) {
@@ -219,5 +235,7 @@ Flight.flightSearch = function(numStops, startAirport, endAirport, date, callbac
         }
     });
 };
+
+
 
 module.exports = Flight;

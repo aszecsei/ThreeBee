@@ -7,38 +7,61 @@ var express = require('express');
 var router = express.Router();
 var Flight = require('../src/models/flight');
 var auth = require('../src/auth');
+var moment = require('moment');
+var async = require('async');
 
-router.post('/', function(req, res) {
-    Flight.findOne({'name': req.body.addname}, function (err, plane) {
-        // if there are any errors, return the error
-        if (err)
-            res.status(400);
+router.post('/', auth.isManager, function(req, res) {
+    console.log("HI");
+    var recurrence = req.body.recurrence;
+    if(recurrence != "single") {
+        var endDate = moment(req.body.endDate, "MM/DD/YYYY");
+    } else {
+        endDate = moment(req.body.dateTime);
+    }
 
-        // check to see if theres already a user with that email
-        if (plane) {
-            res.status(400);
+    var mRecur = "days";
+    if(recurrence == "weekly") {
+        mRecur = "weeks";
+    } else if(recurrence == "monthly") {
+        mRecur = "months";
+    }
+
+    // If you want an inclusive end date (fully-closed interval)
+    var dates = [];
+    for (var m = moment(req.body.dateTime); m.diff(endDate, 'days') <= 0; m.add(1, mRecur)) {
+        dates.push(m.format("YYYY-MM-DD HH:mm:ss"));
+    }
+
+    console.log("DATES: " + JSON.stringify(dates));
+
+    async.map(dates, function(date, callback) {
+        var newFlight = new Flight();
+
+        // set the user's local credentials
+        newFlight.duration = req.body.duration;
+        newFlight.firstFlight = date;
+        newFlight.turnover = req.body.turnover;
+        newFlight.planeID = req.body.planeID;
+        newFlight.takeoff = req.body.firstStop;
+        newFlight.landing = req.body.secondStop;
+        console.log("SAVING: " + JSON.stringify(newFlight));
+
+        // save the user
+        newFlight.save(function (err, id) {
+            if (err) {
+                callback(err);
+                return;
+            }
+            console.log("SAVED");
+            newFlight.id = id;
+            callback(err, newFlight);
+        });
+    }, function(err, addedFlights) {
+        if(err) {
+            console.log(err);
+            res.json({"Error: " : err});
         } else {
-            // if there is no user with that email
-            // create the user
-            var newFlight = new Flight();
-
-            // set the user's local credentials
-            newFlight.duration = req.body.duration;
-            newFlight.firstFlight = req.body.dateTime;
-            newFlight.turnover = req.body.turnover;
-            newFlight.planeID = req.body.planeID;
-            newFlight.takeoff = req.body.firstStop;
-            newFlight.landing = req.body.secondStop;
-
-            // save the user
-            newFlight.save(function (err, id) {
-                if (err) {
-                    console.log(err);
-                    throw err;
-                }
-                newFlight.id = id;
-                res.json(newFlight);
-            });
+            res.json(addedFlights);
         }
     });
 });

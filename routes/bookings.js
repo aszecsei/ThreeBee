@@ -4,14 +4,13 @@ var router = express.Router();
 
 var passport = require('passport');
 var auth = require('../src/auth');
-var db = require('../src/database');
 var Booking = require('../src/models/booking');
 var Flight = require('../src/models/flight');
 var async = require('async');
+var PDFDocument = require ('pdfkit');
+var moment = require('moment');
 
 router.get('/', auth.isLoggedIn, function(req, res) {
-    console.log("here");
-    console.log(req.user.id);
     if(req.isAuthenticated() && req.user.user_type == 2 && req.user.auth_status == 1){
         Booking.getAll(function (err, result) {
             res.render('managerbookings', {shouldDisplayLogin: 2, result: result, loggedInName: "Admin"});
@@ -21,6 +20,7 @@ router.get('/', auth.isLoggedIn, function(req, res) {
             Booking.getAll(function (err, result) {
                 res.render('managerbookings', {shouldDisplayLogin: 2, result: result, loggedInName: "Admin"});
 
+
             })
     } else {
         Booking.getAllForUser(req.user.id, function(err, results) {
@@ -29,9 +29,116 @@ router.get('/', auth.isLoggedIn, function(req, res) {
         });
     }
 });
-
-router.post('/:id', function (req,res) {
-    db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE planeID = '" +req.params.id+"';");
-    res.redirect('/');
+router.get('/:id/checkin', auth.isManager, function(req,res) {
+    Booking.findOne(req.params.id, function (err, result1) {
+        if (result1[0].nextBook != null) {
+            Booking.findOne(result1[0].nextBook, function (err, result2) {
+                if (result2[0].nextBook != null) {
+                    Booking.findOne(result2[0].nextBook, function (err, result3) {
+                        console.log("test3");
+                        res.render('seats', {shouldDisplayLogin: 2 ,flights: 3, loggedInName: "Manager"});
+                    });
+                }
+                else {
+                    console.log("test2");
+                    res.render('seats', {shouldDisplayLogin: 2 ,flights: 2, loggedInName: "Manager"});
+                }
+            });
+        }
+        else {
+            console.log("test1");
+            res.render('seats', {shouldDisplayLogin: 2 ,flights: 1, loggedInName: "Manager"});
+        }
+    });
 });
+
+router.post('/:id/checkin', auth.isManager, function(req,res) {
+    var PDF = new PDFDocument();
+    PDF.pipe(res);
+    var books = [];
+    var flights = [];
+    Booking.findOne(req.params.id, function (err, result1) {
+        books.push(result1);
+
+        Flight.queryOne(result1[0].flightID, function (err, flight1) {
+            addToPDF(flight1,result1,req.body.seat1, PDF);
+            flights.push(flight1);
+
+            if (result1[0].nextBook != null) {
+
+                Booking.findOne(result1[0].nextBook, function (err, result2) {
+                    books.push(result2);
+
+                    Flight.queryOne(result2[0].flightID, function (err, flight2) {
+                        PDF.addPage();
+                        addToPDF(flight2,result2,req.body.seat2,PDF);
+                        flights.push(flight2);
+
+                        if (result2[0].nextBook != null) {
+
+                            Booking.findOne(result2[0].nextBook, function (err, result3) {
+                                books.push(result3);
+                                Flight.queryOne(result3[0].flightID, function (err,flight3){
+                                    PDF.addPage();
+                                    addToPDF(flight3,result3,req.body.seat3,PDF);
+                                    flights.push(flight3);
+                                    PDF.end();
+                                });
+                            });
+                        }
+
+                        else {
+                            console.log(flights);
+                            console.log(result2[0].flightID);
+                            console.log("test2");
+                            PDF.end();
+                        }
+                    });
+                });
+            }
+            else {
+                console.log(flights);
+                console.log("test1");
+                PDF.end();
+            }
+        });
+    });
+});
+
+
+router.delete('/:id', auth.isManager, function(req,res) {
+    Booking.delete(req.params.id,function (err) {
+        return true;
+    });
+
+});
+
+function addToPDF(flightresult,bookingresult, seat, PDF) {
+    var bookClass;
+    switch (bookingresult[0].bookingType){
+        case 1:
+            bookClass = "Economy Class";
+            break;
+        case 2:
+            bookClass = "Business Class";
+            break;
+
+        case 3:
+            bookClass = "First Class";
+            break;
+
+
+    }
+
+
+    PDF.fontSize(25)
+        .image('./public/images/threebee-logo_airlines.png', 100, 160)
+        .text('This is your ticket', 100, 100)
+
+
+    PDF.fontSize(10)
+        .text('Takeoff: ' + flightresult.takeoff + ' Landing: '+ flightresult.landing)
+        .text('Departure: '+ moment(flightresult.flight_firstFlight).format("LLL") + '  Arrival: '+ moment(flightresult.flight_firstFlight).add(flightresult.flight_duration, "minutes").format("LLL"))
+        .text('Plane: ' + flightresult.planeName +' Booking Class: ' + bookClass + ' Seat:'+ seat);
+}
 module.exports = router;

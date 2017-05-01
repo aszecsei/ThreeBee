@@ -12,13 +12,15 @@ router.post('/book', function (req,res) {
     var flights = JSON.parse(req.body.booking_flights)
     var newBook = new Booking();
     newBook.userID =req.user.id;
-    console.log("Past")
+    console.log("Past");
 
     var flightType = req.body.flightType;
 
     var returnDate = req.body.returnDate;
     var fromCity = req.body.fromCity;
     var toCity = req.body.toCity;
+
+    var sortType = req.body.sortType ? req.body.sortType : "STOPS";
 
     console.log(flightType);
     console.log(returnDate);
@@ -43,7 +45,7 @@ router.post('/book', function (req,res) {
                     res.render('payment', {shouldDisplayLogin: 2});
                 }
                 else {
-                    renderPage(fromCity,toCity,returnDate,0,req,res,0)
+                    renderPage(fromCity,toCity,returnDate,0,req,res,0, sortType);
                 }
             });
             break;
@@ -68,7 +70,7 @@ router.post('/book', function (req,res) {
                         res.render('payment', {shouldDisplayLogin: 2});
                     }
                     else {
-                        renderPage(fromCity,toCity,returnDate,0,req,res,0)
+                        renderPage(fromCity,toCity,returnDate,0,req,res,0, sortType);
                     }
                 });
             });
@@ -101,7 +103,7 @@ router.post('/book', function (req,res) {
                                 res.render('payment', {shouldDisplayLogin: 2});
                             }
                             else {
-                                renderPage(fromCity,toCity,returnDate,0,req,res,0)
+                                renderPage(fromCity,toCity,returnDate,0,req,res,0, sortType)
                             }
                         });
                     });
@@ -116,17 +118,19 @@ router.post('/', function(req, res) {
     var date = moment(req.body.outdate, "MM/DD/YYYY").format("YYYY-MM-DD") + " 00:00:00";
     var returnDate = moment(req.body.returndate, "MM/DD/YYYY").format("YYYY-MM-DD") + " 00:00:00";
 
+    var sortType = req.body.sortType ? req.body.sortType : "STOPS";
+
     console.log("1: " + fromCity);
     console.log("2: " + toCity);
     console.log("3: " + isRoundTrip);
     console.log("4: " + date);
     console.log("5: " + returnDate);
 
-    renderPage(fromCity,toCity,date,req.body.isroundtrip,req,res,returnDate);
+    renderPage(fromCity,toCity,date,req.body.isroundtrip,req,res,returnDate, sortType);
 
 });
 
-function renderPage(fromCity, toCity,date, isRoundTrip,req,res,returnDate) {
+function renderPage(fromCity, toCity,date, isRoundTrip,req,res,returnDate, sortType) {
     async.parallel([
         async.apply(doSearch, 0, fromCity, toCity, date),
         async.apply(doSearch, 1, fromCity, toCity, date),
@@ -139,6 +143,26 @@ function renderPage(fromCity, toCity,date, isRoundTrip,req,res,returnDate) {
         for(var i=0; i<results.length; i++) {
             flightList = flightList.concat(results[i]);
         }
+
+        flightList.sort(function(a, b) {
+            switch(sortType) {
+                case "TRAVELTIME":
+                    return (moment(a[a.length - 1].arrivalTime) - moment(a[0].departureTime)) - (moment(b[b.length - 1].arrivalTime) - moment(b[0].departureTime));
+                case "PRICELH":
+                    // TODO: Fix this once prices are working
+                    return a.length - b.length;
+                case "DEPEL":
+                    return moment(a[0].departureTime) - moment(b[0].departureTime);
+                case "DEPLE":
+                    return moment(b[0].departureTime) - moment(a[0].departureTime);
+                case "ARREL":
+                    return moment(a[a.length - 1].arrivalTime) - moment(b[b.length - 1].arrivalTime);
+                case "ARRLE":
+                    return moment(b[b.length - 1].arrivalTime) - moment(a[a.length - 1].arrivalTime);
+                default:
+                    return a.length - b.length;
+            }
+        });
 
         for(i=0;i<flightList.length; i++) {
             priceList.push(0);

@@ -44,8 +44,11 @@ function Flight(id,duration, firstFlight, turnover, planeID, takeoff, landing, b
 
 }
 Flight.delete = function (id, callback) {
-    db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE flightID = ?", [id]);
-    callback();
+    db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE flightID = ?", [id], function(err) {
+        db.query("UPDATE `bookings` SET `isActive`=0 WHERE flightID=?", [flight.flightID], function(err) {
+            callback(err);
+        });
+    });
 };
 Flight.deletePlane = function (id, callback) {
     db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE planeID = ?",[id]);

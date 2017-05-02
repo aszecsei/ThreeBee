@@ -4,6 +4,7 @@
 'use strict';
 
 var db = require('../database');
+var async = require('async');
 
 function Plane(id,name, numFirstSeat, numBizSeat, numCoachSeat) {
     this.id = id;
@@ -39,8 +40,19 @@ function Plane(id,name, numFirstSeat, numBizSeat, numCoachSeat) {
     }
 }
 Plane.delete = function (id, callback) {
-    db.query("UPDATE `threebee`.`airplane_type` SET `airplane_isActive`='0'  WHERE airplaneID = '" +id+"';");
-    callback();
+    db.query("UPDATE `threebee`.`airplane_type` SET `airplane_isActive`='0'  WHERE airplaneID = ?;", [id], function(err) {
+        db.query("SELECT * FROM `flight_data` WHERE planeID=?", [id], function(err, rows) {
+            async.each(rows, function(flight, flightCallback) {
+                db.query("UPDATE `bookings` SET `isActive`=0 WHERE flightID=?", [flight.flightID], function(err) {
+                    flightCallback(err);
+                });
+            }, function(err) {
+                db.query("UPDATE `flight_data` SET `flight_isActive`=0 WHERE planeID=?", [id], function(err) {
+                    callback(err);
+                });
+            });
+        });
+    });
 };
 
 Plane.findPlaneForEdit = function(name, callback) {

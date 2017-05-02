@@ -46,7 +46,7 @@ router.post('/signup', auth.isAdmin, function(req, res) {
 
                 // Now, send the email!
                 email.sendMail(newUser.email, "Your ThreeBee Account", "Hello!\n\nYou've recently been given a manager account at ThreeBee Airlines. To log in, please use this email and the password: '" + pass + "'.", function() {
-                    res.render('managerlanding', {shouldDisplayLogin: 2});
+                    res.json(newUser);
                 });
             });
         }

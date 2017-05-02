@@ -19,11 +19,11 @@ function Flight(id,duration, firstFlight, turnover, planeID, takeoff, landing, b
     this.basePrice = basePrice;
 
     this.save = function (callback) {
-        db.query("INSERT INTO flight_data (flight_duration, flight_firstFlight, flight_turnover, planeID, flight_takeoff, flight_landing, flight_basePrice, flight_isActive) VALUES (?,?,?,?,?,?,?,1)", [this.duration, this.firstFlight, this.turnover, this.planeID, this.takeoff,this.landing, this.basePrice], function (err) {
+        db.query("INSERT INTO flight_data (flight_duration, flight_firstFlight, flight_turnover, planeID, flight_takeoff, flight_landing, flight_basePrice, flight_isActive) VALUES (?,?,?,?,?,?,?,1)", [this.duration, this.firstFlight, this.turnover, this.planeID, this.takeoff,this.landing, this.basePrice], function (err, results, fields) {
             if (err) {
                 callback(err);
             } else {
-                callback(err, this.lastID);
+                callback(err, results.insertId);
             }
         });
     };
@@ -44,8 +44,11 @@ function Flight(id,duration, firstFlight, turnover, planeID, takeoff, landing, b
 
 }
 Flight.delete = function (id, callback) {
-    db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE flightID = ?", [id]);
-    callback();
+    db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE flightID = ?", [id], function(err) {
+        db.query("UPDATE `bookings` SET `isActive`=0 WHERE flightID=?", [flight.flightID], function(err) {
+            callback(err);
+        });
+    });
 };
 Flight.deletePlane = function (id, callback) {
     db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE planeID = ?",[id]);

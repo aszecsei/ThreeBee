@@ -4,6 +4,7 @@
 'use strict';
 
 var db = require('../database');
+var async = require('async');
 
 function Plane(id,name, numFirstSeat, numBizSeat, numCoachSeat) {
     this.id = id;
@@ -13,22 +14,59 @@ function Plane(id,name, numFirstSeat, numBizSeat, numCoachSeat) {
     this.numCoachSeat = numCoachSeat;
 
     this.save = function (callback) {
-        db.query("INSERT INTO airplane_type (airplane_name, airplane_firstSeats, airplane_buisnessSeats, airplane_coachSeats,airplane_isActive) VALUES (?,?,?,?,1)", [this.name, this.numFirstSeat, this.numBizSeat, this.numCoachSeat], function (err) {
+        db.query("INSERT INTO airplane_type (airplane_name, airplane_firstSeats, airplane_buisnessSeats, airplane_coachSeats,airplane_isActive) VALUES (?,?,?,?,1)", [this.name, this.numFirstSeat, this.numBizSeat, this.numCoachSeat], function (err, results, fields) {
             if (err) {
                 callback(err);
             } else {
-                callback(err, this.lastID);
+                callback(err, results.insertId);
             }
         });
+    };
+    this.update = function(callback) {
+        db.query("UPDATE `threebee`.`airplane_type` SET airplane_name=?, airplane_firstSeats=?, airplane_buisnessSeats=?, airplane_coachSeats=? WHERE airplaneID=?",
+            [this.name, this.numFirstSeat, this.numBizSeat, this.numCoachSeat, this.id], function(err, results){
+                if(err) {
+                    callback(err);
+                } else {
+                    //insertId will be the autoincrement primary key iduser_info
+                    console.log('we were apparently a success in updating');
+                    callback(err, results.insertId);
+                }
+
+            });
     };
     this.delete = function (callback) {
 
     }
 }
 Plane.delete = function (id, callback) {
-    db.query("UPDATE `threebee`.`airplane_type` SET `airplane_isActive`='0'  WHERE airplaneID = '" +id+"';");
-    callback();
+    db.query("UPDATE `threebee`.`airplane_type` SET `airplane_isActive`='0'  WHERE airplaneID = ?;", [id], function(err) {
+        db.query("SELECT * FROM `flight_data` WHERE planeID=?", [id], function(err, rows) {
+            async.each(rows, function(flight, flightCallback) {
+                db.query("UPDATE `bookings` SET `isActive`=0 WHERE flightID=?", [flight.flightID], function(err) {
+                    flightCallback(err);
+                });
+            }, function(err) {
+                db.query("UPDATE `flight_data` SET `flight_isActive`=0 WHERE planeID=?", [id], function(err) {
+                    callback(err);
+                });
+            });
+        });
+    });
 };
+
+Plane.findPlaneForEdit = function(name, callback) {
+    db.query("SELECT * FROM AIRPLANE_TYPE WHERE `airplane_name`=?",[name], function(err, row){
+        if(err) {
+            callback(err, undefined);
+        } else if (row.length > 0) {
+            //insertId will be the autoincrement primary key iduser_info
+            console.log('we found it');
+            var result = new Plane(row[0].airplaneID, row[0].name, row[0].numFirstSeat, row[0].numBizSeat, row[0].numCoachSeat);
+            callback(err, result);
+        }
+    })
+}
 
 Plane.findOne = function (params, callback) {
     // create the array

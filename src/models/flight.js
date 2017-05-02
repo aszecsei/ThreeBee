@@ -8,7 +8,7 @@
 
 var db = require('../database');
 
-function Flight(id,duration, firstFlight, turnover, planeID, takeoff, landing) {
+function Flight(id,duration, firstFlight, turnover, planeID, takeoff, landing, basePrice) {
     this.id = id;
     this.duration = duration;
     this.firstFlight = firstFlight;
@@ -16,23 +16,42 @@ function Flight(id,duration, firstFlight, turnover, planeID, takeoff, landing) {
     this.planeID = planeID;
     this.takeoff = takeoff;
     this.landing = landing;
+    this.basePrice = basePrice;
 
     this.save = function (callback) {
-        db.query("INSERT INTO flight_data (flight_duration, flight_firstFlight, flight_turnover, planeID, flight_takeoff, flight_landing, flight_isActive) VALUES (?,?,?,?,?,?,1)", [this.duration, this.firstFlight, this.turnover, this.planeID, this.takeoff,this.landing], function (err) {
+        db.query("INSERT INTO flight_data (flight_duration, flight_firstFlight, flight_turnover, planeID, flight_takeoff, flight_landing, flight_basePrice, flight_isActive) VALUES (?,?,?,?,?,?,?,1)", [this.duration, this.firstFlight, this.turnover, this.planeID, this.takeoff,this.landing, this.basePrice], function (err, results, fields) {
             if (err) {
                 callback(err);
             } else {
-                callback(err, this.lastID);
+                callback(err, results.insertId);
             }
         });
     };
+
+    this.updateFlight = function(callback) {
+        db.query("UPDATE `threebee`.`flight_data` SET flight_duration=?, planeID=?, flight_firstFlight=?, flight_turnover=?, flight_takeoff=?, flight_landing=?, flight_basePrice=? WHERE flightID=?",
+            [this.duration, this.planeID, this.firstFlight, this.turnover, this.takeoff, this.landing, this.basePrice, this.id], function(err, results){
+                if(err) {
+                    callback(err);
+                } else {
+                    //insertId will be the autoincrement primary key iduser_info
+                    console.log('we were apparently a success in updating that shit');
+                    callback(err, results.insertId);
+                }
+
+            });
+    };
+
 }
 Flight.delete = function (id, callback) {
-    db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE flightID = '" +id+"';");
-    callback();
+    db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE flightID = ?", [id], function(err) {
+        db.query("UPDATE `bookings` SET `isActive`=0 WHERE flightID=?", [flight.flightID], function(err) {
+            callback(err);
+        });
+    });
 };
 Flight.deletePlane = function (id, callback) {
-    db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE planeID = '" +id+"';");
+    db.query("UPDATE `threebee`.`flight_data` SET `flight_isActive`='0' WHERE planeID = ?",[id]);
     callback();
 };
 Flight.findOne = function (params, callback) {
@@ -187,16 +206,16 @@ Flight.flightSearch = function(numStops, startAirport, endAirport, date, callbac
         q = "SELECT fd1.flightID as flightID1, fd2.flightID as flightID2 FROM\
         flight_data as fd1\
         JOIN\
-        flight_data as fd2 ON (fd1.flight_landing=fd2.flight_takeoff AND fd2.flight_firstFlight >= fd1.flight_firstFlight + interval (fd1.flight_duration + 10) minute)\
+        flight_data as fd2 ON (fd1.flight_landing=fd2.flight_takeoff AND fd2.flight_firstFlight >= fd1.flight_firstFlight + interval (fd1.flight_duration + 10) minute AND fd2.flight_firstFlight < fd1.flight_firstFlight + interval (fd1.flight_duration + 360) minute)\
         WHERE fd1.flight_takeoff=? AND fd2.flight_landing=? AND DATE(fd1.flight_firstFlight)=DATE(?)";
     } else if(numStops == 2) {
         // We want 2 layovers
         q = "SELECT fd1.flightID as flightID1, fd2.flightID as flightID2, fd3.flightID as flightID3 FROM\
         flight_data as fd1\
         JOIN\
-        flight_data as fd2 ON (fd1.flight_landing=fd2.flight_takeoff AND fd2.flight_firstFlight >= fd1.flight_firstFlight + interval (fd1.flight_duration + 10) minute)\
+        flight_data as fd2 ON (fd1.flight_landing=fd2.flight_takeoff AND fd2.flight_firstFlight >= fd1.flight_firstFlight + interval (fd1.flight_duration + 10) minute AND fd2.flight_firstFlight < fd1.flight_firstFlight + interval (fd1.flight_duration + 360) minute)\
         JOIN\
-        flight_data as fd3 ON (fd2.flight_landing=fd3.flight_takeoff AND fd3.flight_firstFlight >= fd2.flight_firstFlight + interval (fd2.flight_duration + 10) minute)\
+        flight_data as fd3 ON (fd2.flight_landing=fd3.flight_takeoff AND fd3.flight_firstFlight >= fd2.flight_firstFlight + interval (fd2.flight_duration + 10) minute AND fd3.flight_firstFlight < fd2.flight_firstFlight + interval (fd2.flight_duration + 360) minute)\
         WHERE fd1.flight_takeoff=? AND fd3.flight_landing=? AND DATE(fd1.flight_firstFlight)=DATE(?)";
     }
     db.query(q, [startAirport, endAirport, date], function(err, rows) {
@@ -219,5 +238,7 @@ Flight.flightSearch = function(numStops, startAirport, endAirport, date, callbac
         }
     });
 };
+
+
 
 module.exports = Flight;

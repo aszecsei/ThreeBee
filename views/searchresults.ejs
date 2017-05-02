@@ -9,6 +9,7 @@
 </head>
 <body class="container">
 <main>
+
     <header>
         <% include ./partials/header.ejs %>
     </header>
@@ -17,6 +18,25 @@
         <h1>Search Results</h1>
     </div>
     <div class="jumbotron">
+        <form action="#" method="POST">
+            <label class="col-xs-3 control-label">Sorting: </label>
+            <input type="hidden" value="<%= JSON.stringify(bookingList[i]) %>" name="booking_flights" />
+            <input type="hidden" value="<%=flightType%>" name="flightType"/>
+            <input type="hidden" value="<%=outDate%>" name="outdate"/>
+            <input type="hidden" value="<%=returnDate%>" name="returndate"/>
+            <input type="hidden" value="<%=toCity%>" name="depcity"/>
+            <input type="hidden" value="<%=fromCity%>" name="arrcity"/>
+            <input type="hidden" value="<%= isRoundTrip %>" name="isroundtrip"/>
+            <select name="sortType" id="sortType" onchange="this.form.submit()">
+                <option value="STOPS"<% if(sortType=="STOPS") { %> selected<% } %>>Number of Stops</option>
+                <option value="PRICELH"<% if(sortType=="PRICELH") { %> selected<% } %>>Price (Low to High)</option>
+                <option value="DEPEL"<% if(sortType=="DEPEL") { %> selected<% } %>>Departure (Early to Late)</option>
+                <option value="DEPLE"<% if(sortType=="DEPLE") { %> selected<% } %>>Departure (Late to Early)</option>
+                <option value="ARREL"<% if(sortType=="ARREL") { %> selected<% } %>>Arrival (Early to Late)</option>
+                <option value="ARRLE"<% if(sortType=="ARRLE") { %> selected<% } %>>Arrival (Late to Early)</option>
+                <option value="TRAVELTIME"<% if(sortType=="TRAVELTIME") { %> selected<% } %>>Travel Time</option>
+            </select>
+        </form>
         <table class="table table-hover table-responsive">
             <thead>
             <tr>
@@ -40,7 +60,12 @@
                     <td><% for(j=0; j<flightList[i].length; j++) { %><%= flightList[i][j].arrivalTime %><% if(j != flightList[i].length-1) { %><br/><% } } %></td>
                     <td><%= priceList[i] %></td>
                     <input type="hidden" value="<%= JSON.stringify(bookingList[i]) %>" name="booking_flights" />
+                    <input type="hidden" value="<%=flightType%>" name="flightType"/>
+                    <input type="hidden" value="<%=returnDate%>" name="returndate"/>
+                    <input type="hidden" value="<%=fromCity%>" name="fromCity"/>
+                    <input type="hidden" value="<%=toCity%>" name="toCity"/>
                     <td><button type="submit" name="submit" class="btn btn-primary">Purchase</button></td>
+
                 </form>
             </tr>
             <% } %>
@@ -60,7 +85,10 @@
             zoom: 6
         };
         var map = new google.maps.Map(mapCanvas, mapOptions);
-
+        var lineSymbol = {
+            path: google.maps.SymbolPath.FORWARD_OPEN_ARROW,
+            scale: 3
+        };
         <%for(var i = 0; i < airports.length; i++){%>
         var trip =[]
             <%for(var j = 0; j < airports[i].length; j++){%>
@@ -74,6 +102,10 @@
         var flightPath<%= i %> = new google.maps.Polyline({
             path: trip,
             geodesic: true,
+            icons: [{
+                icon: lineSymbol,
+                offset: '100%'
+            }],
             strokeColor: "<%= colors[i%6] %>",
             strokeOpacity: 1.0,
             strokeWeight: 2

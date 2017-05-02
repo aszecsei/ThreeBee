@@ -43,3 +43,9 @@
 #return-text{
     font-size: 1.5em;
 }
+@media (min-width: 768px) {
+    .modal-xl {
+        width: 90%;
+        max-width:1200px;
+    }
+}

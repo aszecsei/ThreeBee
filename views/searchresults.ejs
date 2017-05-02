@@ -85,7 +85,10 @@
             zoom: 6
         };
         var map = new google.maps.Map(mapCanvas, mapOptions);
-
+        var lineSymbol = {
+            path: google.maps.SymbolPath.FORWARD_OPEN_ARROW,
+            scale: 3
+        };
         <%for(var i = 0; i < airports.length; i++){%>
         var trip =[]
             <%for(var j = 0; j < airports[i].length; j++){%>
@@ -99,6 +102,10 @@
         var flightPath<%= i %> = new google.maps.Polyline({
             path: trip,
             geodesic: true,
+            icons: [{
+                icon: lineSymbol,
+                offset: '100%'
+            }],
             strokeColor: "<%= colors[i%6] %>",
             strokeOpacity: 1.0,
             strokeWeight: 2

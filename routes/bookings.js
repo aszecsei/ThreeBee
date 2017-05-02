@@ -39,7 +39,7 @@ router.get('/', auth.isLoggedIn, function(req, res) {
         });
     } else {
         Booking.getAllForUser(req.user.id, function(err, results) {
-            async.map(result, function(trip, callback) {
+            async.map(results, function(trip, callback) {
                 async.map(trip, function(booking, callback2) {
                     Flight.queryOne(booking.flightID, function(err, flight) {
                         booking.planeName = flight.planeName;

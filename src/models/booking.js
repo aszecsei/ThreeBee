@@ -73,6 +73,7 @@ Booking.getAllForUser = function(userid, callback) {
                     callback1(null, [row]);
                 }
             }, function(err, results) {
+                if(err) console.log(err);
                 callback(null, results);
             });
         }

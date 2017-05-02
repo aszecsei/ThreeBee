@@ -200,14 +200,14 @@ Flight.flightSearch = function(numStops, startAirport, endAirport, date, callbac
         // We want a direct flight
         q = "SELECT fd1.flightID as flightID1 FROM\
         flight_data as fd1\
-        WHERE fd1.flight_takeoff=? AND fd1.flight_landing=? AND DATE(fd1.flight_firstFlight)=DATE(?)";
+        WHERE fd1.flight_takeoff=? AND fd1.flight_landing=? AND DATE(fd1.flight_firstFlight)=DATE(?) AND fd1.flight_isActive=1";
     } else if(numStops == 1) {
         // We want one layover
         q = "SELECT fd1.flightID as flightID1, fd2.flightID as flightID2 FROM\
         flight_data as fd1\
         JOIN\
         flight_data as fd2 ON (fd1.flight_landing=fd2.flight_takeoff AND fd2.flight_firstFlight >= fd1.flight_firstFlight + interval (fd1.flight_duration + 10) minute AND fd2.flight_firstFlight < fd1.flight_firstFlight + interval (fd1.flight_duration + 360) minute)\
-        WHERE fd1.flight_takeoff=? AND fd2.flight_landing=? AND DATE(fd1.flight_firstFlight)=DATE(?)";
+        WHERE fd1.flight_takeoff=? AND fd2.flight_landing=? AND DATE(fd1.flight_firstFlight)=DATE(?) AND fd1.flight_isActive=1  AND fd2.flight_isActive=1";
     } else if(numStops == 2) {
         // We want 2 layovers
         q = "SELECT fd1.flightID as flightID1, fd2.flightID as flightID2, fd3.flightID as flightID3 FROM\
@@ -216,7 +216,7 @@ Flight.flightSearch = function(numStops, startAirport, endAirport, date, callbac
         flight_data as fd2 ON (fd1.flight_landing=fd2.flight_takeoff AND fd2.flight_firstFlight >= fd1.flight_firstFlight + interval (fd1.flight_duration + 10) minute AND fd2.flight_firstFlight < fd1.flight_firstFlight + interval (fd1.flight_duration + 360) minute)\
         JOIN\
         flight_data as fd3 ON (fd2.flight_landing=fd3.flight_takeoff AND fd3.flight_firstFlight >= fd2.flight_firstFlight + interval (fd2.flight_duration + 10) minute AND fd3.flight_firstFlight < fd2.flight_firstFlight + interval (fd2.flight_duration + 360) minute)\
-        WHERE fd1.flight_takeoff=? AND fd3.flight_landing=? AND DATE(fd1.flight_firstFlight)=DATE(?)";
+        WHERE fd1.flight_takeoff=? AND fd3.flight_landing=? AND DATE(fd1.flight_firstFlight)=DATE(?) AND fd1.flight_isActive=1 AND fd2.flight_isActive=1 AND fd3.flight_isActive=1";
     }
     db.query(q, [startAirport, endAirport, date], function(err, rows) {
         if(err) {

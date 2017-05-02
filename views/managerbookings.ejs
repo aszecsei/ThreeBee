@@ -20,21 +20,22 @@
                 <th>Departure Time</th>
                 <th>Arrival</th>
                 <th>Arrival Time</th>
+                <th>Check In</th>
                 <th>Cancel</th>
             </thread>
             <tbody>
-            <%var j = 1; for(var i = 0; i < result[k].length; i++){ %>
-            <tr id="BookingRow<%= result[k][i].bookingID %>">
-            <th scope="row"><%= (i+1); %></th>
-            <td><%= result[k][i].planeName %></td>
-            <td><%= result[k][i].takeoff %> (<%= result[k][i].takeoffAbbr %>)</td>
-            <td><%= result[k][i].departureTime %></td>
-            <td><%= result[k][i].landing %> (<%= result[k][i].landingAbbr %>)</td>
-            <td><%= result[k][i].arrivalTime %></td>
-                    <%if (i == 0){%>
-                <td><a class="btn btn-large btn-info" href= bookings/<%= result[k][i].bookingID%>/checkin>Check In</a> </td>
-                <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#BookingDeleteConfirm<%= result[k][i].bookingID %>">Delete</button></td>
-                <%}%>
+            <% for(var i = 0; i < result[k].length; i++){ %>
+                <tr id="BookingRow<%= result[k][i].bookingID %>">
+                <th scope="row"><%= (i+1) %></th>
+                <td><%= result[k][i].planeName %></td>
+                <td><%= result[k][i].takeoff %> (<%= result[k][i].takeoffAbbr %>)</td>
+                <td><%= result[k][i].departureTime %></td>
+                <td><%= result[k][i].landing %> (<%= result[k][i].landingAbbr %>)</td>
+                <td><%= result[k][i].arrivalTime %></td>
+                <% if (i == 0) { %>
+                    <td><a class="btn btn-large btn-info" href= bookings/<%= result[k][i].bookingID%>/>Check In</a> </td>
+                    <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#BookingDeleteConfirm<%= result[k][i].bookingID %>">Delete</button></td>
+                <% } %>
             </tr>
             <% } %>
         </table>
@@ -57,7 +58,9 @@
                 </div>
             </div>
         </div>
+        <% } %>
     </div>
+    <% } %>
     <script>
         function deleteBooking(id) {
             console.log(id+"lol");

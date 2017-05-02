@@ -112,22 +112,26 @@ router.post('/book', function (req,res) {
     }
 });
 router.post('/', function(req, res) {
-    var fromCity = req.body.depcity;
-    var toCity = req.body.arrcity;
-    var isRoundTrip = (req.body.isroundtrip == "roundtrip");
-    var date = moment(req.body.outdate, "MM/DD/YYYY").format("YYYY-MM-DD") + " 00:00:00";
-    var returnDate = req.body.returndate ? moment(req.body.returndate, "MM/DD/YYYY").format("YYYY-MM-DD") + " 00:00:00" : "";
+    if(req.isAuthenticated()){
+        var fromCity = req.body.depcity;
+        var toCity = req.body.arrcity;
+        var isRoundTrip = (req.body.isroundtrip == "roundtrip");
+        var date = moment(req.body.outdate, "MM/DD/YYYY").format("YYYY-MM-DD") + " 00:00:00";
+        var returnDate = req.body.returndate ? moment(req.body.returndate, "MM/DD/YYYY").format("YYYY-MM-DD") + " 00:00:00" : "";
 
-    var sortType = req.body.sortType ? req.body.sortType : "STOPS";
+        var sortType = req.body.sortType ? req.body.sortType : "STOPS";
 
-    console.log("1: " + fromCity);
-    console.log("2: " + toCity);
-    console.log("3: " + isRoundTrip);
-    console.log("4: " + date);
-    console.log("5: " + returnDate);
+        console.log("1: " + fromCity);
+        console.log("2: " + toCity);
+        console.log("3: " + isRoundTrip);
+        console.log("4: " + date);
+        console.log("5: " + returnDate);
 
-    renderPage(fromCity,toCity,date,req.body.isroundtrip,req,res,returnDate, sortType);
-
+        renderPage(fromCity,toCity,date,req.body.isroundtrip,req,res,returnDate, sortType);
+    }
+    else {
+        res.redirect('/login');
+    }
 });
 
 function renderPage(fromCity, toCity,date, isRoundTrip,req,res,returnDate, sortType) {

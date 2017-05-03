@@ -25,6 +25,7 @@ var userinfo = require('./routes/userinfo');
 var map = require('./routes/map');
 var about = require('./routes/about');
 var checkin = require('./routes/checkin');
+var purchase = require('./routes/purchase');
 var app = express();
 
 // view engine setup
@@ -60,6 +61,7 @@ app.use('/userinfo', userinfo);
 app.use('/map', map);
 app.use('/about', about);
 app.use('/checkin', checkin);
+app.use('/purchase', purchase);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

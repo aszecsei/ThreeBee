@@ -228,30 +228,21 @@ function renderPage(fromCity, toCity,date, isRoundTrip,req,res,returnDate, sortT
 
 
 function doSearch(numStops, fromCity, toCity, date, callback) {
-    Flight.flightSearch(numStops, fromCity, toCity, date, function(err, results) {
-        async.map(results, function(result, callback) {
-            async.map(result, function(flightID, callback2) {
-                Flight.queryOne(flightID, function(err, result) {
+    Flight.flightSearch(numStops, fromCity, toCity, date, function (err, results) {
+        async.map(results, function (result, callback) {
+            async.map(result, function (flightID, callback2) {
+                Flight.queryOne(flightID, function (err, result) {
                     console.log(JSON.stringify(result, null, 4));
                     result.departureTime = moment(result.flight_firstFlight).format("LLL");
                     result.arrivalTime = moment(result.flight_firstFlight).add(result.flight_duration, "minutes").format("LLL");
                     callback2(err, result);
                 });
-            }, function(err, results) {
+            }, function (err, results) {
                 callback(err, results);
             });
-        }, function(err, results) {
+        }, function (err, results) {
             callback(err, results);
         });
     });
-}
-
-function searchAir(airportID) {
-    db.query("SELECT a.latitude, a.longitude FROM threebee.airports a WHERE a.airportID=?",[flightList[i][0].flight_takeoff], function(err, row) {
-        async.map(results, function(row, callback){
-        });
-    });
-
-
 }
 module.exports = router;

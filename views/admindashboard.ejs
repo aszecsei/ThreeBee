@@ -276,6 +276,7 @@
                                                 <td>" + response[i].departureTime + "</td>\
                                                 <td>" + response[i].arrivalTime + "</td>\
                                                 <td><button type='button' class='btn btn-danger' data-toggle='modal' data-target='#FlightDeleteConfirm" + response[i].flightID + "'>Delete</button></td>\
+                                                <td><button type='button' class='btn btn-primary' data-toggle='modal' data-target='#FlightEdit"+ response[i].flightID +"'>Edit</button></td>\
                                                 </tr>";
                                                 $("#flightTableTbody").append(markup);
 
@@ -555,9 +556,13 @@
                                                           <td>" + response.numFirstSeat + "</td>\
                                                           <td>" + response.numBizSeat + "</td>\
                                                           <td>" + response.numCoachSeat + "</td>\
+                                                          <td><button type='button' class='btn btn-primary' data-toggle='modal' data-target='#PlaneEdit" + response.mId  + "'>Edit</button></td>\
                                                           <td><button type='button' class='btn btn-danger' data-toggle='modal' data-target='#PlaneDeleteConfirm" + response.mId  + "'>Delete</button></td>\
                                                           </tr>";
                                             $("#planeTableTbody").append(markup);
+                                            var markup3 ="<option value="+ response.mId +">"+ response.name +"</option>";
+
+                                            $("#planeID").append(markup3);
 
                                             var markup2 = "<div id='PlaneDeleteConfirm" + response.mId %> + "' class='modal fade' role='dialog'>\
                                                           <div class='modal-dialog'>\
@@ -714,6 +719,10 @@
                                         type: 'DELETE',
                                         success: function() {
                                             $("#PlaneRow" + id).remove();
+                                            var markup3 ="<option value="+ id +">";
+                                            console.log("#planeID option[value=" + id + "]");
+
+                                            $("#planeID option[value="+ id + "]").remove();
                                         },
                                         error: function(req, status, error) {
 

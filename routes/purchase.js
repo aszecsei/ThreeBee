@@ -73,6 +73,7 @@ router.post('/submitoptions', function(req,res) {
 //this is where the receipt generation will happen
 router.post('/confirm', function (req,res) {
     console.log('we confirmed? the purchase..');
+    res.json({"Success": "Successfully confirmed"});
     /*
      var flights = JSON.parse(req.body.booking_flights)
      var newBook = new Booking();

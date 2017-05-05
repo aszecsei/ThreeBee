@@ -17,7 +17,7 @@
                 <h1>Payment</h1>
             </div>
             <div class="panel-body">
-                <form id="cardinfo" actions="/purchase/confirm" method="post" class="form-horizontal">
+                <form id="cardinfo" class="form-horizontal">
                     <div class="form-group">
                         <label class="col-xs-3 control-label">Total Cost</label>
                         <div class="col-xs-3" value="<%= cost%>">$<%= cost%></div>
@@ -25,21 +25,98 @@
                     <div class="form-group">
                         <label class="col-xs-3 control-label">Card Number</label>
                         <div class="col-xs-3" >
-                            <input name="cardNumber" class="form-control"pattern="[a-zA-Z0-9]{10}" required/>
+                            <input name="cardNumber" id="cardNumber" class="form-control"pattern="[a-zA-Z0-9]{10}" required/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-xs-3 control-label">Security Code</label>
                         <div class="col-xs-2" >
-                            <input type="number" name="securityCode" class="form-control" min="0"  max="999" required/>
+                            <input type="number" id="securityCode" name="securityCode" class="form-control" min="0"  max="999" required/>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-xs-9 col-xs-offset-3">
-                            <button id="submitcardinfo" type="submit" class="btn btn-primary">Submit</button>
+                            <button id="submitcardinfo" type="submit" data-target="#ConfirmNumber" class="btn btn-primary">Submit</button>
                         </div>
                     </div>
                 </form>
+                <script>
+                    $("#cardinfo").submit( function(){
+                        event.preventDefault();
+                        $("#ConfirmNumber").modal('show');
+
+                    });
+                </script>
+
+                <div id="ConfirmNumber" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Confirm Card Information</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form id="cardinfoConfirm" actions="/purchase/confirm" method="post" class="form-horizontal">
+                                    <div class="form-group">
+                                        <label class="col-xs-3 control-label">Total Cost</label>
+                                        <div class="col-xs-3" value="<%= cost%>">$<%= cost%></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-xs-3 control-label">Card Number</label>
+                                        <div class="col-xs-3" >
+                                            <input id="cardNumberConfirm" name="cardNumberConfirm" class="form-control"pattern="[a-zA-Z0-9]{10}" required/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-xs-3 control-label">Security Code</label>
+                                        <div class="col-xs-2" >
+                                            <input type="number" id="securityCodeConfirm" name="securityCodeConfirm" class="form-control" min="0"  max="999" required/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-9 col-xs-offset-3">
+                                            <button id="submitcardinfoconfirm" type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <script>
+                                    // Attach a submit handler to the form
+                                    $( "#cardinfoConfirm" ).submit( function( event ) {
+                                        // Stop form from submitting normally
+                                        event.preventDefault();
+                                        var cardNum= document.getElementById('cardNumber');
+                                        var secCode= document.getElementById('securityCode');
+                                        console.log($("#cardNumberConfirm").val());
+                                        console.log(cardNum.value);
+                                        console.log($("#securityCodeConfirm").val());
+                                        console.log($("#securityCode").val());
+
+                                        if(($("#cardNumberConfirm").val() == cardNum.value)&&($("#securityCodeConfirm").val() == secCode.value)){
+                                            $.ajax({
+                                                type: 'POST',
+                                                url: '/purchase/confirm',
+                                                data: $('#cardinfoConfirm').serialize(),
+                                                success: function () {
+                                                    $('#ConfirmNumber').modal('hide');
+                                                },
+                                                error: function (exception) {
+                                                    alert('there was an error: '+exception);
+                                                }
+                                            });
+                                        } else{
+                                            alert('Card Information Does Not Match');
+                                        }
+
+
+
+
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
 

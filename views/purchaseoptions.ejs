@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% title = "Purchase Options"; %>
+    <% include ./partials/head.ejs %>
+</head>
+<body class="container">
+
+<header>
+    <% include ./partials/header.ejs %>
+</header>
+
+<main>
+    <div class="jumbotron">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1>Purchase Options</h1>
+            </div>
+            <div class="panel-body">
+                <form id="addflight" action="/purchase/submitoptions" method="post" class="form-horizontal">
+                    <div class="form-group" >
+                        <label class="col-xs-3 control-label">Select Price Tier</label>
+                        <div class="col-xs-3">
+                            <select class="form-control" id="tier" name="tier" required>
+                                <option>Coach</option>
+                                <option>Business</option>
+                                <option>First Class</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-3 control-label">Number of Tickets</label>
+                        <div class="col-xs-3" >
+                            <input type="number" name="numTickets" class="form-control" min="0" required/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-9 col-xs-offset-3">
+                            <button id="submitoptions" type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                    <div class="hidden" name="price" value="<%=cost%>"/>
+                    </div>
+                </form>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+</main>
+
+<footer>
+    <% include ./partials/footer.ejs %>
+</footer>
+
+</body>
+</html>

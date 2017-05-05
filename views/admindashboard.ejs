@@ -266,6 +266,7 @@
                                         type: 'POST',
                                         data: $("#addflight").serialize(),
                                         success: function(response) {
+                                            console.log(JSON.stringify(response, null, 4));
                                             for(var i=0; i<response.length; i++) {
                                                 // Append a row
                                                 var markup = "<tr id='FlightRow" + response[i].flightID + "'>\
@@ -275,6 +276,8 @@
                                                 <td>" + response[i].landing + " (" + response[i].landingAbbr + ")</td>\
                                                 <td>" + response[i].departureTime + "</td>\
                                                 <td>" + response[i].arrivalTime + "</td>\
+                                                <td>" + response[i].flight_basePrice + "</td>\
+                                                <td><button type='button' class='btn btn-primary disabled' data-toggle='modal' data-target='#FlightEdit" + response[i].flightID + "'>Edit</button></td>\
                                                 <td><button type='button' class='btn btn-danger' data-toggle='modal' data-target='#FlightDeleteConfirm" + response[i].flightID + "'>Delete</button></td>\
                                                 </tr>";
                                                 $("#flightTableTbody").append(markup);
@@ -555,6 +558,7 @@
                                                           <td>" + response.numFirstSeat + "</td>\
                                                           <td>" + response.numBizSeat + "</td>\
                                                           <td>" + response.numCoachSeat + "</td>\
+                                                          <td><button type='button' class='btn btn-primary disabled' data-toggle='modal' data-target='#PlaneEdit" + response.mId + "'>Edit</button></td>\
                                                           <td><button type='button' class='btn btn-danger' data-toggle='modal' data-target='#PlaneDeleteConfirm" + response.mId  + "'>Delete</button></td>\
                                                           </tr>";
                                             $("#planeTableTbody").append(markup);
@@ -729,8 +733,11 @@
         </div>
         <script>
             var $myGroup = $('#dashboardgroup');
-            $myGroup.on('show.bs.collapse','.collapse', function() {
-                $myGroup.closest('.collapse.in').collapse('hide');
+            $myGroup.on("shown",function(event) {
+                $("#managers").collapse('hide');
+                $("#flights").collapse('hide');
+                $("#planes").collapse('hide');
+                event.stopPropagation();
             });
         </script>
     </div>

@@ -45,6 +45,7 @@ router.post('/', auth.isManager, function(req, res) {
         newFlight.planeID = req.body.planeID;
         newFlight.takeoff = req.body.firstStop;
         newFlight.landing = req.body.secondStop;
+        newFlight.basePrice = req.body.basePrice;
         console.log("SAVING: " + JSON.stringify(newFlight));
 
         // save the user

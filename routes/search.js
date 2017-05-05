@@ -8,27 +8,31 @@ var moment = require('moment');
 var db = require('../src/database');
 
 router.post('/', function(req, res) {
-    var fromCity = req.body.depcity;
-    var toCity = req.body.arrcity;
-    var isRoundTrip = (req.body.isroundtrip == "roundtrip");
-    var date = moment(req.body.outdate, "MM/DD/YYYY").format("YYYY-MM-DD") + " 00:00:00";
-    var returnDate = req.body.returndate ? moment(req.body.returndate, "MM/DD/YYYY").format("YYYY-MM-DD") + " 00:00:00" : "";
-    var prevBookingList = req.body.booking_flights ? req.body.booking_flights : "[]";
+    if(req.isAuthenticated()){
+        var fromCity = req.body.depcity;
+        var toCity = req.body.arrcity;
+        var isRoundTrip = (req.body.isroundtrip == "roundtrip");
+        var date = moment(req.body.outdate, "MM/DD/YYYY").format("YYYY-MM-DD") + " 00:00:00";
+        var returnDate = req.body.returndate ? moment(req.body.returndate, "MM/DD/YYYY").format("YYYY-MM-DD") + " 00:00:00" : "";
+        var prevBookingList = req.body.booking_flights ? req.body.booking_flights : "[]";
 
-    var sortType = req.body.sortType ? req.body.sortType : "STOPS";
+        var sortType = req.body.sortType ? req.body.sortType : "STOPS";
 
-    console.log("1: " + fromCity);
-    console.log("2: " + toCity);
-    console.log("3: " + isRoundTrip);
-    console.log("4: " + date);
-    console.log("5: " + returnDate);
+        console.log("1: " + fromCity);
+        console.log("2: " + toCity);
+        console.log("3: " + isRoundTrip);
+        console.log("4: " + date);
+        console.log("5: " + returnDate);
 
-    if(prevBookingList) {
-        renderPage(fromCity, toCity, date, req.body.isroundtrip, req, res, returnDate, sortType, true, prevBookingList);
-    } else {
-        renderPage(fromCity, toCity, date, req.body.isroundtrip, req, res, returnDate, sortType, false, prevBookingList);
+        if(prevBookingList) {
+            renderPage(fromCity, toCity, date, req.body.isroundtrip, req, res, returnDate, sortType, true, prevBookingList);
+        } else {
+            renderPage(fromCity, toCity, date, req.body.isroundtrip, req, res, returnDate, sortType, false, prevBookingList);
+        }
     }
-
+    else {
+        res.redirect('/login');
+    }
 });
 
 function renderPage(fromCity, toCity,date, isRoundTrip,req,res,returnDate, sortType, isSecondFlight, prevBookingList) {
@@ -128,30 +132,21 @@ function renderPage(fromCity, toCity,date, isRoundTrip,req,res,returnDate, sortT
 
 
 function doSearch(numStops, fromCity, toCity, date, callback) {
-    Flight.flightSearch(numStops, fromCity, toCity, date, function(err, results) {
-        async.map(results, function(result, callback) {
-            async.map(result, function(flightID, callback2) {
-                Flight.queryOne(flightID, function(err, result) {
+    Flight.flightSearch(numStops, fromCity, toCity, date, function (err, results) {
+        async.map(results, function (result, callback) {
+            async.map(result, function (flightID, callback2) {
+                Flight.queryOne(flightID, function (err, result) {
                     console.log(JSON.stringify(result, null, 4));
                     result.departureTime = moment(result.flight_firstFlight).format("LLL");
                     result.arrivalTime = moment(result.flight_firstFlight).add(result.flight_duration, "minutes").format("LLL");
                     callback2(err, result);
                 });
-            }, function(err, results) {
+            }, function (err, results) {
                 callback(err, results);
             });
-        }, function(err, results) {
+        }, function (err, results) {
             callback(err, results);
         });
     });
-}
-
-function searchAir(airportID) {
-    db.query("SELECT a.latitude, a.longitude FROM threebee.airports a WHERE a.airportID=?",[flightList[i][0].flight_takeoff], function(err, row) {
-        async.map(results, function(row, callback){
-        });
-    });
-
-
 }
 module.exports = router;

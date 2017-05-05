@@ -11,8 +11,7 @@ var moment = require('moment');
 var PDFDocument = require ('pdfkit');
 
 router.get('/', auth.isLoggedIn, function(req, res) {
-    console.log("here");
-    console.log(req.user.id);
+
     if((req.isAuthenticated() && req.user.user_type == 2 && req.user.auth_status == 1) ||
         (req.isAuthenticated() && req.user.user_type == 1)) {
         Booking.getAll(function (err, result) {
@@ -38,6 +37,8 @@ router.get('/', auth.isLoggedIn, function(req, res) {
             });
         });
     } else {
+        var nowDate = moment();
+        var canDelete = true;
         Booking.getAllForUser(req.user.id, function(err, results) {
             async.map(results, function(trip, callback) {
                 async.map(trip, function(booking, callback2) {
@@ -49,8 +50,13 @@ router.get('/', auth.isLoggedIn, function(req, res) {
                         booking.landingAbbr = flight.landingAbbr;
                         var departureTime = new Date(flight.flight_firstFlight);
                         departureTime = moment(departureTime);
+                        var beforeDate = departureTime.add(1, 'd')
+                        if (beforeDate.isBefore(nowDate)){
+                            canDelete = false;
+                        }
                         booking.departureTime = departureTime.format("LLL");
                         booking.arrivalTime = departureTime.add(flight.flight_duration, 'minutes').format("LLL");
+                        booking.canDelete = canDelete;
                         callback2(err, booking);
                     });
                 }, function(err, newTrip) {
@@ -139,7 +145,7 @@ router.post('/:id/checkin', auth.isManager, function(req,res) {
 });
 
 
-router.delete('/:id', auth.isManager, function(req,res) {
+router.delete('/:id', function(req,res) {
     Booking.delete(req.params.id,function (err) {
         return true;
     });

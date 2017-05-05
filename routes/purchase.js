@@ -34,7 +34,8 @@ router.post('/', function (req,res) {
             res.render('purchaseoptions', {
                 shouldDisplayLogin: 2,
                 cost: priceTotal,
-                flights: JSON.stringify(flights)
+                flights: JSON.stringify(flights),
+                loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : null)
             });
         }
     });
@@ -68,7 +69,8 @@ router.post('/submitoptions', function(req,res) {
             res.render('payment', {
                 shouldDisplayLogin: 2,
                 cost: totalPrice,
-                flights: req.body.flights
+                flights: req.body.flights,
+                loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : null)
             });
         }
     });

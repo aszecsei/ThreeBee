@@ -89,7 +89,7 @@ router.get('/:auth', function(req, res) {
 
         if(results.length > 0) {
             // We're gonna authorize the user
-            res.render('authorize', {authKey: auth, shouldDisplayLogin:2});
+            res.render('authorize', {authKey: auth, shouldDisplayLogin:2, loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : null)});
         }
     });
 });

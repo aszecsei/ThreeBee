@@ -34,7 +34,7 @@ router.get('/', auth.isLoggedIn, function(req, res) {
                     callback(err, newTrip);
                 });
             }, function(err, trips) {
-                res.render('managerbookings', {shouldDisplayLogin: 2, result: trips});
+                res.render('managerbookings', {shouldDisplayLogin: 2, result: trips, loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : null)});
             });
         });
     } else {
@@ -57,7 +57,7 @@ router.get('/', auth.isLoggedIn, function(req, res) {
                     callback(err, newTrip);
                 });
             }, function(err, trips) {
-                res.render('bookingInfo', {shouldDisplayLogin: 2, result: results});
+                res.render('bookingInfo', {shouldDisplayLogin: 2, result: results, loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : null)});
             });
         });
     }
@@ -143,7 +143,6 @@ router.delete('/:id', auth.isManager, function(req,res) {
     Booking.delete(req.params.id,function (err) {
         return true;
     });
-
 });
 
 function addToPDF(flightresult,bookingresult, seat, bags, PDF) {

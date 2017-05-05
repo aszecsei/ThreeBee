@@ -26,7 +26,8 @@ router.get('/',function(req, res) {
             res.render('userinfo', {
                 shouldDisplayLogin: 2,
                 userinfoList: userinfoList,
-                user: user
+                user: user,
+                loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : null)
             });
         });
 

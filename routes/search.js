@@ -119,7 +119,8 @@ function renderPage(fromCity, toCity,date, isRoundTrip,req,res,returnDate, sortT
                 outDate: req.body.outdate,
                 rDate:req.body.returnDate,
                 isSecondFlight: isSecondFlight,
-                prevBookings: JSON.parse(prevBookingList)
+                prevBookings: JSON.parse(prevBookingList),
+                loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : null)
             });
         });
     });

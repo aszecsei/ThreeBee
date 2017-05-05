@@ -17,16 +17,16 @@ router.get('/:id', auth.isManager, function(req,res) {
                 if (result1 != null){
                     Booking.findOne(result2[0].nextBook, function (err, result3) {
                         books.push(result3);
-                        res.render('check', {shouldDisplayLogin: 2, result: books});
+                        res.render('check', {shouldDisplayLogin: 2, result: books, loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : null)});
                     });
                 }
                 else {
-                    res.render('check', {shouldDisplayLogin: 2, result: books});
+                    res.render('check', {shouldDisplayLogin: 2, result: books, loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : null)});
                 }
             });
         }
         else {
-            res.render('check', {shouldDisplayLogin: 2, result: books});
+            res.render('check', {shouldDisplayLogin: 2, result: books, loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : null)});
         }
     });
 });

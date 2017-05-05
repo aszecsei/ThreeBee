@@ -97,7 +97,7 @@ router.post('/:id', auth.isManager, function(req,res) {
             console.log(err);
             throw err;
         } else {
-            res.json({message: 'Successfully update flight info'});
+            res.json({message: 'Successfully update flight info', loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : null)});
         }
     });
 

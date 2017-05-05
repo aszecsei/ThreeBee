@@ -8,7 +8,6 @@ var moment = require('moment');
 var db = require('../src/database');
 
 router.post('/', function(req, res) {
-    console.log('hey were in the post request');
     var fromCity = req.body.depcity;
     var toCity = req.body.arrcity;
     var isRoundTrip = (req.body.isroundtrip == "roundtrip");

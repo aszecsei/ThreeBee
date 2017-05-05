@@ -20,7 +20,7 @@
                 <form id="cardinfo" class="form-horizontal">
                     <div class="form-group">
                         <label class="col-xs-3 control-label">Total Cost</label>
-                        <div class="col-xs-3" value="<%= cost%>">$<%= cost%></div>
+                        <div class="col-xs-3" name="totalPrice" value="<%= cost%>">$<%= cost%></div>
                     </div>
                     <div class="form-group">
                         <label class="col-xs-3 control-label">Card Number</label>
@@ -79,6 +79,7 @@
                                             <button id="submitcardinfoconfirm" type="submit" class="btn btn-primary">Submit</button>
                                         </div>
                                     </div>
+                                    <input type="hidden" name="cost" value="<%=cost%>"/>
                                 </form>
                                 <script>
                                     // Attach a submit handler to the form
@@ -87,10 +88,6 @@
                                         event.preventDefault();
                                         var cardNum= document.getElementById('cardNumber');
                                         var secCode= document.getElementById('securityCode');
-                                        console.log($("#cardNumberConfirm").val());
-                                        console.log(cardNum.value);
-                                        console.log($("#securityCodeConfirm").val());
-                                        console.log($("#securityCode").val());
 
                                         if(($("#cardNumberConfirm").val() == cardNum.value)&&($("#securityCodeConfirm").val() == secCode.value)){
                                             $.ajax({

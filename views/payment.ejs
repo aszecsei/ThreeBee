@@ -44,7 +44,7 @@
                     $("#cardinfo").submit( function(){
                         event.preventDefault();
                         $("#ConfirmNumber").modal('show');
-
+                        $("#cardNumberConfirm").focus();
                     });
                 </script>
 
@@ -80,6 +80,7 @@
                                         </div>
                                     </div>
                                     <input type="hidden" name="cost" value="<%=cost%>"/>
+                                    <input type="hidden" name="flights" value="<%=flights%>"/>
                                 </form>
                                 <script>
                                     // Attach a submit handler to the form
@@ -96,9 +97,10 @@
                                                 data: $('#cardinfoConfirm').serialize(),
                                                 success: function () {
                                                     $('#ConfirmNumber').modal('hide');
+                                                    window.location.replace("/bookings");
                                                 },
                                                 error: function (exception) {
-                                                    alert('there was an error: '+exception);
+                                                    alert('there was an error: '+ JSON.stringify(exception));
                                                 }
                                             });
                                         } else{

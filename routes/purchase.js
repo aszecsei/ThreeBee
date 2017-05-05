@@ -5,6 +5,13 @@ var Flight = require('../src/models/flight');
 
 var PDFDocument = require ('pdfkit');
 var email = require('../src/email');
+var async = require('async');
+var Booking = require('../src/models/booking');
+
+var errorHandle = function(res, message) {
+    console.log("ERROR: " + JSON.stringify(message));
+    res.status(500).json(message);
+};
 
 router.post('/', function (req,res) {
     // TODO: Get the booking information and stuff
@@ -26,7 +33,8 @@ router.post('/', function (req,res) {
             }
             res.render('purchaseoptions', {
                 shouldDisplayLogin: 2,
-                cost: priceTotal
+                cost: priceTotal,
+                flights: JSON.stringify(flights)
             });
         }
     });
@@ -59,21 +67,16 @@ router.post('/submitoptions', function(req,res) {
 
             res.render('payment', {
                 shouldDisplayLogin: 2,
-                cost: totalPrice
+                cost: totalPrice,
+                flights: req.body.flights
             });
         }
     });
-
-
-
-
 });
 
 //this is where the receipt generation will happen
 router.post('/confirm', function (req,res) {
     console.log('we confirmed the purchase..');
-
-
 
     //receipt generation
     //var PDF = new PDFDocument();
@@ -84,116 +87,73 @@ router.post('/confirm', function (req,res) {
     //PDF.end();
     console.log('user info: '+req.user.email);
 
-
-    email.sendMail(req.user.email, "Booked Flight", "Congratulations on your booked trip\n\nAmount Paid: $"+price, function () {
-        res.json({message: 'Successfully registered'})
+    var flights = JSON.parse(req.body.flights);
+    console.log("FLIGHTS: " + JSON.stringify(flights));
+    async.each(flights, function(booking, callback) {
+        console.log("Booking: " + JSON.stringify(booking));
+        var newBook = new Booking();
+        console.log("Test ID");
+        newBook.userID =req.user.id;
+        console.log("Test post-ID");
+        newBook.type = 1;
+        console.log("Booking length: " + booking.length);
+        switch (booking.length){
+            case 1:
+                newBook.flightID = booking[0];
+                newBook.lastId = null;
+                console.log("Saving...");
+                newBook.save(function(err) {
+                    console.log("SAVED");
+                    callback(err);
+                });
+                break;
+            case 2:
+                newBook.flightID = booking[1];
+                newBook.lastId = null;
+                newBook.save(function (err,test){
+                    if (err) {
+                        callback(err);
+                    } else {
+                        newBook.flightID = booking[0];
+                        newBook.lastId = test;
+                        newBook.save(callback);
+                    }
+                });
+                break;
+            case 3:
+                newBook.flightID = booking[2];
+                newBook.lastId = null;
+                newBook.save(function (err,id1) {
+                    if (err) {
+                        callback(err);
+                    } else {
+                        newBook.flightID = booking[1];
+                        newBook.lastId = id1;
+                        newBook.save(function (err, id2) {
+                            if (err) {
+                                callback(err);
+                            } else {
+                                newBook.flightID = booking[0];
+                                newBook.lastId = id2;
+                                newBook.save(callback);
+                            }
+                        });
+                    }
+                });
+                break;
+        }
+    }, function(err) {
+        console.log("Bookings done");
+        if(err) {
+            errorHandle(res, err);
+        } else {
+            console.log("Going to email!");
+            email.sendMail(req.user.email, "Booked Flight", "Congratulations on your booked trip\n\nAmount Paid: $"+price, function () {
+                console.log("Email sent!");
+                res.json({message: 'Successfully booked!'});
+            });
+        }
     });
-
-    res.json({message: "Successfully confirmed"});
-/*
-     var flights = JSON.parse(req.body.booking_flights);
-     var newBook = new Booking();
-     newBook.userID =req.user.id;
-     console.log("Past");
-
-     var flightType = req.body.flightType;
-
-     var returnDate = req.body.returndate;
-     var fromCity = req.body.fromCity;
-     var toCity = req.body.toCity;
-
-     var sortType = req.body.sortType ? req.body.sortType : "STOPS";
-
-     console.log(flightType);
-     console.log(returnDate);
-     console.log(fromCity);
-     console.log(toCity);
-
-
-     newBook.type = 1;
-
-     switch (flights.length){
-        case 1:
-             newBook.flightID = flights[0];
-             newBook.lastId = null;
-             console.log("Test at 1");
-             newBook.save(function (err) {
-                 if (err) {
-                    console.log(err);
-                    throw err;
-                 }
-                 if(flightType != "roundtrip")
-                 {
-                    res.render('payment', {shouldDisplayLogin: 2});
-                 }
-                 else {
-                    renderPage(fromCity,toCity,returnDate,0,req,res,0, sortType);
-                 }
-             });
-             break;
-         case 2:
-             newBook.flightID = flights[1];
-             newBook.lastId = null;
-             console.log("Test at 2");
-             newBook.save(function (err,test){
-                 if (err) {
-                    console.log(err);
-                    throw err;
-                 }
-                 newBook.flightID = flights[0];
-                 newBook.lastId = test;
-                 newBook.save(function (err) {
-                     if (err) {
-                        console.log(err);
-                        throw err;
-                     }
-                     if(flightType != "roundtrip")
-                     {
-                        res.render('payment', {shouldDisplayLogin: 2});
-                     }
-                     else {
-                        renderPage(fromCity,toCity,returnDate,0,req,res,0, sortType);
-                     }
-                 });
-             });
-             break;
-         case 3:
-             newBook.flightID = flights[2];
-             newBook.lastId = null;
-             console.log("Test at 3");
-             newBook.save(function (err,id1) {
-                 if (err) {
-                    console.log(err);
-                    throw err;
-                 }
-                 newBook.flightID = flights[1];
-                 newBook.lastId = id1;
-                 newBook.save(function (err,id2) {
-                     if (err) {
-                        console.log(err);
-                        throw err;
-                     }
-                     newBook.flightID = flights[0];
-                     newBook.lastId = id2;
-                     newBook.save(function (err) {
-                         if (err) {
-                            console.log(err);
-                            throw err;
-                         }
-                         if(flightType != "roundtrip")
-                         {
-                            res.render('payment', {shouldDisplayLogin: 2});
-                         } else {
-                            renderPage(fromCity,toCity,returnDate,0,req,res,0, sortType)
-                         }
-                     });
-                 });
-             });
-             break;
-         }
-
-*/
-
 });
 
 module.exports = router;

@@ -268,6 +268,18 @@ Flight.flightSearch = function(numStops, startAirport, endAirport, date, callbac
     });
 };
 
+Flight.getModifier = function(tierIndex, callback) {
+
+    db.query("SELECT * from threebee.pricing_modifiers WHERE modifier=?", [tierIndex], function (err, result) {
+        if(err){
+            console.log(err);
+        } else {
+            console.log('found the modifier: '+result.modifier);
+            callback(err, result);
+        }
+    });
+};
+
 
 
 module.exports = Flight;

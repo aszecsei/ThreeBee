@@ -40,14 +40,32 @@ router.post('/', function (req,res) {
 router.post('/submitoptions', function(req,res) {
     console.log('were submitting optionssss');
 
-    //calculating the price
-    //var flightNumbers = req.body.flights;
+    var totalBasePrice = parseInt(req.body.totalBasePrice);
+    console.log(req.body.totalBasePrice);
+    console.log(totalBasePrice);
+    var numTickets = parseInt(req.body.numTickets);
+    console.log(numTickets);
+    var tierIndex = req.body.tier;
 
+    Flight.getModifier(tierIndex, function(err, result){
+        if(err){
+            console.log(err);
+            throw err;
+        } else {
+            console.log('found the modifier! : '+result[0].modifier);
+            console.log('result: '+JSON.stringify(result));
+            var modVal = parseInt(result[0].modifier);
+            var totalPrice = totalBasePrice*modVal*numTickets;
+            console.log('totalPrice: '+totalPrice);
 
-    res.render('payment', {
-        shouldDisplayLogin: 2
-        //cost: cost
+            res.render('payment', {
+                shouldDisplayLogin: 2,
+                cost: totalPrice
+            });
+        }
     });
+
+
 
 
 });

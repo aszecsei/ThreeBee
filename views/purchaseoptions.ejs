@@ -22,9 +22,9 @@
                         <label class="col-xs-3 control-label">Select Price Tier</label>
                         <div class="col-xs-3">
                             <select class="form-control" id="tier" name="tier" required>
-                                <option>Coach</option>
-                                <option>Business</option>
-                                <option>First Class</option>
+                                <option value="1">Coach</option>
+                                <option value="2">Business</option>
+                                <option value="3">First Class</option>
                             </select>
                         </div>
                     </div>
@@ -34,17 +34,13 @@
                             <input type="number" name="numTickets" class="form-control" min="0" required/>
                         </div>
                     </div>
+                    <input type="hidden" name="totalBasePrice" value="<%=cost%>"/>
                     <div class="form-group">
                         <div class="col-xs-9 col-xs-offset-3">
                             <button id="submitoptions" type="submit" class="btn btn-primary">Submit</button>
                         </div>
                     </div>
-                    <div class="hidden" name="price" value="<%=cost%>"/>
-                    </div>
                 </form>
-
-
-
             </div>
 
         </div>

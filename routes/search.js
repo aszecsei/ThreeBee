@@ -7,110 +7,6 @@ var async = require('async');
 var moment = require('moment');
 var db = require('../src/database');
 
-router.post('/book', function (req,res) {
-
-    var flights = JSON.parse(req.body.booking_flights)
-    var newBook = new Booking();
-    newBook.userID =req.user.id;
-    console.log("Past");
-
-    var flightType = req.body.flightType;
-
-    var returnDate = req.body.returndate;
-    var fromCity = req.body.fromCity;
-    var toCity = req.body.toCity;
-
-    var sortType = req.body.sortType ? req.body.sortType : "STOPS";
-
-    console.log(flightType);
-    console.log(returnDate);
-    console.log(fromCity);
-    console.log(toCity);
-
-
-    newBook.type = 1;
-
-    switch (flights.length){
-        case 1:
-            newBook.flightID = flights[0];
-            newBook.lastId = null;
-            console.log("Test at 1");
-            newBook.save(function (err) {
-                if (err) {
-                    console.log(err);
-                    throw err;
-                }
-                if(flightType != "roundtrip")
-                {
-                    res.render('payment', {shouldDisplayLogin: 2});
-                }
-                else {
-                    renderPage(fromCity,toCity,returnDate,0,req,res,0, sortType);
-                }
-            });
-            break;
-        case 2:
-            newBook.flightID = flights[1];
-            newBook.lastId = null;
-            console.log("Test at 2");
-            newBook.save(function (err,test){
-                if (err) {
-                    console.log(err);
-                    throw err;
-                }
-                newBook.flightID = flights[0];
-                newBook.lastId = test;
-                newBook.save(function (err) {
-                    if (err) {
-                        console.log(err);
-                        throw err;
-                    }
-                    if(flightType != "roundtrip")
-                    {
-                        res.render('payment', {shouldDisplayLogin: 2});
-                    }
-                    else {
-                        renderPage(fromCity,toCity,returnDate,0,req,res,0, sortType);
-                    }
-                });
-            });
-            break;
-        case 3:
-            newBook.flightID = flights[2];
-            newBook.lastId = null;
-            console.log("Test at 3");
-            newBook.save(function (err,id1) {
-                if (err) {
-                    console.log(err);
-                    throw err;
-                }
-                newBook.flightID = flights[1];
-                newBook.lastId = id1;
-                newBook.save(function (err,id2) {
-                    if (err) {
-                        console.log(err);
-                        throw err;
-                    }
-                    newBook.flightID = flights[0];
-                    newBook.lastId = id2;
-                        newBook.save(function (err) {
-                            if (err) {
-                                console.log(err);
-                                throw err;
-                            }
-                            if(flightType != "roundtrip")
-                            {
-                                res.render('payment', {shouldDisplayLogin: 2});
-                            }
-                            else {
-                                renderPage(fromCity,toCity,returnDate,0,req,res,0, sortType)
-                            }
-                        });
-                    });
-                });
-            break;
-    }
-});
 router.post('/', function(req, res) {
     if(req.isAuthenticated()){
         var fromCity = req.body.depcity;
@@ -118,6 +14,7 @@ router.post('/', function(req, res) {
         var isRoundTrip = (req.body.isroundtrip == "roundtrip");
         var date = moment(req.body.outdate, "MM/DD/YYYY").format("YYYY-MM-DD") + " 00:00:00";
         var returnDate = req.body.returndate ? moment(req.body.returndate, "MM/DD/YYYY").format("YYYY-MM-DD") + " 00:00:00" : "";
+        var prevBookingList = req.body.booking_flights ? req.body.booking_flights : "[]";
 
         var sortType = req.body.sortType ? req.body.sortType : "STOPS";
 
@@ -127,14 +24,18 @@ router.post('/', function(req, res) {
         console.log("4: " + date);
         console.log("5: " + returnDate);
 
-        renderPage(fromCity,toCity,date,req.body.isroundtrip,req,res,returnDate, sortType);
+        if(prevBookingList) {
+            renderPage(fromCity, toCity, date, req.body.isroundtrip, req, res, returnDate, sortType, true, prevBookingList);
+        } else {
+            renderPage(fromCity, toCity, date, req.body.isroundtrip, req, res, returnDate, sortType, false, prevBookingList);
+        }
     }
     else {
         res.redirect('/login');
     }
 });
 
-function renderPage(fromCity, toCity,date, isRoundTrip,req,res,returnDate, sortType) {
+function renderPage(fromCity, toCity,date, isRoundTrip,req,res,returnDate, sortType, isSecondFlight, prevBookingList) {
     async.parallel([
         async.apply(doSearch, 0, fromCity, toCity, date),
         async.apply(doSearch, 1, fromCity, toCity, date),
@@ -153,8 +54,15 @@ function renderPage(fromCity, toCity,date, isRoundTrip,req,res,returnDate, sortT
                 case "TRAVELTIME":
                     return (moment(a[a.length - 1].arrivalTime) - moment(a[0].departureTime)) - (moment(b[b.length - 1].arrivalTime) - moment(b[0].departureTime));
                 case "PRICELH":
-                    // TODO: Fix this once prices are working
-                    return a.length - b.length;
+                    var aSum = 0;
+                    var bSum = 0;
+                    for(var i=0; i<a.length; i++) {
+                        aSum += a[i].flight_basePrice;
+                    }
+                    for(i=0; i<b.length; i++) {
+                        bSum += b[i].flight_basePrice;
+                    }
+                    return aSum - bSum;
                 case "DEPEL":
                     return moment(a[0].departureTime) - moment(b[0].departureTime);
                 case "DEPLE":
@@ -204,23 +112,31 @@ function renderPage(fromCity, toCity,date, isRoundTrip,req,res,returnDate, sortT
             }
 
 
-            var colors = ["#FF00FF","#FFD700","red", "green","purple","orange"]
-            res.render('searchresults', {
-                title:"Search Results",
-                shouldDisplayLogin:(req.isAuthenticated() ? 1 : 0),
-                flightList:flightList,
-                priceList:priceList,
-                bookingList:bookingList,
-                airports:airportList,
-                colors:colors,
-                flightType: isRoundTrip,
-                returnDate: returnDate,
-                toCity: fromCity,
-                fromCity: toCity,
-                sortType: sortType,
-                isRoundTrip: req.body.isroundtrip,
-                outDate: req.body.outdate,
-                rDate:req.body.returnDate
+            var colors = ["#FF00FF","#FFD700","red", "green","purple","orange"];
+
+            db.query("SELECT * FROM pricing_modifiers", function(err, pricingTiers) {
+                console.log("PRICING: " + JSON.stringify(pricingTiers, null, 4));
+                res.render('searchresults', {
+                    title:"Search Results",
+                    shouldDisplayLogin:(req.isAuthenticated() ? 1 : 0),
+                    flightList:flightList,
+                    priceList:priceList,
+                    bookingList:bookingList,
+                    airports:airportList,
+                    colors:colors,
+                    flightType: isRoundTrip,
+                    returnDate:  req.body.returndate,
+                    toCity: fromCity,
+                    fromCity: toCity,
+                    sortType: sortType,
+                    isRoundTrip: req.body.isroundtrip,
+                    outDate: req.body.outdate,
+                    rDate:req.body.returnDate,
+                    isSecondFlight: isSecondFlight,
+                    prevBookings: JSON.parse(prevBookingList),
+                    loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : null),
+                    pricingTiers: pricingTiers
+                });
             });
         });
     });

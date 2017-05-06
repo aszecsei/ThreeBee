@@ -12,7 +12,7 @@ router.get('/', function(req, res) {
         if (rower == undefined){
             rower = [];
         }
-        res.render('planes', {shouldDisplayLogin: 2, result: rower});
+        res.render('planes', {shouldDisplayLogin: 2, result: rower, loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : null)});
     });
 });
 
@@ -69,13 +69,13 @@ router.get('/:id', function(req,res){
             if (rower == undefined){
                 res.redirect("/planes");
             }
-            res.render('planeInfo', {shouldDisplayLogin: 2, result: row, planes: rower});
+            res.render('planeInfo', {shouldDisplayLogin: 2, result: row, planes: rower, loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : null)});
         })
     });
 
 });
 router.get('/:id/newflight', function (req,res) {
-    res.render('newFlight',{ shouldDisplayLogin: 2});
+    res.render('newFlight',{ shouldDisplayLogin: 2, loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : null)});
 });
 
 router.post('/:id/newflight/addflight', function(req, res) {

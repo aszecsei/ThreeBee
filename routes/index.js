@@ -72,7 +72,7 @@ router.get('/', function(req, res) {
               body: 'We be three bees! Alic, Emma, and Tanner.',
               shouldDisplayLogin: (req.isAuthenticated() ? 1 : 0),
               airports: rows,
-              loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : "")
+              loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : null)
           });
       });
   }

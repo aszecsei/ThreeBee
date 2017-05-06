@@ -72,7 +72,7 @@ router.post('/forgotpassword', function(req, res) {
 /* GET manager change password page. */
 router.get('/changepassword', function(req, res) {
     if(req.user)
-        res.render('changepassword', {shouldDisplayLogin: 1, required: req.user.user_type == 1 && req.user.auth_status == 0, loggedInName: "Manager"});
+        res.render('changepassword', {shouldDisplayLogin: 1, required: req.user.user_type == 1 && req.user.auth_status == 0, loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : null)});
     else
         res.redirect("/");
 });

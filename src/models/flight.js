@@ -194,6 +194,35 @@ Flight.queryMany = function (ids,callback) {
     });
 };
 
+Flight.findPrices = function(ids, callback){
+    console.log('ids: '+ids);
+    console.log('we are finding prices for '+ids.length+' flights');
+    var idString="";
+    for(var i = 0; i< ids.length; i++){
+        console.log('we are concatenating the prices..');
+        console.log('id:'+ids[i].toString())
+        if(i==0){
+            idString += ids[i];
+        }else {
+            idString += ',';
+            idString += ids[i];
+            console.log(idString);
+        }
+    }
+    var query = "SELECT flight_basePrice FROM threebee.flight_data WHERE `flightID` IN ("+idString+")";
+    console.log(query);
+    db.query("SELECT * FROM threebee.flight_data WHERE `flightID` IN ("+idString+")", function(err,results){
+        if(err){
+            console.log('there was an error');
+            callback(err, undefined);
+        } else if (results.length > 0){
+            console.log('we found your shit');
+            callback(err, results);
+        }
+
+    });
+};
+
 Flight.flightSearch = function(numStops, startAirport, endAirport, date, callback) {
     var q = "";
     if(numStops == 0) {
@@ -235,6 +264,18 @@ Flight.flightSearch = function(numStops, startAirport, endAirport, date, callbac
                 result.push(row);
             }
             callback(null, result);
+        }
+    });
+};
+
+Flight.getModifier = function(tierIndex, callback) {
+
+    db.query("SELECT * from threebee.pricing_modifiers WHERE id=?", [tierIndex], function (err, result) {
+        if(err){
+            console.log(err);
+        } else {
+            console.log('found the modifier: '+result.modifier);
+            callback(err, result);
         }
     });
 };

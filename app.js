@@ -25,6 +25,7 @@ var userinfo = require('./routes/userinfo');
 var map = require('./routes/map');
 var about = require('./routes/about');
 var checkin = require('./routes/checkin');
+var purchase = require('./routes/purchase');
 var changetiers = require('./routes/changetiers')
 var app = express();
 
@@ -61,6 +62,7 @@ app.use('/userinfo', userinfo);
 app.use('/map', map);
 app.use('/about', about);
 app.use('/checkin', checkin);
+app.use('/purchase', purchase);
 app.use('/changetiers', changetiers);
 
 // catch 404 and forward to error handler

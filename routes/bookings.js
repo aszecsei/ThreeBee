@@ -23,8 +23,7 @@ router.get('/', auth.isLoggedIn, function(req, res) {
                         booking.takeoffAbbr = flight.takeoffAbbr;
                         booking.landing = flight.landing;
                         booking.landingAbbr = flight.landingAbbr;
-                        var departureTime = new Date(flight.flight_firstFlight);
-                        departureTime = moment(departureTime);
+                        var departureTime = moment(flight.flight_firstFlight);
                         booking.departureTime = departureTime.format("LLL");
                         booking.arrivalTime = departureTime.add(flight.flight_duration, 'minutes').format("LLL");
                         callback2(err, booking);
@@ -33,7 +32,7 @@ router.get('/', auth.isLoggedIn, function(req, res) {
                     callback(err, newTrip);
                 });
             }, function(err, trips) {
-                res.render('managerbookings', {shouldDisplayLogin: 2, result: trips});
+                res.render('managerbookings', {shouldDisplayLogin: 2, result: trips, loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : null)});
             });
         });
     } else {
@@ -48,24 +47,22 @@ router.get('/', auth.isLoggedIn, function(req, res) {
                         booking.takeoffAbbr = flight.takeoffAbbr;
                         booking.landing = flight.landing;
                         booking.landingAbbr = flight.landingAbbr;
-                        var departureTime = new Date(flight.flight_firstFlight);
-                        departureTime = moment(departureTime);
-                        var beforeDate = departureTime.add(1, 'd')
+                        var departureTime = moment(flight.flight_firstFlight);
+                        var beforeDate = moment(departureTime).add(-1, 'd');
                         if (beforeDate.isBefore(nowDate)){
-                            canDelete = false;
+                            booking.canDelete = false;
+                        } else {
+                            booking.canDelete = true;
                         }
                         booking.departureTime = departureTime.format("LLL");
                         booking.arrivalTime = departureTime.add(flight.flight_duration, 'minutes').format("LLL");
-                        booking.canDelete = canDelete;
                         callback2(err, booking);
                     });
                 }, function(err, newTrip) {
                     callback(err, newTrip);
                 });
             }, function(err, trips) {
-
-                console.log(results);
-                res.render('bookingInfo', {shouldDisplayLogin: 2, result: results});
+                res.render('bookingInfo', {shouldDisplayLogin: 2, result: results, loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : null)});
             });
         });
     }
@@ -151,7 +148,6 @@ router.delete('/:id', function(req,res) {
     Booking.delete(req.params.id,function (err) {
         return true;
     });
-
 });
 
 function addToPDF(flightresult,bookingresult, seat, bags, PDF) {

@@ -270,7 +270,7 @@ Flight.flightSearch = function(numStops, startAirport, endAirport, date, callbac
 
 Flight.getModifier = function(tierIndex, callback) {
 
-    db.query("SELECT * from threebee.pricing_modifiers WHERE modifier=?", [tierIndex], function (err, result) {
+    db.query("SELECT * from threebee.pricing_modifiers WHERE id=?", [tierIndex], function (err, result) {
         if(err){
             console.log(err);
         } else {

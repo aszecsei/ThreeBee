@@ -54,8 +54,15 @@ function renderPage(fromCity, toCity,date, isRoundTrip,req,res,returnDate, sortT
                 case "TRAVELTIME":
                     return (moment(a[a.length - 1].arrivalTime) - moment(a[0].departureTime)) - (moment(b[b.length - 1].arrivalTime) - moment(b[0].departureTime));
                 case "PRICELH":
-                    // TODO: Fix this once prices are working
-                    return a.length - b.length;
+                    var aSum = 0;
+                    var bSum = 0;
+                    for(var i=0; i<a.length; i++) {
+                        aSum += a[i].flight_basePrice;
+                    }
+                    for(i=0; i<b.length; i++) {
+                        bSum += b[i].flight_basePrice;
+                    }
+                    return aSum - bSum;
                 case "DEPEL":
                     return moment(a[0].departureTime) - moment(b[0].departureTime);
                 case "DEPLE":

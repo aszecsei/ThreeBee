@@ -23,8 +23,7 @@ router.get('/', auth.isLoggedIn, function(req, res) {
                         booking.takeoffAbbr = flight.takeoffAbbr;
                         booking.landing = flight.landing;
                         booking.landingAbbr = flight.landingAbbr;
-                        var departureTime = new Date(flight.flight_firstFlight);
-                        departureTime = moment(departureTime);
+                        var departureTime = moment(flight.flight_firstFlight);
                         booking.departureTime = departureTime.format("LLL");
                         booking.arrivalTime = departureTime.add(flight.flight_duration, 'minutes').format("LLL");
                         callback2(err, booking);
@@ -48,11 +47,10 @@ router.get('/', auth.isLoggedIn, function(req, res) {
                         booking.takeoffAbbr = flight.takeoffAbbr;
                         booking.landing = flight.landing;
                         booking.landingAbbr = flight.landingAbbr;
-                        var departureTime = new Date(flight.flight_firstFlight);
-                        departureTime = moment(departureTime);
-                        var beforeDate = departureTime.add(1, 'd')
+                        var departureTime = moment(flight.flight_firstFlight);
+                        var beforeDate = moment(departureTime).add(1, 'd');
                         if (beforeDate.isBefore(nowDate)){
-                            canDelete = false;
+                            booking.canDelete = false;
                         }
                         booking.departureTime = departureTime.format("LLL");
                         booking.arrivalTime = departureTime.add(flight.flight_duration, 'minutes').format("LLL");

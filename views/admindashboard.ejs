@@ -269,7 +269,6 @@
                                         type: 'POST',
                                         data: $("#addflight").serialize(),
                                         success: function(response) {
-                                            console.log(JSON.stringify(response, null, 4));
                                             for(var i=0; i<response.length; i++) {
                                                 // Append a row
                                                 var markup = "<tr id='FlightRow" + response[i].flightID + "'>\
@@ -282,7 +281,6 @@
                                                 <td>" + response[i].flight_basePrice + "</td>\
                                                 <td><button type='button' class='btn btn-primary disabled' data-toggle='modal' data-target='#FlightEdit" + response[i].flightID + "'>Edit</button></td>\
                                                 <td><button type='button' class='btn btn-danger' data-toggle='modal' data-target='#FlightDeleteConfirm" + response[i].flightID + "'>Delete</button></td>\
-                                                <td><button type='button' class='btn btn-primary' data-toggle='modal' data-target='#FlightEdit"+ response[i].flightID +"'>Edit</button></td>\
                                                 </tr>";
                                                 $("#flightTableTbody").append(markup);
 

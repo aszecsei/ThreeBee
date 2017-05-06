@@ -64,7 +64,7 @@
                     <td><% for(j=0; j<flightList[i].length; j++) { %><%= flightList[i][j].departureTime %><% if(j != flightList[i].length-1) { %><br/><% } } %></td>
                     <td><% for(j=0; j<flightList[i].length; j++) { %><%= flightList[i][j].landing %><% if(j != flightList[i].length-1) { %><br/><% } } %></td>
                     <td><% for(j=0; j<flightList[i].length; j++) { %><%= flightList[i][j].arrivalTime %><% if(j != flightList[i].length-1) { %><br/><% } } %></td>
-                    <td><%= priceList[i] %></td>
+                    <td><% var priceTotal = 0; for(j=0; j<flightList[i].length; j++) { priceTotal += flightList[i][j].flight_basePrice; }; for(j=0; j<pricingTiers.length; j++) { %><%if(j!=0){%> / <%}%><%= priceTotal * pricingTiers[j].modifier %><%}%></td>
                     <% if(locals.prevBookings && locals.prevBookings.length > 0) { %>
                     <input type="hidden" value="<%= JSON.stringify([prevBookings, bookingList[i]]) %>" name="booking_flights" />
                     <% } else if(isRoundTrip) { %>

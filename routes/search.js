@@ -112,26 +112,31 @@ function renderPage(fromCity, toCity,date, isRoundTrip,req,res,returnDate, sortT
             }
 
 
-            var colors = ["#FF00FF","#FFD700","red", "green","purple","orange"]
-            res.render('searchresults', {
-                title:"Search Results",
-                shouldDisplayLogin:(req.isAuthenticated() ? 1 : 0),
-                flightList:flightList,
-                priceList:priceList,
-                bookingList:bookingList,
-                airports:airportList,
-                colors:colors,
-                flightType: isRoundTrip,
-                returnDate:  req.body.returndate,
-                toCity: fromCity,
-                fromCity: toCity,
-                sortType: sortType,
-                isRoundTrip: req.body.isroundtrip,
-                outDate: req.body.outdate,
-                rDate:req.body.returnDate,
-                isSecondFlight: isSecondFlight,
-                prevBookings: JSON.parse(prevBookingList),
-                loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : null)
+            var colors = ["#FF00FF","#FFD700","red", "green","purple","orange"];
+
+            db.query("SELECT * FROM pricing_modifiers", function(err, pricingTiers) {
+                console.log("PRICING: " + JSON.stringify(pricingTiers, null, 4));
+                res.render('searchresults', {
+                    title:"Search Results",
+                    shouldDisplayLogin:(req.isAuthenticated() ? 1 : 0),
+                    flightList:flightList,
+                    priceList:priceList,
+                    bookingList:bookingList,
+                    airports:airportList,
+                    colors:colors,
+                    flightType: isRoundTrip,
+                    returnDate:  req.body.returndate,
+                    toCity: fromCity,
+                    fromCity: toCity,
+                    sortType: sortType,
+                    isRoundTrip: req.body.isroundtrip,
+                    outDate: req.body.outdate,
+                    rDate:req.body.returnDate,
+                    isSecondFlight: isSecondFlight,
+                    prevBookings: JSON.parse(prevBookingList),
+                    loggedInName: (req.isAuthenticated() ? req.user.first_name + " " + req.user.last_name : null),
+                    pricingTiers: pricingTiers
+                });
             });
         });
     });

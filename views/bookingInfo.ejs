@@ -30,14 +30,15 @@
                 <td><%= result[k][i].departureTime %></td>
                 <td><%= result[k][i].landing %> (<%= result[k][i].landingAbbr %>)</td>
                 <td><%= result[k][i].arrivalTime %></td>
-                <% if (i == 0) { if(result[k][i].canDelete){%>
-                <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#BookingDeleteConfirm<%= result[k][i].bookingID %>">Delete</button></td>
-                <%}}%>
+                <% if (i == 0) { %>
+                <td><button type="button" class="btn btn-danger<%if(!result[k][i].canDelete){%> disabled<%}%>" data-toggle="modal" data-target="#BookingDeleteConfirm<%= result[k][i].bookingID %>">Delete</button></td>
+                <%}%>
             </tr>
             <% } %>
         </table>
     </div>
     <% for(var i = 0; i < result[k].length; i++){ %>
+    <% if(result[k][i].canDelete) { %>
     <div id="BookingDeleteConfirm<%= result[k][i].bookingID %>" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
@@ -56,7 +57,7 @@
             </div>
         </div>
     </div>
-    <% } %>
+    <% } } %>
     </div>
     <% } %>
     <script>

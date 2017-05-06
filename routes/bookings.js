@@ -48,13 +48,14 @@ router.get('/', auth.isLoggedIn, function(req, res) {
                         booking.landing = flight.landing;
                         booking.landingAbbr = flight.landingAbbr;
                         var departureTime = moment(flight.flight_firstFlight);
-                        var beforeDate = moment(departureTime).add(1, 'd');
+                        var beforeDate = moment(departureTime).add(-1, 'd');
                         if (beforeDate.isBefore(nowDate)){
                             booking.canDelete = false;
+                        } else {
+                            booking.canDelete = true;
                         }
                         booking.departureTime = departureTime.format("LLL");
                         booking.arrivalTime = departureTime.add(flight.flight_duration, 'minutes').format("LLL");
-                        booking.canDelete = canDelete;
                         callback2(err, booking);
                     });
                 }, function(err, newTrip) {

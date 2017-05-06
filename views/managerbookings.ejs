@@ -33,7 +33,7 @@
                 <td><%= result[k][i].landing %> (<%= result[k][i].landingAbbr %>)</td>
                 <td><%= result[k][i].arrivalTime %></td>
                 <% if (i == 0) { %>
-                    <td><a class="btn btn-large btn-info" href= bookings/<%= result[k][i].bookingID%>/>Check In</a> </td>
+                    <td><a class="btn btn-large btn-info" href= "bookings/<%= result[k][i].bookingID%>/checkin">Check In</a> </td>
                     <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#BookingDeleteConfirm<%= result[k][i].bookingID %>">Delete</button></td>
                 <% } %>
             </tr>
